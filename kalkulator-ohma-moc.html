@@ -1,11 +1,580 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Prawo Ohma — Rezystor — Moc</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f3f4f6;
+    color: #111827;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+}
+
+main {
+    max-width: 900px;
+    margin: auto;
+    padding: 35px 20px 60px;
+}
+
+.card {
+    background: white;
+    border-radius: 22px;
+    padding: 30px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.10);
+}
+
+h1 {
+    margin: 0 0 8px;
+    font-size: 34px;
+}
+
+.subtitle {
+    color: #64748b;
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.section {
+    background: #f8fafc;
+    border: 1px solid #dbe2ea;
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 22px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+select,
+input {
+    width: 100%;
+    padding: 15px;
+    font-size: 17px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: white;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.field {
+    margin-bottom: 5px;
+}
+
+.help {
+    margin-top: 7px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+button {
+    width: 100%;
+    padding: 17px;
+    border: 0;
+    border-radius: 12px;
+    background: #111827;
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1f2937;
+}
+
+.result {
+    margin-top: 18px;
+    padding: 20px;
+    border-left: 5px solid #16803c;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.result-title {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+}
+
+.result-value {
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 7px;
+}
+
+.formula {
+    color: #475569;
+    font-size: 15px;
+}
+
+.warning {
+    margin-top: 20px;
+    padding: 20px;
+    border-left: 5px solid #c62828;
+    border-radius: 12px;
+    background: #fff4f4;
+    color: #7f1d1d;
+}
+
+.warning-title {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.warning p {
+    margin: 7px 0;
+    line-height: 1.5;
+}
+
+.ok {
+    margin-top: 20px;
+    padding: 18px;
+    border-left: 5px solid #16803c;
+    border-radius: 12px;
+    background: #f0fdf4;
+    color: #166534;
+}
+
+.formulas {
+    margin-top: 25px;
+    padding: 20px;
+    background: #f1f5f9;
+    border-radius: 14px;
+}
+
+.formulas-title {
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.formulas div {
+    margin: 7px 0;
+    font-family: Consolas, monospace;
+}
+
+.note {
+    margin-top: 20px;
+    padding: 18px;
+    background: #eff6ff;
+    border-left: 5px solid #2563eb;
+    border-radius: 12px;
+    color: #1e3a8a;
+}
+
+@media (max-width: 700px) {
+
+    main {
+        padding: 15px 10px 40px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    h1 {
+        font-size: 27px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<div class="card">
+
+<h1>Prawo Ohma — Rezystor — Moc</h1>
+
+<div class="subtitle">
+Uniwersalny kalkulator podstawowych zależności elektrycznych.
+</div>
+
+
+<div class="section">
+
+<div class="section-title">
+Co chcesz obliczyć?
+</div>
+
+<select id="tryb" onchange="zmienTryb()">
+
+<option value="U">
+Napięcie U [V]
+</option>
+
+<option value="I">
+Prąd I [A]
+</option>
+
+<option value="R">
+Rezystancję R [Ω]
+</option>
+
+<option value="P">
+Moc P [W]
+</option>
+
+</select>
+
+</div>
+
+
+<div class="section">
+
+<div class="grid">
+
+<div class="field">
+
+<label id="label1">
+Prąd I [A]
+</label>
+
+<input
+    id="input1"
+    type="text"
+    placeholder="np. 0,02"
+>
+
+<div class="help" id="help1">
+Dla 20 mA wpisz 0,02 A.
+</div>
+
+</div>
+
+
+<div class="field">
+
+<label id="label2">
+Rezystancja R [Ω]
+</label>
+
+<input
+    id="input2"
+    type="text"
+    placeholder="np. 600"
+>
+
+<div class="help" id="help2">
+Rezystancja odbiornika.
+</div>
+
+</div>
+
+</div>
+
+
+<div id="pole3" style="display:none; margin-top:18px;">
+
+<label id="label3">
+Rezystancja R [Ω]
+</label>
+
+<input
+    id="input3"
+    type="text"
+    placeholder="np. 600"
+>
+
+<div class="help" id="help3">
+Rezystancja odbiornika.
+</div>
+
+</div>
+
+</div>
+
+
+<button onclick="oblicz()">
+OBLICZ
+</button>
+
+
+<div id="wyniki"></div>
+
+
+<div class="formulas">
+
+<div class="formulas-title">
+Podstawowe wzory:
+</div>
+
+<div>U = I × R</div>
+<div>I = U / R</div>
+<div>R = U / I</div>
+<div>P = U × I</div>
+<div>P = I² × R</div>
+<div>P = U² / R</div>
+
+</div>
+
+
+<div class="note">
+
+<strong>Ważne:</strong><br>
+
+Wartości U, I i R muszą być ze sobą zgodne.
+Jeżeli podasz wszystkie trzy wartości, kalkulator
+sprawdzi ich wzajemną zgodność.
+
+</div>
+
+</div>
+
+</main>
+
+
+<script>
+
+
+// ======================================================
+// FUNKCJE POMOCNICZE
+// ======================================================
+
+function liczba(wartosc) {
+
+    if (wartosc === undefined || wartosc === null) {
+        return NaN;
+    }
+
+    return parseFloat(
+        String(wartosc)
+            .replace(",", ".")
+            .replace(/\s/g, "")
+    );
+}
+
+
+function formatuj(x) {
+
+    if (!Number.isFinite(x)) {
+        return "—";
+    }
+
+    if (Math.abs(x) >= 1000 || Math.abs(x) < 0.001) {
+        return x.toExponential(3);
+    }
+
+    return Number(
+        x.toFixed(4)
+    ).toString();
+}
+
+
+function wynik(title, value, formula) {
+
+    return `
+        <div class="result">
+
+            <div class="result-title">
+                ${title}
+            </div>
+
+            <div class="result-value">
+                ${value}
+            </div>
+
+            <div class="formula">
+                ${formula}
+            </div>
+
+        </div>
+    `;
+}
+
+
+// ======================================================
+// ZMIANA TRYBU
+// ======================================================
+
+function zmienTryb() {
+
+    const tryb =
+        document.getElementById("tryb").value;
+
+    const label1 =
+        document.getElementById("label1");
+
+    const label2 =
+        document.getElementById("label2");
+
+    const help1 =
+        document.getElementById("help1");
+
+    const help2 =
+        document.getElementById("help2");
+
+    const input1 =
+        document.getElementById("input1");
+
+    const input2 =
+        document.getElementById("input2");
+
+    const pole3 =
+        document.getElementById("pole3");
+
+    const label3 =
+        document.getElementById("label3");
+
+    const help3 =
+        document.getElementById("help3");
+
+    const input3 =
+        document.getElementById("input3");
+
+
+    pole3.style.display = "none";
+
+
+    if (tryb === "U") {
+
+        label1.innerText =
+            "Prąd I [A]";
+
+        label2.innerText =
+            "Rezystancja R [Ω]";
+
+        help1.innerText =
+            "Dla 20 mA wpisz 0,02 A.";
+
+        help2.innerText =
+            "Rezystancja odbiornika.";
+
+        input1.placeholder =
+            "np. 0,02";
+
+        input2.placeholder =
+            "np. 600";
+    }
+
+
+    if (tryb === "I") {
+
+        label1.innerText =
+            "Napięcie U [V]";
+
+        label2.innerText =
+            "Rezystancja R [Ω]";
+
+        help1.innerText =
+            "Napięcie elektryczne.";
+
+        help2.innerText =
+            "Rezystancja odbiornika.";
+
+        input1.placeholder =
+            "np. 12";
+
+        input2.placeholder =
+            "np. 600";
+    }
+
+
+    if (tryb === "R") {
+
+        label1.innerText =
+            "Napięcie U [V]";
+
+        label2.innerText =
+            "Prąd I [A]";
+
+        help1.innerText =
+            "Napięcie elektryczne.";
+
+        help2.innerText =
+            "Dla 20 mA wpisz 0,02 A.";
+
+        input1.placeholder =
+            "np. 5";
+
+        input2.placeholder =
+            "np. 0,02";
+    }
+
+
+    if (tryb === "P") {
+
+        label1.innerText =
+            "Napięcie U [V]";
+
+        label2.innerText =
+            "Prąd I [A]";
+
+        help1.innerText =
+            "Napięcie elektryczne.";
+
+        help2.innerText =
+            "Dla 20 mA wpisz 0,02 A.";
+
+        input1.placeholder =
+            "np. 12";
+
+        input2.placeholder =
+            "np. 0,5";
+
+
+        pole3.style.display =
+            "block";
+
+        label3.innerText =
+            "Rezystancja R [Ω]";
+
+        help3.innerText =
+            "Opcjonalnie — służy do kontroli zgodności.";
+
+        input3.placeholder =
+            "np. 24";
+    }
+
+
+    document.getElementById("wyniki").innerHTML = "";
+
+}
+
+
 // ======================================================
 // KONTROLA SPÓJNOŚCI U – I – R
 // ======================================================
 
-function sprawdzSpojnoscUIR(U, I, R) {
+function kontrolaUIR(U, I, R) {
 
-    // Sprawdzamy tylko wtedy, gdy wszystkie trzy wartości
-    // zostały podane i są większe od zera.
     if (
         !Number.isFinite(U) ||
         !Number.isFinite(I) ||
@@ -14,124 +583,383 @@ function sprawdzSpojnoscUIR(U, I, R) {
         I <= 0 ||
         R <= 0
     ) {
-        return null;
+
+        return "";
     }
 
-    // Rezystancja wynikająca z prawa Ohma
-    const R_obliczone = U / I;
 
-    // Prąd wynikający z prawa Ohma
-    const I_obliczone = U / R;
+    const Rwynik =
+        U / I;
 
-    // Tolerancja 1%.
-    // Pozwala uniknąć zgłaszania błędu przez
-    // niewielkie różnice zaokrągleń.
-    const roznicaR =
-        Math.abs(R_obliczone - R) / R;
+    const Iwynik =
+        U / R;
 
-    const roznicaI =
-        Math.abs(I_obliczone - I) / I;
 
-    // Jeżeli różnica przekracza 1%,
-    // dane uznajemy za niespójne.
-    if (roznicaR > 0.01 || roznicaI > 0.01) {
+    const roznica =
+        Math.abs(Rwynik - R) / R;
 
-        return {
-            zgodne: false,
-            R_obliczone: R_obliczone,
-            I_obliczone: I_obliczone
-        };
+
+    // Tolerancja 1%
+    if (roznica <= 0.01) {
+
+        return `
+            <div class="ok">
+
+                <strong>
+                DANE SĄ ZGODNE
+                </strong>
+
+                <p>
+                U = ${formatuj(U)} V,
+                I = ${formatuj(I)} A,
+                R = ${formatuj(R)} Ω
+                </p>
+
+                <p>
+                R = U / I =
+                ${formatuj(Rwynik)} Ω
+                </p>
+
+            </div>
+        `;
     }
 
-    return {
-        zgodne: true,
-        R_obliczone: R_obliczone,
-        I_obliczone: I_obliczone
-    };
-}
 
+    return `
+        <div class="warning">
 
-// ======================================================
-// WYŚWIETLENIE OSTRZEŻENIA
-// ======================================================
+            <div class="warning-title">
+                UWAGA — DANE SĄ NIESPÓJNE
+            </div>
 
-function pokazKontroleUIR(U, I, R) {
-
-    const wynik = sprawdzSpojnoscUIR(U, I, R);
-
-    // Usuwamy poprzednie ostrzeżenie,
-    // aby nie pojawiały się kolejne kopie.
-    const stareOstrzezenie =
-        document.getElementById("ostrzezenie-ui-r");
-
-    if (stareOstrzezenie) {
-        stareOstrzezenie.remove();
-    }
-
-    if (!wynik || wynik.zgodne) {
-        return;
-    }
-
-    const ostrzezenie =
-        document.createElement("div");
-
-    ostrzezenie.id = "ostrzezenie-ui-r";
-
-    ostrzezenie.style.marginTop = "20px";
-    ostrzezenie.style.padding = "18px";
-    ostrzezenie.style.borderLeft = "5px solid #c62828";
-    ostrzezenie.style.borderRadius = "12px";
-    ostrzezenie.style.background = "#fff4f4";
-    ostrzezenie.style.color = "#7f1d1d";
-
-    ostrzezenie.innerHTML = `
-        <div style="font-weight:700; font-size:14px; margin-bottom:8px;">
-            UWAGA — DANE SĄ NIESPÓJNE
-        </div>
-
-        <div style="font-size:16px; line-height:1.6;">
-            Dla podanych wartości:
-            <br>
-            <strong>U = ${U} V</strong>
-            <br>
-            <strong>I = ${I} A</strong>
-            <br>
-            <strong>R = ${R} Ω</strong>
-        </div>
-
-        <div style="margin-top:12px; font-size:16px; line-height:1.6;">
-            Z prawa Ohma wynika:
-            <br>
-            <strong>R = U / I = ${U} / ${I} =
-            ${wynik.R_obliczone.toFixed(2)} Ω</strong>
-        </div>
-
-        <div style="margin-top:8px; font-size:16px; line-height:1.6;">
-            Natomiast dla wpisanego R = ${R} Ω
-            prąd powinien wynosić:
-            <br>
+            <p>
+            Podano:
             <strong>
-            I = U / R = ${U} / ${R} =
-            ${wynik.I_obliczone.toFixed(4)} A
-            </strong>
-        </div>
+            U = ${formatuj(U)} V
+            </strong>,
+            <strong>
+            I = ${formatuj(I)} A
+            </strong>,
+            <strong>
+            R = ${formatuj(R)} Ω
+            </strong>.
+            </p>
 
-        <div style="margin-top:12px; font-size:14px;">
+            <p>
+            Z prawa Ohma:
+            <strong>
+            R = U / I =
+            ${formatuj(U)} / ${formatuj(I)}
+            = ${formatuj(Rwynik)} Ω
+            </strong>.
+            </p>
+
+            <p>
+            Dla wpisanego R = ${formatuj(R)} Ω
+            prąd powinien wynosić:
+            <strong>
+            I = U / R =
+            ${formatuj(Iwynik)} A
+            </strong>.
+            </p>
+
+            <p>
             Sprawdź wartości U, I oraz R.
+            </p>
+
         </div>
     `;
-
-    // Wstawiamy ostrzeżenie przed sekcją wzorów.
-    const wzory = document.querySelector(".formulas");
-
-    if (wzory) {
-        wzory.parentNode.insertBefore(ostrzezenie, wzory);
-    } else {
-        const wynikContainer =
-            document.querySelector("main");
-
-        if (wynikContainer) {
-            wynikContainer.appendChild(ostrzezenie);
-        }
-    }
 }
+
+
+// ======================================================
+// GŁÓWNE OBLICZENIA
+// ======================================================
+
+function oblicz() {
+
+    const tryb =
+        document.getElementById("tryb").value;
+
+
+    const a =
+        liczba(
+            document.getElementById("input1").value
+        );
+
+
+    const b =
+        liczba(
+            document.getElementById("input2").value
+        );
+
+
+    const c =
+        liczba(
+            document.getElementById("input3").value
+        );
+
+
+    let U;
+    let I;
+    let R;
+    let P;
+
+    let html = "";
+
+
+    // ==================================================
+    // OBLICZANIE NAPIĘCIA
+    // ==================================================
+
+    if (tryb === "U") {
+
+        I = a;
+        R = b;
+
+
+        if (
+            !Number.isFinite(I) ||
+            !Number.isFinite(R) ||
+            I <= 0 ||
+            R <= 0
+        ) {
+
+            pokazBlad(
+                "Podaj dodatni prąd I oraz rezystancję R."
+            );
+
+            return;
+        }
+
+
+        U = I * R;
+
+        P = U * I;
+
+
+        html += wynik(
+            "NAPIĘCIE U",
+            formatuj(U) + " V",
+            `U = I × R = ${formatuj(I)} A × ${formatuj(R)} Ω`
+        );
+
+
+        html += wynik(
+            "MOC P",
+            formatuj(P) + " W",
+            `P = U × I = ${formatuj(U)} V × ${formatuj(I)} A`
+        );
+
+    }
+
+
+    // ==================================================
+    // OBLICZANIE PRĄDU
+    // ==================================================
+
+    if (tryb === "I") {
+
+        U = a;
+        R = b;
+
+
+        if (
+            !Number.isFinite(U) ||
+            !Number.isFinite(R) ||
+            U <= 0 ||
+            R <= 0
+        ) {
+
+            pokazBlad(
+                "Podaj dodatnie napięcie U oraz rezystancję R."
+            );
+
+            return;
+        }
+
+
+        I = U / R;
+
+        P = U * I;
+
+
+        html += wynik(
+            "PRĄD I",
+            formatuj(I) + " A",
+            `I = U / R = ${formatuj(U)} V / ${formatuj(R)} Ω`
+        );
+
+
+        html += wynik(
+            "PRĄD I",
+            formatuj(I * 1000) + " mA",
+            "Ta sama wartość wyrażona w miliamperach."
+        );
+
+
+        html += wynik(
+            "MOC P",
+            formatuj(P) + " W",
+            `P = U × I = ${formatuj(U)} V × ${formatuj(I)} A`
+        );
+
+    }
+
+
+    // ==================================================
+    // OBLICZANIE REZYSTANCJI
+    // ==================================================
+
+    if (tryb === "R") {
+
+        U = a;
+        I = b;
+
+
+        if (
+            !Number.isFinite(U) ||
+            !Number.isFinite(I) ||
+            U <= 0 ||
+            I <= 0
+        ) {
+
+            pokazBlad(
+                "Podaj dodatnie napięcie U oraz prąd I."
+            );
+
+            return;
+        }
+
+
+        R = U / I;
+
+        P = U * I;
+
+
+        html += wynik(
+            "REZYSTANCJA R",
+            formatuj(R) + " Ω",
+            `R = U / I = ${formatuj(U)} V / ${formatuj(I)} A`
+        );
+
+
+        html += wynik(
+            "MOC P",
+            formatuj(P) + " W",
+            `P = U × I = ${formatuj(U)} V × ${formatuj(I)} A`
+        );
+
+    }
+
+
+    // ==================================================
+    // OBLICZANIE MOCY
+    // ==================================================
+
+    if (tryb === "P") {
+
+        U = a;
+        I = b;
+        R = c;
+
+
+        if (
+            !Number.isFinite(U) ||
+            !Number.isFinite(I) ||
+            U <= 0 ||
+            I <= 0
+        ) {
+
+            pokazBlad(
+                "Podaj dodatnie napięcie U oraz prąd I."
+            );
+
+            return;
+        }
+
+
+        P = U * I;
+
+
+        html += wynik(
+            "MOC P",
+            formatuj(P) + " W",
+            `P = U × I = ${formatuj(U)} V × ${formatuj(I)} A`
+        );
+
+
+        const Rwynik =
+            U / I;
+
+
+        html += wynik(
+            "REZYSTANCJA R",
+            formatuj(Rwynik) + " Ω",
+            `R = U / I = ${formatuj(U)} V / ${formatuj(I)} A`
+        );
+
+
+        // Kontrola tylko wtedy,
+        // gdy użytkownik rzeczywiście wpisał R.
+
+        if (
+            Number.isFinite(R) &&
+            R > 0
+        ) {
+
+            html += kontrolaUIR(
+                U,
+                I,
+                R
+            );
+
+        }
+
+    }
+
+
+    document.getElementById("wyniki").innerHTML =
+        html;
+
+}
+
+
+// ======================================================
+// BŁĘDNE DANE
+// ======================================================
+
+function pokazBlad(tekst) {
+
+    document.getElementById("wyniki").innerHTML = `
+
+        <div class="warning">
+
+            <div class="warning-title">
+                BŁĄD DANYCH
+            </div>
+
+            <p>
+            Nie można obliczyć.
+            </p>
+
+            <p>
+            ${tekst}
+            </p>
+
+        </div>
+
+    `;
+}
+
+
+// ======================================================
+// START
+// ======================================================
+
+zmienTryb();
+
+</script>
+
+</body>
+</html>
