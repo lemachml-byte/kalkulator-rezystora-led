@@ -7,7 +7,6 @@
 <title>Prawo Ohma — Rezystor — Moc</title>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
@@ -16,12 +15,8 @@ body {
     margin: 0;
     background: #f3f4f6;
     color: #111827;
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Arial,
-        sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                 Arial, sans-serif;
 }
 
 main {
@@ -82,10 +77,6 @@ input {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 18px;
-}
-
-.field {
-    margin-bottom: 5px;
 }
 
 .help {
@@ -153,11 +144,6 @@ button:hover {
     margin-bottom: 10px;
 }
 
-.warning p {
-    margin: 7px 0;
-    line-height: 1.5;
-}
-
 .ok {
     margin-top: 20px;
     padding: 18px;
@@ -194,7 +180,6 @@ button:hover {
 }
 
 @media (max-width: 700px) {
-
     main {
         padding: 15px 10px 40px;
     }
@@ -210,16 +195,13 @@ button:hover {
     h1 {
         font-size: 27px;
     }
-
 }
-
 </style>
 </head>
 
 <body>
 
 <main>
-
 <div class="card">
 
 <h1>Prawo Ohma — Rezystor — Moc</h1>
@@ -237,21 +219,10 @@ Co chcesz obliczyć?
 
 <select id="tryb" onchange="zmienTryb()">
 
-<option value="U">
-Napięcie U [V]
-</option>
-
-<option value="I">
-Prąd I [A]
-</option>
-
-<option value="R">
-Rezystancję R [Ω]
-</option>
-
-<option value="P">
-Moc P [W]
-</option>
+<option value="U">Napięcie U [V]</option>
+<option value="I">Prąd I [A]</option>
+<option value="R">Rezystancję R [Ω]</option>
+<option value="P">Moc P [W]</option>
 
 </select>
 
@@ -262,11 +233,8 @@ Moc P [W]
 
 <div class="grid">
 
-<div class="field">
-
-<label id="label1">
-Prąd I [A]
-</label>
+<div>
+<label id="label1">Prąd I [A]</label>
 
 <input
     id="input1"
@@ -277,15 +245,11 @@ Prąd I [A]
 <div class="help" id="help1">
 Dla 20 mA wpisz 0,02 A.
 </div>
-
 </div>
 
 
-<div class="field">
-
-<label id="label2">
-Rezystancja R [Ω]
-</label>
+<div>
+<label id="label2">Rezystancja R [Ω]</label>
 
 <input
     id="input2"
@@ -296,11 +260,9 @@ Rezystancja R [Ω]
 <div class="help" id="help2">
 Rezystancja odbiornika.
 </div>
-
 </div>
 
 </div>
-
 </div>
 
 
@@ -332,19 +294,16 @@ Podstawowe wzory:
 
 <strong>Ważne:</strong><br>
 
-W każdym trybie kalkulator wymaga tylko danych
-niezbędnych do obliczenia wyniku.
-Pozostałe wielkości wylicza automatycznie.
+Kalkulator wymaga tylko dwóch danych wejściowych.
+Pozostałe wielkości są obliczane automatycznie.
 
 </div>
 
 </div>
-
 </main>
 
 
 <script>
-
 
 function liczba(wartosc) {
 
@@ -370,34 +329,31 @@ function formatuj(x) {
         return "—";
     }
 
-    if (
-        Math.abs(x) >= 1000000 ||
-        Math.abs(x) < 0.000001
-    ) {
+    if (Math.abs(x) >= 1000000 ||
+        (Math.abs(x) > 0 && Math.abs(x) < 0.000001)) {
+
         return x.toExponential(3);
     }
 
-    return Number(
-        x.toFixed(4)
-    ).toString();
+    return Number(x.toFixed(4)).toString();
 }
 
 
-function wynik(title, value, formula) {
+function wynik(tytul, wartosc, wzor) {
 
     return `
         <div class="result">
 
             <div class="result-title">
-                ${title}
+                ${tytul}
             </div>
 
             <div class="result-value">
-                ${value}
+                ${wartosc}
             </div>
 
             <div class="formula">
-                ${formula}
+                ${wzor}
             </div>
 
         </div>
@@ -415,12 +371,11 @@ function blad(tekst) {
                 BŁĄD DANYCH
             </div>
 
-            <p>
+            <div>
                 ${tekst}
-            </p>
+            </div>
 
         </div>
-
     `;
 }
 
@@ -449,97 +404,83 @@ function zmienTryb() {
         document.getElementById("input2");
 
 
-    document.getElementById("wyniki").innerHTML = "";
-
     input1.value = "";
     input2.value = "";
+
+    document.getElementById("wyniki").innerHTML = "";
 
 
     if (tryb === "U") {
 
-        label1.textContent =
-            "Prąd I [A]";
+        label1.textContent = "Prąd I [A]";
+        label2.textContent = "Rezystancja R [Ω]";
 
-        label2.textContent =
-            "Rezystancja R [Ω]";
+        input1.placeholder = "np. 0,02";
+        input2.placeholder = "np. 600";
 
         help1.textContent =
             "Dla 20 mA wpisz 0,02 A.";
 
         help2.textContent =
             "Rezystancja odbiornika.";
-
-        input1.placeholder =
-            "np. 0,02";
-
-        input2.placeholder =
-            "np. 600";
     }
 
 
     else if (tryb === "I") {
 
-        label1.textContent =
-            "Napięcie U [V]";
+        label1.textContent = "Napięcie U [V]";
+        label2.textContent = "Rezystancja R [Ω]";
 
-        label2.textContent =
-            "Rezystancja R [Ω]";
+        input1.placeholder = "np. 12";
+        input2.placeholder = "np. 600";
 
         help1.textContent =
             "Napięcie elektryczne.";
 
         help2.textContent =
             "Rezystancja odbiornika.";
-
-        input1.placeholder =
-            "np. 12";
-
-        input2.placeholder =
-            "np. 600";
     }
 
 
     else if (tryb === "R") {
 
-        label1.textContent =
-            "Napięcie U [V]";
+        label1.textContent = "Napięcie U [V]";
+        label2.textContent = "Prąd I [A]";
 
-        label2.textContent =
-            "Prąd I [A]";
+        input1.placeholder = "np. 5";
+        input2.placeholder = "np. 0,02";
 
         help1.textContent =
             "Napięcie elektryczne.";
 
         help2.textContent =
             "Dla 20 mA wpisz 0,02 A.";
-
-        input1.placeholder =
-            "np. 5";
-
-        input2.placeholder =
-            "np. 0,02";
     }
 
 
-    else {
+    else if (tryb === "P") {
 
-        label1.textContent =
-            "Napięcie U [V]";
+        /*
+         * TRYB MOC:
+         *
+         * TYLKO:
+         * U + I
+         *
+         * R NIE JEST POLEM WEJŚCIOWYM.
+         * R zostanie wyliczone automatycznie.
+         */
 
-        label2.textContent =
-            "Prąd I [A]";
+        label1.textContent = "Napięcie U [V]";
+        label2.textContent = "Prąd I [A]";
+
+        input1.placeholder = "np. 12";
+        input2.placeholder = "np. 0,5";
 
         help1.textContent =
             "Napięcie elektryczne.";
 
         help2.textContent =
             "Dla 20 mA wpisz 0,02 A.";
-
-        input1.placeholder =
-            "np. 12";
-
-        input2.placeholder =
-            "np. 0,5";
     }
 
 }
@@ -581,9 +522,11 @@ function oblicz() {
     let html = "";
 
 
-    // ================================================
-    // NAPIĘCIE U
-    // ================================================
+    /*
+     * ==========================================
+     * NAPIĘCIE
+     * ==========================================
+     */
 
     if (tryb === "U") {
 
@@ -606,30 +549,14 @@ function oblicz() {
             formatuj(P) + " W",
             `P = U × I = ${formatuj(U)} V × ${formatuj(I)} A`
         );
-
-
-        html += `
-
-            <div class="ok">
-
-                <strong>
-                    KONTROLA:
-                </strong>
-
-                <p>
-                    Z podanych I i R jednoznacznie wynika
-                    U = ${formatuj(U)} V.
-                </p>
-
-            </div>
-
-        `;
     }
 
 
-    // ================================================
-    // PRĄD I
-    // ================================================
+    /*
+     * ==========================================
+     * PRĄD
+     * ==========================================
+     */
 
     else if (tryb === "I") {
 
@@ -662,9 +589,11 @@ function oblicz() {
     }
 
 
-    // ================================================
-    // REZYSTANCJA R
-    // ================================================
+    /*
+     * ==========================================
+     * REZYSTANCJA
+     * ==========================================
+     */
 
     else if (tryb === "R") {
 
@@ -690,9 +619,18 @@ function oblicz() {
     }
 
 
-    // ================================================
-    // MOC P
-    // ================================================
+    /*
+     * ==========================================
+     * MOC
+     * ==========================================
+     *
+     * WEJŚCIE:
+     * U + I
+     *
+     * AUTOMATYCZNIE:
+     * P = U × I
+     * R = U / I
+     */
 
     else if (tryb === "P") {
 
@@ -717,24 +655,33 @@ function oblicz() {
         );
 
 
+        /*
+         * Niezależna kontrola mocy:
+         *
+         * P = I² × R
+         */
+
+        const Pkontrola =
+            I * I * R;
+
+
         html += `
 
             <div class="ok">
 
                 <strong>
-                    KONTROLA:
+                    KONTROLA OBLICZENIA
                 </strong>
 
                 <p>
-                    R = ${formatuj(R)} Ω
+                    P = I² × R
                 </p>
 
                 <p>
-                    P = I² × R =
-                    ${formatuj(I)}² ×
+                    P = ${formatuj(I)}² ×
                     ${formatuj(R)}
                     =
-                    ${formatuj(P)} W
+                    ${formatuj(Pkontrola)} W
                 </p>
 
             </div>
