@@ -210,6 +210,7 @@ button:hover {
     h1 {
         font-size: 27px;
     }
+
 }
 
 </style>
@@ -300,25 +301,6 @@ Rezystancja odbiornika.
 
 </div>
 
-
-<div id="pole3" style="display:none; margin-top:18px;">
-
-<label id="label3">
-Rezystancja R [Ω]
-</label>
-
-<input
-    id="input3"
-    type="text"
-    placeholder="np. 600"
->
-
-<div class="help" id="help3">
-Rezystancja odbiornika.
-</div>
-
-</div>
-
 </div>
 
 
@@ -350,9 +332,9 @@ Podstawowe wzory:
 
 <strong>Ważne:</strong><br>
 
-Wartości U, I i R muszą być ze sobą zgodne.
-Jeżeli podasz wszystkie trzy wartości, kalkulator
-sprawdzi ich wzajemną zgodność.
+W każdym trybie kalkulator wymaga tylko danych
+niezbędnych do obliczenia wyniku.
+Pozostałe wielkości wylicza automatycznie.
 
 </div>
 
@@ -364,13 +346,13 @@ sprawdzi ich wzajemną zgodność.
 <script>
 
 
-// ======================================================
-// FUNKCJE POMOCNICZE
-// ======================================================
-
 function liczba(wartosc) {
 
-    if (wartosc === undefined || wartosc === null) {
+    if (
+        wartosc === undefined ||
+        wartosc === null ||
+        String(wartosc).trim() === ""
+    ) {
         return NaN;
     }
 
@@ -388,7 +370,10 @@ function formatuj(x) {
         return "—";
     }
 
-    if (Math.abs(x) >= 1000 || Math.abs(x) < 0.001) {
+    if (
+        Math.abs(x) >= 1000000 ||
+        Math.abs(x) < 0.000001
+    ) {
         return x.toExponential(3);
     }
 
@@ -420,9 +405,25 @@ function wynik(title, value, formula) {
 }
 
 
-// ======================================================
-// ZMIANA TRYBU
-// ======================================================
+function blad(tekst) {
+
+    document.getElementById("wyniki").innerHTML = `
+
+        <div class="warning">
+
+            <div class="warning-title">
+                BŁĄD DANYCH
+            </div>
+
+            <p>
+                ${tekst}
+            </p>
+
+        </div>
+
+    `;
+}
+
 
 function zmienTryb() {
 
@@ -447,34 +448,25 @@ function zmienTryb() {
     const input2 =
         document.getElementById("input2");
 
-    const pole3 =
-        document.getElementById("pole3");
 
-    const label3 =
-        document.getElementById("label3");
+    document.getElementById("wyniki").innerHTML = "";
 
-    const help3 =
-        document.getElementById("help3");
-
-    const input3 =
-        document.getElementById("input3");
-
-
-    pole3.style.display = "none";
+    input1.value = "";
+    input2.value = "";
 
 
     if (tryb === "U") {
 
-        label1.innerText =
+        label1.textContent =
             "Prąd I [A]";
 
-        label2.innerText =
+        label2.textContent =
             "Rezystancja R [Ω]";
 
-        help1.innerText =
+        help1.textContent =
             "Dla 20 mA wpisz 0,02 A.";
 
-        help2.innerText =
+        help2.textContent =
             "Rezystancja odbiornika.";
 
         input1.placeholder =
@@ -485,18 +477,18 @@ function zmienTryb() {
     }
 
 
-    if (tryb === "I") {
+    else if (tryb === "I") {
 
-        label1.innerText =
+        label1.textContent =
             "Napięcie U [V]";
 
-        label2.innerText =
+        label2.textContent =
             "Rezystancja R [Ω]";
 
-        help1.innerText =
+        help1.textContent =
             "Napięcie elektryczne.";
 
-        help2.innerText =
+        help2.textContent =
             "Rezystancja odbiornika.";
 
         input1.placeholder =
@@ -507,18 +499,18 @@ function zmienTryb() {
     }
 
 
-    if (tryb === "R") {
+    else if (tryb === "R") {
 
-        label1.innerText =
+        label1.textContent =
             "Napięcie U [V]";
 
-        label2.innerText =
+        label2.textContent =
             "Prąd I [A]";
 
-        help1.innerText =
+        help1.textContent =
             "Napięcie elektryczne.";
 
-        help2.innerText =
+        help2.textContent =
             "Dla 20 mA wpisz 0,02 A.";
 
         input1.placeholder =
@@ -529,18 +521,18 @@ function zmienTryb() {
     }
 
 
-    if (tryb === "P") {
+    else {
 
-        label1.innerText =
+        label1.textContent =
             "Napięcie U [V]";
 
-        label2.innerText =
+        label2.textContent =
             "Prąd I [A]";
 
-        help1.innerText =
+        help1.textContent =
             "Napięcie elektryczne.";
 
-        help2.innerText =
+        help2.textContent =
             "Dla 20 mA wpisz 0,02 A.";
 
         input1.placeholder =
@@ -548,133 +540,10 @@ function zmienTryb() {
 
         input2.placeholder =
             "np. 0,5";
-
-
-        pole3.style.display =
-            "block";
-
-        label3.innerText =
-            "Rezystancja R [Ω]";
-
-        help3.innerText =
-            "Opcjonalnie — służy do kontroli zgodności.";
-
-        input3.placeholder =
-            "np. 24";
     }
-
-
-    document.getElementById("wyniki").innerHTML = "";
 
 }
 
-
-// ======================================================
-// KONTROLA SPÓJNOŚCI U – I – R
-// ======================================================
-
-function kontrolaUIR(U, I, R) {
-
-    if (
-        !Number.isFinite(U) ||
-        !Number.isFinite(I) ||
-        !Number.isFinite(R) ||
-        U <= 0 ||
-        I <= 0 ||
-        R <= 0
-    ) {
-
-        return "";
-    }
-
-
-    const Rwynik =
-        U / I;
-
-    const Iwynik =
-        U / R;
-
-
-    const roznica =
-        Math.abs(Rwynik - R) / R;
-
-
-    // Tolerancja 1%
-    if (roznica <= 0.01) {
-
-        return `
-            <div class="ok">
-
-                <strong>
-                DANE SĄ ZGODNE
-                </strong>
-
-                <p>
-                U = ${formatuj(U)} V,
-                I = ${formatuj(I)} A,
-                R = ${formatuj(R)} Ω
-                </p>
-
-                <p>
-                R = U / I =
-                ${formatuj(Rwynik)} Ω
-                </p>
-
-            </div>
-        `;
-    }
-
-
-    return `
-        <div class="warning">
-
-            <div class="warning-title">
-                UWAGA — DANE SĄ NIESPÓJNE
-            </div>
-
-            <p>
-            Podano:
-            <strong>
-            U = ${formatuj(U)} V
-            </strong>,
-            <strong>
-            I = ${formatuj(I)} A
-            </strong>,
-            <strong>
-            R = ${formatuj(R)} Ω
-            </strong>.
-            </p>
-
-            <p>
-            Z prawa Ohma:
-            <strong>
-            R = U / I =
-            ${formatuj(U)} / ${formatuj(I)}
-            = ${formatuj(Rwynik)} Ω
-            </strong>.
-            </p>
-
-            <p>
-            Dla wpisanego R = ${formatuj(R)} Ω
-            prąd powinien wynosić:
-            <strong>
-            I = U / R =
-            ${formatuj(Iwynik)} A
-            </strong>.
-            </p>
-
-            <p>
-            Sprawdź wartości U, I oraz R.
-            </p>
-
-        </div>
-    `;
-}
-
-
-// ======================================================
-// GŁÓWNE OBLICZENIA
-// ======================================================
 
 function oblicz() {
 
@@ -694,48 +563,35 @@ function oblicz() {
         );
 
 
-    const c =
-        liczba(
-            document.getElementById("input3").value
+    if (
+        !Number.isFinite(a) ||
+        !Number.isFinite(b) ||
+        a <= 0 ||
+        b <= 0
+    ) {
+
+        blad(
+            "Podaj dwie dodatnie wartości liczbowe."
         );
 
+        return;
+    }
 
-    let U;
-    let I;
-    let R;
-    let P;
 
     let html = "";
 
 
-    // ==================================================
-    // OBLICZANIE NAPIĘCIA
-    // ==================================================
+    // ================================================
+    // NAPIĘCIE U
+    // ================================================
 
     if (tryb === "U") {
 
-        I = a;
-        R = b;
+        const I = a;
+        const R = b;
 
-
-        if (
-            !Number.isFinite(I) ||
-            !Number.isFinite(R) ||
-            I <= 0 ||
-            R <= 0
-        ) {
-
-            pokazBlad(
-                "Podaj dodatni prąd I oraz rezystancję R."
-            );
-
-            return;
-        }
-
-
-        U = I * R;
-
-        P = U * I;
+        const U = I * R;
+        const P = U * I;
 
 
         html += wynik(
@@ -751,37 +607,37 @@ function oblicz() {
             `P = U × I = ${formatuj(U)} V × ${formatuj(I)} A`
         );
 
+
+        html += `
+
+            <div class="ok">
+
+                <strong>
+                    KONTROLA:
+                </strong>
+
+                <p>
+                    Z podanych I i R jednoznacznie wynika
+                    U = ${formatuj(U)} V.
+                </p>
+
+            </div>
+
+        `;
     }
 
 
-    // ==================================================
-    // OBLICZANIE PRĄDU
-    // ==================================================
+    // ================================================
+    // PRĄD I
+    // ================================================
 
-    if (tryb === "I") {
+    else if (tryb === "I") {
 
-        U = a;
-        R = b;
+        const U = a;
+        const R = b;
 
-
-        if (
-            !Number.isFinite(U) ||
-            !Number.isFinite(R) ||
-            U <= 0 ||
-            R <= 0
-        ) {
-
-            pokazBlad(
-                "Podaj dodatnie napięcie U oraz rezystancję R."
-            );
-
-            return;
-        }
-
-
-        I = U / R;
-
-        P = U * I;
+        const I = U / R;
+        const P = U * I;
 
 
         html += wynik(
@@ -803,38 +659,20 @@ function oblicz() {
             formatuj(P) + " W",
             `P = U × I = ${formatuj(U)} V × ${formatuj(I)} A`
         );
-
     }
 
 
-    // ==================================================
-    // OBLICZANIE REZYSTANCJI
-    // ==================================================
+    // ================================================
+    // REZYSTANCJA R
+    // ================================================
 
-    if (tryb === "R") {
+    else if (tryb === "R") {
 
-        U = a;
-        I = b;
+        const U = a;
+        const I = b;
 
-
-        if (
-            !Number.isFinite(U) ||
-            !Number.isFinite(I) ||
-            U <= 0 ||
-            I <= 0
-        ) {
-
-            pokazBlad(
-                "Podaj dodatnie napięcie U oraz prąd I."
-            );
-
-            return;
-        }
-
-
-        R = U / I;
-
-        P = U * I;
+        const R = U / I;
+        const P = U * I;
 
 
         html += wynik(
@@ -849,37 +687,20 @@ function oblicz() {
             formatuj(P) + " W",
             `P = U × I = ${formatuj(U)} V × ${formatuj(I)} A`
         );
-
     }
 
 
-    // ==================================================
-    // OBLICZANIE MOCY
-    // ==================================================
+    // ================================================
+    // MOC P
+    // ================================================
 
-    if (tryb === "P") {
+    else if (tryb === "P") {
 
-        U = a;
-        I = b;
-        R = c;
+        const U = a;
+        const I = b;
 
-
-        if (
-            !Number.isFinite(U) ||
-            !Number.isFinite(I) ||
-            U <= 0 ||
-            I <= 0
-        ) {
-
-            pokazBlad(
-                "Podaj dodatnie napięcie U oraz prąd I."
-            );
-
-            return;
-        }
-
-
-        P = U * I;
+        const P = U * I;
+        const R = U / I;
 
 
         html += wynik(
@@ -889,73 +710,43 @@ function oblicz() {
         );
 
 
-        const Rwynik =
-            U / I;
-
-
         html += wynik(
             "REZYSTANCJA R",
-            formatuj(Rwynik) + " Ω",
+            formatuj(R) + " Ω",
             `R = U / I = ${formatuj(U)} V / ${formatuj(I)} A`
         );
 
 
-        // Kontrola tylko wtedy,
-        // gdy użytkownik rzeczywiście wpisał R.
+        html += `
 
-        if (
-            Number.isFinite(R) &&
-            R > 0
-        ) {
+            <div class="ok">
 
-            html += kontrolaUIR(
-                U,
-                I,
-                R
-            );
+                <strong>
+                    KONTROLA:
+                </strong>
 
-        }
+                <p>
+                    R = ${formatuj(R)} Ω
+                </p>
 
+                <p>
+                    P = I² × R =
+                    ${formatuj(I)}² ×
+                    ${formatuj(R)}
+                    =
+                    ${formatuj(P)} W
+                </p>
+
+            </div>
+
+        `;
     }
 
 
     document.getElementById("wyniki").innerHTML =
         html;
-
 }
 
-
-// ======================================================
-// BŁĘDNE DANE
-// ======================================================
-
-function pokazBlad(tekst) {
-
-    document.getElementById("wyniki").innerHTML = `
-
-        <div class="warning">
-
-            <div class="warning-title">
-                BŁĄD DANYCH
-            </div>
-
-            <p>
-            Nie można obliczyć.
-            </p>
-
-            <p>
-            ${tekst}
-            </p>
-
-        </div>
-
-    `;
-}
-
-
-// ======================================================
-// START
-// ======================================================
 
 zmienTryb();
 
