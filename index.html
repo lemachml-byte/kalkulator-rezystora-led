@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kalkulator rezystora LED</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f4f6;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{max-width:680px;margin:auto;padding:20px 16px 40px}
+.card{background:white;border-radius:20px;padding:22px;box-shadow:0 8px 30px #0001}
+h1{margin:0 0 6px;font-size:28px}
+p{color:#6b7280}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{display:block;font-weight:700;margin-bottom:6px}
+input,select{width:100%;padding:13px;border:1px solid #d1d5db;border-radius:11px;font-size:17px}
+button{width:100%;padding:15px;border:0;border-radius:12px;background:#111827;color:white;font-size:17px;font-weight:800}
+.full{grid-column:1/-1}
+.results{margin-top:22px;display:grid;gap:11px}
+.box{background:#fafafa;border:1px solid #ddd;border-radius:13px;padding:14px}
+.good{border-left:5px solid #16803c}
+.warn{border-left:5px solid #b77900}
+.title{font-size:13px;color:#6b7280}
+.value{font-size:24px;font-weight:850}
+.small{font-size:14px;color:#6b7280;margin-top:5px}
+.formula{margin-top:18px;padding:13px;background:#f3f4f6;border-radius:11px;font-family:monospace}
+@media(max-width:560px){.grid{grid-template-columns:1fr}.full{grid-column:auto}}
+</style>
+</head>
+<body>
+<main>
+<section class="card">
+<h1>Kalkulator rezystora LED</h1>
+<p>Dobór rezystora ograniczającego prąd LED.</p>
+
+<div class="grid">
+<div>
+<label>Napięcie zasilania V<sub>S</sub> [V]</label>
+<input id="vs" type="number" step=".01" value="5">
+</div>
+
+<div>
+<label>Napięcie LED V<sub>F</sub> [V]</label>
+<input id="vf" type="number" step=".01" value="2">
+</div>
+
+<div>
+<label>Prąd LED I<sub>F</sub> [mA]</label>
+<input id="im" type="number" step=".1" value="20">
+</div>
+
+<div>
+<label>Tolerancja R [%]</label>
+<input id="tol" type="number" step=".1" value="5">
+</div>
+
+<div>
+<label>Moc znamionowa R [W]</label>
+<input id="pw" type="number" step=".01" value=".25">
+</div>
+
+<div>
+<label>Szereg</label>
+<select id="series">
+<option>E12</option>
+<option selected>E24</option>
+</select>
+</div>
+
+<div class="full">
+<button onclick="calc()">OBLICZ</button>
+</div>
+</div>
+
+<div id="results" class="results"></div>
+
+<div class="formula">
+R = (V<sub>S</sub> − V<sub>F</sub>) / I<sub>F</sub><br>
+P = I<sub>F</sub><sup>2</sup> × R
+</div>
+</section>
+</main>
+
+<script>
+const E12=[10,12,15,18,22,27,33,39,47,56,68,82];
+const E24=[10,11,12,13,15,16,18,20,22,24,27,30,33,36,39,43,47,51,56,62,68,75,82,91];
+
+function fmt(r){
+if(r>=1000000)return (r/1000000).toFixed(2)+' MΩ';
+if(r>=1000)return (r/1000).toFixed(2)+' kΩ';
+return r.toFixed(2)+' Ω';
+}
+
+function nearest(r,a){
+let best=0,d=Infinity;
+for(let e=-1;e<8;e++){
+for(let x of a){
+let v=x*Math.pow(10,e);
+if(Math.abs(v-r)<d){d=Math.abs(v-r);best=v;}
+}}
+return best;
+}
+
+function calc(){
+let vs=+document.getElementById('vs').value;
+let vf=+document.getElementById('vf').value;
+let im=+document.getElementById('im').value;
+let tol=+document.getElementById('tol').value;
+let pw=+document.getElementById('pw').value;
+
+if(vs<=vf||im<=0||tol<0||pw<=0){
+document.getElementById('results').innerHTML=
+'<div class="box warn"><div class="value">Sprawdź dane</div></div>';
+return;
+}
+
+let I=im/1000;
+let R=(vs-vf)/I;
+let Rmin=R*(1-tol/100);
+let Rmax=R*(1+tol/100);
+let P=I*I*R;
+let Pmax=I*I*Rmax;
+
+let arr=document.getElementById('series').value==='E12'?E12:E24;
+let rec=nearest(R,arr);
+let Ir=(vs-vf)/rec;
+let Pr=Ir*Ir*rec;
+let required=Math.max(Pmax*2,.125);
+
+document.getElementById('results').innerHTML=
+'<div class="box good">'+
+'<div class="title">REZYSTOR IDEALNY</div>'+
+'<div class="value">'+fmt(R)+'</div></div>'+
+
+'<div class="box">'+
+'<div class="title">Zakres przy tolerancji ±'+tol+'%</div>'+
+'<div class="value">'+fmt(Rmin)+' – '+fmt(Rmax)+'</div>'+
+'<div class="small">Prąd LED: '+
+(1000*(vs-vf)/Rmax).toFixed(2)+' – '+
+(1000*(vs-vf)/Rmin).toFixed(2)+' mA</div></div>'+
+
+'<div class="box">'+
+'<div class="title">Moc na rezystorze</div>'+
+'<div class="value">'+P.toFixed(3)+' W</div>'+
+'<div class="small">Maksymalnie: '+Pmax.toFixed(3)+' W</div></div>'+
+
+'<div class="box '+(pw>=required?'good':'warn')+'">'+
+'<div class="title">DOBÓR PRAKTYCZNY</div>'+
+'<div class="value">'+fmt(rec)+'</div>'+
+'<div class="small">Prąd: '+
+(Ir*1000).toFixed(2)+' mA | Moc: '+
+Pr.toFixed(3)+' W</div>'+
+'<div class="small">Zalecana moc znamionowa: minimum '+
+required.toFixed(2)+' W</div></div>';
+}
+
+calc();
+</script>
+</body>
+</html>
