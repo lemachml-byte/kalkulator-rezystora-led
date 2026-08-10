@@ -7,10 +7,7 @@
 <title>Kalkulator rezystora LED</title>
 
 <style>
-
-*{
- box-sizing:border-box
-}
+*{box-sizing:border-box}
 
 body{
  margin:0;
@@ -37,11 +34,6 @@ h1{
  font-size:28px
 }
 
-h2{
- margin:0 0 10px;
- font-size:20px
-}
-
 p{
  color:#6b7280
 }
@@ -62,8 +54,7 @@ label{
  margin-bottom:6px
 }
 
-input,
-select{
+input,select{
  width:100%;
  padding:13px;
  border:1px solid #d1d5db;
@@ -72,8 +63,7 @@ select{
  background:white
 }
 
-input:focus,
-select:focus{
+input:focus,select:focus{
  outline:2px solid #93c5fd;
  border-color:#2563eb
 }
@@ -88,10 +78,6 @@ button{
  font-size:17px;
  font-weight:800;
  cursor:pointer
-}
-
-button:hover{
- background:#1f2937
 }
 
 .small{
@@ -143,8 +129,7 @@ button:hover{
 .title{
  font-size:13px;
  color:#6b7280;
- font-weight:700;
- letter-spacing:.2px
+ font-weight:700
 }
 
 .value{
@@ -183,7 +168,6 @@ button:hover{
 }
 
 @media(max-width:560px){
-
  .grid{
   grid-template-columns:1fr
  }
@@ -195,9 +179,7 @@ button:hover{
  h1{
   font-size:24px
  }
-
 }
-
 </style>
 </head>
 
@@ -213,14 +195,11 @@ button:hover{
 Dobór rezystora ograniczającego prąd LED.
 </p>
 
-
 <div class="grid">
 
-
-<!-- ZASILANIE -->
+<!-- NAPIĘCIE ZASILANIA -->
 
 <div>
-
 <label>
 Napięcie zasilania V<sub>S</sub> [V]
 </label>
@@ -237,14 +216,12 @@ Napięcie zasilania V<sub>S</sub> [V]
 Napięcie źródła zasilania, np. 5 V USB,
 9 V bateria lub 12 V zasilacz.
 </div>
-
 </div>
 
 
-<!-- LED -->
+<!-- TYP LED -->
 
 <div>
-
 <label>
 Typ LED
 </label>
@@ -252,23 +229,23 @@ Typ LED
 <select id="led" onchange="setLED()">
 
 <option value="red">
-Czerwona — ok. 2,0 V / 20 mA
+Czerwona — ok. 2,0 V
 </option>
 
 <option value="yellow">
-Żółta — ok. 2,1 V / 20 mA
+Żółta — ok. 2,1 V
 </option>
 
 <option value="green">
-Zielona — ok. 2,2 V / 20 mA
+Zielona — ok. 2,2 V
 </option>
 
 <option value="blue">
-Niebieska — ok. 3,0 V / 20 mA
+Niebieska — ok. 3,0 V
 </option>
 
 <option value="white">
-Biała — ok. 3,2 V / 20 mA
+Biała — ok. 3,2 V
 </option>
 
 <option value="custom">
@@ -278,17 +255,15 @@ Własne parametry LED
 </select>
 
 <div class="small">
-Wartości kolorów są orientacyjne.
-Do dokładnych obliczeń używamy danych katalogowych konkretnej LED.
+Wartości są orientacyjne. Dokładne V<sub>F</sub>
+należy sprawdzić w karcie katalogowej LED.
 </div>
-
 </div>
 
 
 <!-- VF -->
 
 <div>
-
 <label>
 Napięcie LED V<sub>F</sub> [V]
 </label>
@@ -304,38 +279,59 @@ Napięcie LED V<sub>F</sub> [V]
 <div class="small">
 V<sub>F</sub> — spadek napięcia na przewodzącej LED.
 </div>
-
 </div>
 
 
-<!-- IF -->
+<!-- PRĄD LED -->
 
 <div>
-
 <label>
 Prąd LED I<sub>F</sub> [mA]
 </label>
+
+<select id="currentSelect" onchange="setCurrent()">
+
+<option value="2">
+2 mA — bardzo mały
+</option>
+
+<option value="5">
+5 mA — mały
+</option>
+
+<option value="10">
+10 mA — umiarkowany
+</option>
+
+<option value="20" selected>
+20 mA — typowa wartość dla wielu klasycznych LED
+</option>
+
+<option value="custom">
+Własna wartość
+</option>
+
+</select>
 
 <input
  id="im"
  type="number"
  step="0.1"
- min="0"
+ min="0.01"
  value="20"
+ style="margin-top:8px"
 >
 
 <div class="small">
-I<sub>F</sub> — prąd, przy którym chcemy pracować.
-Nie należy automatycznie przyjmować 20 mA.
+20 mA nie jest uniwersalnym prądem dla każdej LED.
+Należy sprawdzić kartę katalogową konkretnej diody.
 </div>
-
 </div>
 
 
 <!-- TOLERANCJA -->
 
 <div>
-
 <label>
 Tolerancja rezystora [%]
 </label>
@@ -357,16 +353,14 @@ Tolerancja rezystora [%]
 </select>
 
 <div class="small">
-Tolerancja określa, jak bardzo rzeczywista rezystancja może różnić się od wartości nominalnej.
+Najczęściej spotykane są rezystory ±5% i ±1%.
 </div>
-
 </div>
 
 
 <!-- MOC -->
 
 <div>
-
 <label>
 Moc znamionowa rezystora [W]
 </label>
@@ -396,9 +390,9 @@ Moc znamionowa rezystora [W]
 </select>
 
 <div class="small">
-Moc znamionowa określa maksymalną moc, którą rezystor może rozpraszać w określonych warunkach.
+Moc znamionowa określa maksymalną moc,
+którą rezystor może rozpraszać.
 </div>
-
 </div>
 
 
@@ -427,13 +421,14 @@ E96 — 96 wartości na dekadę
 </select>
 
 <div class="small">
-Szereg E określa standardowe wartości nominalne rezystorów.
+E12, E24 i E96 określają standardowe wartości
+nominalne rezystorów.
 </div>
 
 </div>
 
 
-<!-- BUTTON -->
+<!-- PRZYCISK -->
 
 <div class="full">
 
@@ -446,7 +441,7 @@ OBLICZ
 </div>
 
 
-<!-- INFORMACJA O DANYCH LED -->
+<!-- INFORMACJE -->
 
 <div class="help">
 
@@ -454,42 +449,46 @@ OBLICZ
 
 <br><br>
 
-<strong>1. V<sub>F</sub> — napięcie przewodzenia</strong><br>
-Najlepiej z karty katalogowej LED.
-Wartość zależy m.in. od koloru, technologii i prądu.
+<strong>V<sub>F</sub> — napięcie przewodzenia</strong><br>
+Najlepiej z karty katalogowej konkretnej LED.
+V<sub>F</sub> zależy m.in. od koloru, technologii
+i prądu pracy.
 
 <br><br>
 
-<strong>2. I<sub>F</sub> — prąd LED</strong><br>
-Z karty katalogowej.
-Nie należy mylić <strong>prądu znamionowego</strong> z <strong>maksymalnym dopuszczalnym prądem</strong>.
+<strong>I<sub>F</sub> — prąd LED</strong><br>
+Należy sprawdzić kartę katalogową.
+Maksymalny dopuszczalny prąd nie oznacza,
+że LED należy zasilać właśnie takim prądem.
 
 <br><br>
 
-<strong>3. Tolerancja rezystora</strong><br>
-Najczęściej spotykamy ±5%, ale rezystory precyzyjne często mają ±1%.
+<strong>Tolerancja rezystora</strong><br>
+Określa możliwą różnicę między wartością nominalną
+a rzeczywistą rezystancją.
 
 <br><br>
 
-<strong>4. Moc rezystora</strong><br>
-Obliczamy moc wydzielaną na rezystorze i dobieramy rezystor z odpowiednim zapasem.
+<strong>Moc rezystora</strong><br>
+Dobieramy ją na podstawie mocy wydzielanej
+na rezystorze, najlepiej z odpowiednim zapasem.
 
 <br><br>
 
-<strong>5. Szereg E12 / E24 / E96</strong><br>
-Określa, jakie standardowe wartości rezystorów są dostępne.
-E12 ma 12 wartości na dekadę, E24 ma 24, a E96 ma 96.
-
+<strong>Szereg E12 / E24 / E96</strong><br>
+Określa dostępne standardowe wartości rezystorów.
+E12 ma 12 wartości na dekadę, E24 ma 24,
+a E96 ma 96.
 </div>
 
 
 <div class="info">
 
-<strong>Ważne:</strong><br>
+<strong>Najważniejsza zasada:</strong><br>
 
-Dla zwykłej diody LED rezystor szeregowy ogranicza prąd.
-Nie podłączamy typowej LED bezpośrednio do źródła napięcia,
-jeżeli źródło może wymusić prąd większy od dopuszczalnego.
+Prąd LED należy ustalić na podstawie danych
+konkretnej diody. Wartość 20 mA nie jest
+uniwersalnym prądem dla wszystkich LED.
 
 </div>
 
@@ -499,7 +498,7 @@ jeżeli źródło może wymusić prąd większy od dopuszczalnego.
 
 <div class="formula">
 
-<strong>Podstawowe wzory</strong><br>
+<strong>Wzory:</strong><br>
 
 R = (V<sub>S</sub> − V<sub>F</sub>) / I<sub>F</sub>
 
@@ -516,12 +515,12 @@ P<sub>R</sub> = (V<sub>S</sub> − V<sub>F</sub>) × I<sub>F</sub>
 
 <div class="warning">
 
-<strong>Uwaga dotycząca rzeczywistej LED:</strong><br>
+<strong>Uwaga:</strong><br>
 
-V<sub>F</sub> nie jest stałą matematyczną.
-Zmienia się wraz z prądem, temperaturą i egzemplarzem LED.
-Dlatego wynik kalkulatora jest doborem projektowym,
-a nie pomiarem rzeczywistego układu.
+V<sub>F</sub> rzeczywistej LED nie jest stałą wartością.
+Zależy m.in. od prądu, temperatury i konkretnego
+egzemplarza. Kalkulator służy do doboru projektowego;
+pomiar rzeczywistego układu może dać inną wartość.
 
 </div>
 
@@ -532,21 +531,20 @@ a nie pomiarem rzeczywistego układu.
 
 <script>
 
+/* =========================
+   SZEREGI REZYSTORÓW
+   ========================= */
 
-/* =========================================
-   STANDARDOWE SZEREGI REZYSTORÓW
-   ========================================= */
-
-const E12 = [
+const E12=[
 10,12,15,18,22,27,33,39,47,56,68,82
 ];
 
-const E24 = [
+const E24=[
 10,11,12,13,15,16,18,20,22,24,27,30,
 33,36,39,43,47,51,56,62,68,75,82,91
 ];
 
-const E96 = [
+const E96=[
 10,10.2,10.5,10.7,11,11.3,11.5,11.8,
 12.1,12.4,12.7,13,13.3,13.7,14,14.3,
 14.7,15,15.4,15.8,16.2,16.5,16.9,17.4,
@@ -562,119 +560,81 @@ const E96 = [
 ];
 
 
-/* =========================================
-   PARAMETRY TYPOWYCH LED
-   ========================================= */
+/* =========================
+   PARAMETRY LED
+   ========================= */
 
 function setLED(){
 
- const type = document.getElementById("led").value;
+ const type=document.getElementById("led").value;
 
- const data = {
-
-  red:[2.0,20],
-  yellow:[2.1,20],
-  green:[2.2,20],
-  blue:[3.0,20],
-  white:[3.2,20]
-
+ const data={
+  red:[2.0],
+  yellow:[2.1],
+  green:[2.2],
+  blue:[3.0],
+  white:[3.2]
  };
 
  if(data[type]){
-
-  document.getElementById("vf").value = data[type][0];
-
-  document.getElementById("im").value = data[type][1];
-
+  document.getElementById("vf").value=data[type][0];
  }
 
 }
 
 
-/* =========================================
-   FORMATOWANIE REZYSTANCJI
-   ========================================= */
+/* =========================
+   PRĄD LED
+   ========================= */
+
+function setCurrent(){
+
+ const select=document.getElementById("currentSelect");
+ const input=document.getElementById("im");
+
+ if(select.value!=="custom"){
+  input.value=select.value;
+ }
+
+}
+
+
+/* =========================
+   FORMATOWANIE
+   ========================= */
 
 function fmt(r){
 
- if(r >= 1000000){
-
-  return (r/1000000).toFixed(2) + " MΩ";
-
+ if(r>=1000000){
+  return (r/1000000).toFixed(2)+" MΩ";
  }
 
- if(r >= 1000){
-
-  return (r/1000).toFixed(2) + " kΩ";
-
+ if(r>=1000){
+  return (r/1000).toFixed(2)+" kΩ";
  }
 
- return r.toFixed(2) + " Ω";
-
+ return r.toFixed(2)+" Ω";
 }
 
 
-/* =========================================
-   DOBÓR NAJBLIŻSZEJ WARTOŚCI
-   ========================================= */
+/* =========================
+   DOBÓR REZYSTORA W GÓRĘ
+   ========================= */
 
-function nearest(r, arr){
+function nextHigher(r,arr){
 
- let best = null;
- let distance = Infinity;
+ let best=null;
 
- for(let e=-1; e<8; e++){
-
-  for(let x of arr){
-
-   let v = x * Math.pow(10,e);
-
-   let d = Math.abs(v-r);
-
-   if(d < distance){
-
-    distance = d;
-    best = v;
-
-   }
-
-  }
-
- }
-
- return best;
-
-}
-
-
-/* =========================================
-   DOBÓR WARTOŚCI W GÓRĘ
-   =========================================
-
-   To ważna różnica względem zwykłego
-   "najbliższego rezystora".
-
-   Dla ograniczenia prądu LED wybieramy
-   pierwszą standardową wartość >= R.
-
-*/
-
-function nextHigher(r, arr){
-
- let best = null;
-
- for(let e=-1; e<8; e++){
+ for(let e=-1;e<8;e++){
 
   for(let x of arr){
 
-   let v = x * Math.pow(10,e);
+   let v=x*Math.pow(10,e);
 
-   if(v >= r){
+   if(v>=r){
 
-    if(best === null || v < best){
-
-     best = v;
-
+    if(best===null || v<best){
+     best=v;
     }
 
    }
@@ -684,30 +644,26 @@ function nextHigher(r, arr){
  }
 
  return best;
-
 }
 
 
-/* =========================================
+/* =========================
    OBLICZENIA
-   ========================================= */
+   ========================= */
 
 function calc(){
 
- const vs =
-  Number(document.getElementById("vs").value);
+ const vs=Number(document.getElementById("vs").value);
 
- const vf =
-  Number(document.getElementById("vf").value);
+ const vf=Number(document.getElementById("vf").value);
 
- const im =
-  Number(document.getElementById("im").value);
+ const im=Number(document.getElementById("im").value);
 
- const tol =
-  Number(document.getElementById("tol").value);
+ const tol=Number(document.getElementById("tol").value);
 
- const pw =
-  Number(document.getElementById("pw").value);
+ const pw=Number(document.getElementById("pw").value);
+
+ const series=document.getElementById("series").value;
 
 
  /* WALIDACJA */
@@ -716,168 +672,143 @@ function calc(){
   !Number.isFinite(vs) ||
   !Number.isFinite(vf) ||
   !Number.isFinite(im) ||
-  vs <= 0 ||
-  vf < 0 ||
-  im <= 0
+  vs<=0 ||
+  vf<0 ||
+  im<=0
  ){
 
-  document.getElementById("results").innerHTML =
+  document.getElementById("results").innerHTML=`
 
-  `
   <div class="box bad">
 
-   <div class="value">
-    Sprawdź dane wejściowe
-   </div>
+   <div class="title">BŁĄD DANYCH</div>
 
-   <div class="small">
-    Napięcie zasilania musi być większe od zera,
-    napięcie LED nie może być ujemne,
-    a prąd LED musi być większy od zera.
+   <div class="value">
+   Sprawdź wartości wejściowe.
    </div>
 
   </div>
+
   `;
 
   return;
-
  }
 
 
- /* BRAK NAPIĘCIA NA REZYSTORZE */
+ /* NAPIĘCIE MUSI BYĆ WIĘKSZE OD VF */
 
- if(vs <= vf){
+ if(vs<=vf){
 
-  document.getElementById("results").innerHTML =
+  document.getElementById("results").innerHTML=`
 
-  `
   <div class="box bad">
 
-   <div class="title">
-    BŁĄD
-   </div>
+   <div class="title">BŁĄD</div>
 
    <div class="value">
-    V<sub>S</sub> ≤ V<sub>F</sub>
+   V<sub>S</sub> ≤ V<sub>F</sub>
    </div>
 
    <div class="small">
-    Napięcie zasilania musi być większe od
-    napięcia przewodzenia LED, aby na rezystorze
-    pozostało napięcie ograniczające prąd.
+   Napięcie zasilania musi być większe
+   od napięcia przewodzenia LED.
    </div>
 
   </div>
+
   `;
 
   return;
-
  }
 
 
  /* PRĄD W AMPERACH */
 
- const I = im / 1000;
+ const I=im/1000;
 
 
  /* REZYSTOR IDEALNY */
 
- const R = (vs-vf) / I;
+ const R=(vs-vf)/I;
 
 
  /* TOLERANCJA */
 
- const Rmin = R * (1 - tol/100);
+ const Rmin=R*(1-tol/100);
 
- const Rmax = R * (1 + tol/100);
-
-
- /* PRĄD DLA SKRAJNYCH WARTOŚCI */
-
- const ImaxTolerance =
-  (vs-vf) / Rmin;
-
- const IminTolerance =
-  (vs-vf) / Rmax;
+ const Rmax=R*(1+tol/100);
 
 
- /* MOC NOMINALNA */
+ /* PRĄDY DLA TOLERANCJI */
 
- const P = I * I * R;
+ const Imax=(vs-vf)/Rmin;
 
-
- /* MOC PRZY Rmax */
-
- const PmaxTolerance =
-  I * I * Rmax;
+ const Imin=(vs-vf)/Rmax;
 
 
- /* WYBÓR SZEREGU */
+ /* MOC */
 
- const series =
-  document.getElementById("series").value;
+ const P=I*I*R;
 
- const arr =
-  series === "E12"
-   ? E12
-   : series === "E24"
-   ? E24
-   : E96;
+ const Pmax=I*I*Rmax;
 
 
- /* REZYSTOR PRAKTYCZNY */
+ /* SZEREG */
 
- const rec =
-  nextHigher(R,arr);
-
-
- /* PRĄD DLA PRAKTYCZNEGO REZYSTORA */
-
- const Ir =
-  (vs-vf) / rec;
+ const arr=
+  series==="E12"
+  ?E12
+  :series==="E24"
+  ?E24
+  :E96;
 
 
- /* MOC DLA PRAKTYCZNEGO REZYSTORA */
+ /* WARTOŚĆ PRAKTYCZNA */
 
- const Pr =
-  Ir * Ir * rec;
-
-
- /* ZAPAS MOCY */
-
- const recommendedPower =
-  Math.max(Pr * 2, 0.125);
+ const rec=nextHigher(R,arr);
 
 
- const powerOK =
-  pw >= recommendedPower;
+ /* PRĄD RZECZYWISTY */
+
+ const Ir=(vs-vf)/rec;
 
 
- /* RÓŻNICA WARTOŚCI */
+ /* MOC RZECZYWISTA */
 
- const resistanceDifference =
-  ((rec-R)/R)*100;
+ const Pr=Ir*Ir*rec;
+
+
+ /* ZALECANA MOC */
+
+ const recommended=Math.max(Pr*2,0.125);
+
+
+ /* CZY MOC WYSTARCZA */
+
+ const powerOK=pw>=recommended;
+
+
+ /* ODCHYŁKA */
+
+ const difference=((rec-R)/R)*100;
 
 
  /* WYNIK */
 
- document.getElementById("results").innerHTML =
+ document.getElementById("results").innerHTML=`
 
- `
- 
  <div class="box good">
 
   <div class="title">
-   REZYSTOR IDEALNY
+  REZYSTOR IDEALNY
   </div>
 
   <div class="value">
-   ${fmt(R)}
+  ${fmt(R)}
   </div>
 
   <div class="small">
-   Wartość wynikająca bezpośrednio ze wzoru:
-   R = (V<sub>S</sub> − V<sub>F</sub>) / I<sub>F</sub>
+  R = (V<sub>S</sub> − V<sub>F</sub>) / I<sub>F</sub>
   </div>
 
  </div>
@@ -886,24 +817,19 @@ function calc(){
  <div class="box">
 
   <div class="title">
-   WPŁYW TOLERANCJI REZYSTORA ±${tol}%
+  WPŁYW TOLERANCJI ±${tol}%
   </div>
 
   <div class="value">
-   ${fmt(Rmin)} – ${fmt(Rmax)}
+  ${fmt(Rmin)} – ${fmt(Rmax)}
   </div>
 
   <div class="small">
-   Rzeczywista rezystancja może znajdować się
-   w tym zakresie.
-  </div>
-
-  <div class="small">
-   Możliwy prąd LED:
-   ${ (IminTolerance*1000).toFixed(2) }
-   –
-   ${ (ImaxTolerance*1000).toFixed(2) }
-   mA
+  Możliwy prąd LED:
+  ${(Imin*1000).toFixed(2)}
+  –
+  ${(Imax*1000).toFixed(2)}
+  mA
   </div>
 
  </div>
@@ -912,73 +838,62 @@ function calc(){
  <div class="box">
 
   <div class="title">
-   MOC WYDZIELANA NA REZYSTORZE
+  MOC WYDZIELANA NA REZYSTORZE
   </div>
 
   <div class="value">
-   ${P.toFixed(3)} W
+  ${P.toFixed(3)} W
   </div>
 
   <div class="small">
-   Moc dla wartości idealnej.
-  </div>
-
-  <div class="small">
-   Dla górnej granicy tolerancji:
-   ${PmaxTolerance.toFixed(3)} W
+  Przy górnej granicy tolerancji:
+  ${Pmax.toFixed(3)} W
   </div>
 
  </div>
 
 
- <div class="box ${powerOK ? "good" : "warn"}">
+ <div class="box ${powerOK?"good":"warn"}">
 
   <div class="title">
-   DOBÓR PRAKTYCZNY — ${series}
+  DOBÓR PRAKTYCZNY — ${series}
   </div>
 
   <div class="value">
-   ${fmt(rec)}
+  ${fmt(rec)}
   </div>
 
   <div class="small">
-   Wybrano pierwszą standardową wartość
-   większą lub równą wartości idealnej.
+  Rzeczywisty prąd LED:
+  ${(Ir*1000).toFixed(2)} mA
   </div>
 
   <div class="small">
-   Odchyłka od wartości idealnej:
-   ${resistanceDifference.toFixed(1)}%
+  Moc na rezystorze:
+  ${Pr.toFixed(3)} W
   </div>
 
   <div class="small">
-   Rzeczywisty prąd LED:
-   ${(Ir*1000).toFixed(2)} mA
+  Odchyłka od wartości idealnej:
+  ${difference.toFixed(1)}%
   </div>
 
   <div class="small">
-   Moc na wybranym rezystorze:
-   ${Pr.toFixed(3)} W
+  Zalecana moc rezystora:
+  ≥ ${recommended.toFixed(3)} W
   </div>
 
   <div class="small">
-   Zalecana moc znamionowa:
-   ≥ ${recommendedPower.toFixed(3)} W
+  Wybrana moc:
+  ${pw.toFixed(3)} W
   </div>
 
   <div class="small">
-   Wybrana moc znamionowa:
-   ${pw.toFixed(3)} W
-  </div>
-
-  <div class="small">
-
-   ${
-    powerOK
-    ? "✓ Moc znamionowa rezystora jest wystarczająca."
-    : "⚠ Wybrana moc jest zbyt mała — wybierz rezystor o większej mocy."
-   }
-
+  ${
+   powerOK
+   ?"✓ Moc rezystora jest wystarczająca."
+   :"⚠ Wybierz rezystor o większej mocy."
+  }
   </div>
 
  </div>
@@ -987,22 +902,26 @@ function calc(){
  <div class="box">
 
   <div class="title">
-   PARAMETRY DO UKŁADU
+  PARAMETRY UKŁADU
   </div>
 
   <div class="value">
-   ${fmt(rec)} / ${pw} W
+  ${fmt(rec)} / ${pw} W
   </div>
 
   <div class="small">
-   LED:
-   V<sub>F</sub> = ${vf.toFixed(2)} V,
-   I<sub>F</sub> = ${im.toFixed(2)} mA
+  Zasilanie:
+  ${vs.toFixed(2)} V
   </div>
 
   <div class="small">
-   Zasilanie:
-   ${vs.toFixed(2)} V
+  LED:
+  V<sub>F</sub> = ${vf.toFixed(2)} V
+  </div>
+
+  <div class="small">
+  Prąd LED:
+  ${im.toFixed(2)} mA
   </div>
 
  </div>
@@ -1012,9 +931,9 @@ function calc(){
 }
 
 
-/* =========================================
-   URUCHOMIENIE PO OTWARCIU
-   ========================================= */
+/* =========================
+   START
+   ========================= */
 
 calc();
 
