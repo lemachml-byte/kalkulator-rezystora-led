@@ -42,7 +42,7 @@ body {
 main {
     max-width: 920px;
     margin: 0 auto;
-    padding: 30px 20px 60px;
+    padding: 24px 20px 60px;
 }
 
 .card {
@@ -50,6 +50,31 @@ main {
     border-radius: 24px;
     padding: 34px;
     box-shadow: 0 10px 35px rgba(0,0,0,0.10);
+}
+
+/* =========================
+   POWRÓT
+========================= */
+
+.top-navigation {
+    margin-bottom: 18px;
+}
+
+.back-top {
+    display: inline-block;
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: #ffffff;
+    color: var(--navy);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.15s ease;
+}
+
+.back-top:hover {
+    background: var(--blue);
 }
 
 /* =========================
@@ -84,7 +109,7 @@ h1 {
     margin-bottom: 30px;
     text-align: center;
     color: var(--muted);
-    font-size: 16px;
+    font-size: 15px;
 }
 
 /* =========================
@@ -99,9 +124,29 @@ h1 {
     border-radius: 16px;
 }
 
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.section-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 800;
+}
+
 .section-title {
-    margin-bottom: 14px;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 800;
 }
 
@@ -159,7 +204,7 @@ button {
     border-radius: 12px;
     background: var(--navy);
     color: #ffffff;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 800;
     cursor: pointer;
     transition: 0.15s ease;
@@ -275,24 +320,6 @@ button:active {
 }
 
 /* =========================
-   POWRÓT
-========================= */
-
-.back {
-    display: block;
-    margin-top: 22px;
-    text-align: center;
-    color: var(--navy);
-    font-size: 14px;
-    font-weight: 700;
-    text-decoration: none;
-}
-
-.back:hover {
-    text-decoration: underline;
-}
-
-/* =========================
    STOPKA
 ========================= */
 
@@ -351,12 +378,19 @@ button:active {
 
 <div class="card">
 
+    <!-- POWRÓT -->
+
+    <div class="top-navigation">
+        <a class="back-top" href="index.html">
+            ← Wszystkie kalkulatory
+        </a>
+    </div>
+
     <!-- LOGO -->
 
     <div class="logo">
         <img src="logo.svg" alt="LeMaCh">
     </div>
-
 
     <!-- TYTUŁ -->
 
@@ -368,13 +402,20 @@ button:active {
         Kalkulator podstawowych zależności elektrycznych
     </div>
 
-
-    <!-- WYBÓR OBLICZENIA -->
+    <!-- SEKCJA 1 -->
 
     <div class="section">
 
-        <div class="section-title">
-            Co chcesz obliczyć?
+        <div class="section-heading">
+
+            <div class="section-number">
+                1
+            </div>
+
+            <div class="section-title">
+                Co chcesz obliczyć?
+            </div>
+
         </div>
 
         <select id="tryb" onchange="zmienTryb()">
@@ -399,10 +440,21 @@ button:active {
 
     </div>
 
-
-    <!-- DANE -->
+    <!-- SEKCJA 2 -->
 
     <div class="section">
+
+        <div class="section-heading">
+
+            <div class="section-number">
+                2
+            </div>
+
+            <div class="section-title">
+                Dane wejściowe
+            </div>
+
+        </div>
 
         <div class="grid">
 
@@ -419,15 +471,11 @@ button:active {
                     placeholder="np. 0,02"
                 >
 
-                <div
-                    class="help"
-                    id="help1"
-                >
+                <div class="help" id="help1">
                     Dla 20 mA wpisz 0,02 A.
                 </div>
 
             </div>
-
 
             <div class="field">
 
@@ -442,10 +490,7 @@ button:active {
                     placeholder="np. 600"
                 >
 
-                <div
-                    class="help"
-                    id="help2"
-                >
+                <div class="help" id="help2">
                     Rezystancja odbiornika.
                 </div>
 
@@ -455,13 +500,11 @@ button:active {
 
     </div>
 
-
     <!-- PRZYCISK -->
 
     <button onclick="oblicz()">
         OBLICZ
     </button>
-
 
     <!-- WYNIKI -->
 
@@ -469,7 +512,6 @@ button:active {
         id="wyniki"
         class="results"
     ></div>
-
 
     <!-- WZORY -->
 
@@ -487,7 +529,6 @@ button:active {
         <div>P = U² / R</div>
 
     </div>
-
 
     <!-- INFORMACJA -->
 
@@ -507,17 +548,6 @@ button:active {
 
     </div>
 
-
-    <!-- POWRÓT -->
-
-    <a
-        class="back"
-        href="index.html"
-    >
-        ← Wróć do kalkulatorów elektrycznych
-    </a>
-
-
     <!-- STOPKA -->
 
     <div class="footer">
@@ -527,7 +557,6 @@ button:active {
 </div>
 
 </main>
-
 
 <script>
 
@@ -660,7 +689,6 @@ function zmienTryb() {
 
     const input2 =
         document.getElementById("input2");
-
 
     input1.value = "";
     input2.value = "";
