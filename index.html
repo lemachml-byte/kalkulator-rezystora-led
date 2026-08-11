@@ -209,12 +209,16 @@ h1 {
     background: var(--blue-light);
     border: 2px dashed #b9c6df;
 
-    cursor: default;
+    cursor: pointer;
 }
 
 .future:hover {
-    transform: none;
-    box-shadow: none;
+    transform: translateY(-3px);
+
+    border-color: #9eafd0;
+
+    box-shadow:
+        0 12px 28px rgba(0,0,0,0.09);
 }
 
 .future .number {
@@ -226,7 +230,7 @@ h1 {
 }
 
 .future .open {
-    color: var(--muted);
+    color: var(--navy);
 }
 
 /* =========================
@@ -419,7 +423,10 @@ h1 {
 
         <!-- KALKULATOR 03 -->
 
-        <div class="calculator-card future">
+        <a
+            class="calculator-card future"
+            href="kalkulator-wspolny.html"
+        >
 
             <div class="number">
                 Kalkulator 03
@@ -437,17 +444,17 @@ h1 {
 
                 <br><br>
 
-                W tym miejscu powstanie
-                trzeci kalkulator łączący
-                funkcje pozostałych narzędzi.
+                Kalkulator łączy zależności
+                pomiędzy napięciem, prądem,
+                rezystancją i mocą.
 
             </p>
 
             <div class="open">
-                Przygotowany do opracowania
+                Otwórz kalkulator →
             </div>
 
-        </div>
+        </a>
 
 
     </div>
@@ -471,10 +478,9 @@ h1 {
         <br><br>
 
         Każdy kalkulator działa niezależnie.
-        W przyszłości zostanie dodane również
-        połączone narzędzie wykorzystujące
-        zależności pomiędzy napięciem, prądem,
-        rezystancją i mocą.
+        Kalkulator wspólny pozwala natomiast
+        wykorzystać zależności pomiędzy napięciem,
+        prądem, rezystancją i mocą.
 
     </div>
 
