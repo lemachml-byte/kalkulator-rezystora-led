@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Kalkulatory elektryczne</title>
+<title>Kalkulatory elektryczne — LeMaCh</title>
 
 <style>
 
@@ -12,63 +12,93 @@
     box-sizing: border-box;
 }
 
+:root {
+    --navy: #27376d;
+    --navy-dark: #1f2d5a;
+    --blue-light: #eef2fb;
+    --blue-border: #dce4f4;
+    --border: #d8e0eb;
+    --text: #172033;
+    --muted: #68748a;
+    --green: #16803c;
+    --white: #ffffff;
+    --page: #f3f4f6;
+}
+
 body {
     margin: 0;
     min-height: 100vh;
-    background: #f3f4f6;
-    color: #111827;
+    background: var(--page);
+    color: var(--text);
+
     font-family:
         -apple-system,
         BlinkMacSystemFont,
         "Segoe UI",
         Arial,
         sans-serif;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
+
+main {
+    width: 100%;
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 35px 20px 60px;
+}
+
+/* =========================
+   GŁÓWNA KARTA
+========================= */
 
 .container {
-    width: min(900px, 92%);
-    background: #ffffff;
-    border-radius: 24px;
-    padding: 45px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.10);
+    background: var(--white);
+    border-radius: 26px;
+    padding: 42px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.09);
 }
 
-/* LOGO */
+/* =========================
+   LOGO
+========================= */
 
 .logo {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 25px;
+    text-align: center;
+    margin-bottom: 22px;
 }
 
 .logo img {
-    max-width: 260px;
-    max-height: 110px;
-    object-fit: contain;
+    width: 230px;
+    max-width: 75%;
+    height: auto;
 }
 
-/* NAGŁÓWEK */
+/* =========================
+   NAGŁÓWEK
+========================= */
 
 h1 {
-    text-align: center;
     margin: 0;
-    font-size: 34px;
-    font-weight: 700;
-    color: #111827;
+    text-align: center;
+    color: var(--navy);
+
+    font-size: 36px;
+    line-height: 1.2;
 }
 
 .subtitle {
+    max-width: 650px;
+    margin: 12px auto 35px;
+
     text-align: center;
-    margin: 12px 0 35px;
-    color: #64748b;
+    color: var(--muted);
+
     font-size: 17px;
+    line-height: 1.5;
 }
 
-/* KALKULATORY */
+/* =========================
+   KALKULATORY
+========================= */
 
 .calculators {
     display: grid;
@@ -76,16 +106,25 @@ h1 {
     gap: 20px;
 }
 
-.card {
-    display: block;
-    text-decoration: none;
-    color: inherit;
+/* =========================
+   KARTA
+========================= */
+
+.calculator-card {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    min-height: 220px;
+    padding: 28px;
 
     background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border);
     border-radius: 18px;
 
-    padding: 28px;
+    text-decoration: none;
+    color: inherit;
 
     transition:
         transform 0.18s ease,
@@ -93,79 +132,182 @@ h1 {
         border-color 0.18s ease;
 }
 
-.card:hover {
+.calculator-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.10);
-    border-color: #94a3b8;
+
+    border-color: #b8c3dc;
+
+    box-shadow:
+        0 12px 28px rgba(0,0,0,0.09);
 }
 
-.card-number {
-    font-size: 14px;
-    font-weight: 700;
-    color: #64748b;
-    margin-bottom: 12px;
+/* =========================
+   NUMER
+========================= */
+
+.number {
+    margin-bottom: 14px;
+
+    color: var(--navy);
+
+    font-size: 13px;
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
 }
 
-.card h2 {
-    margin: 0 0 10px;
-    font-size: 22px;
-    color: #111827;
+/* =========================
+   TYTUŁ KARTY
+========================= */
+
+.calculator-card h2 {
+    margin: 0 0 12px;
+
+    color: var(--text);
+
+    font-size: 23px;
+    line-height: 1.25;
 }
 
-.card p {
+/* =========================
+   OPIS
+========================= */
+
+.calculator-card p {
     margin: 0;
-    line-height: 1.55;
-    color: #64748b;
+
+    color: var(--muted);
+
+    font-size: 15px;
+    line-height: 1.6;
 }
 
-/* TRZECI KALKULATOR */
+/* =========================
+   PRZYCISK / STRZAŁKA
+========================= */
 
-.card.future {
+.open {
+    margin-top: auto;
+    padding-top: 22px;
+
+    color: var(--navy);
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+/* =========================
+   TRZECI KALKULATOR
+========================= */
+
+.future {
     grid-column: 1 / -1;
-    background: #f1f5f9;
-    border-style: dashed;
+
+    min-height: 190px;
+
+    background: var(--blue-light);
+    border: 2px dashed #b9c6df;
+
+    cursor: default;
+}
+
+.future:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.future .number {
+    color: var(--navy);
 }
 
 .future h2 {
-    color: #334155;
+    color: var(--navy);
 }
 
-/* STOPKA */
+.future .open {
+    color: var(--muted);
+}
+
+/* =========================
+   INFORMACJA
+========================= */
+
+.info {
+    margin-top: 30px;
+    padding: 22px;
+
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--navy);
+
+    border-radius: 14px;
+
+    color: #34415d;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.info strong {
+    color: var(--navy);
+}
+
+/* =========================
+   STOPKA
+========================= */
 
 .footer {
-    text-align: center;
-    margin-top: 35px;
+    margin-top: 30px;
     padding-top: 20px;
-    border-top: 1px solid #e5e7eb;
+
+    border-top: 1px solid var(--border);
+
+    text-align: center;
+
+    color: #94a3b8;
 
     font-size: 13px;
-    color: #94a3b8;
 }
 
-/* TELEFON */
+/* =========================
+   TELEFON
+========================= */
 
-@media (max-width: 700px) {
+@media (max-width: 720px) {
 
-    body {
-        align-items: flex-start;
-        padding: 25px 0;
+    main {
+        padding: 12px 10px 35px;
     }
 
     .container {
-        padding: 28px 20px;
+        padding: 25px 18px;
+        border-radius: 18px;
+    }
+
+    .logo img {
+        width: 190px;
     }
 
     h1 {
-        font-size: 28px;
+        font-size: 29px;
+    }
+
+    .subtitle {
+        font-size: 15px;
+        margin-bottom: 27px;
     }
 
     .calculators {
         grid-template-columns: 1fr;
     }
 
-    .card.future {
+    .calculator-card {
+        min-height: 190px;
+        padding: 23px;
+    }
+
+    .future {
         grid-column: auto;
     }
 
@@ -176,24 +318,50 @@ h1 {
 
 <body>
 
+<main>
+
 <div class="container">
 
+
+    <!-- LOGO -->
+
     <div class="logo">
-        <img src="logo.svg" alt="Logo">
+
+        <img
+            src="logo.svg"
+            alt="LeMaCh"
+        >
+
     </div>
 
-    <h1>Kalkulatory elektryczne</h1>
+
+    <!-- NAGŁÓWEK -->
+
+    <h1>
+        Kalkulatory elektryczne
+    </h1>
 
     <div class="subtitle">
-        Narzędzia do obliczeń podstawowych zależności elektrycznych
+
+        Narzędzia do obliczeń podstawowych
+        zależności elektrycznych
+
     </div>
+
+
+    <!-- KALKULATORY -->
 
     <div class="calculators">
 
-        <a class="card"
-           href="kalkulator-rezystora-led.html">
 
-            <div class="card-number">
+        <!-- KALKULATOR 01 -->
+
+        <a
+            class="calculator-card"
+            href="kalkulator-rezystora-led.html"
+        >
+
+            <div class="number">
                 Kalkulator 01
             </div>
 
@@ -202,17 +370,29 @@ h1 {
             </h2>
 
             <p>
-                Oblicz rezystor ograniczający prąd LED
-                oraz sprawdź podstawowe parametry układu.
+
+                Dobór rezystora ograniczającego
+                prąd LED na podstawie napięcia
+                zasilania, parametrów diody
+                i wymaganego prądu.
+
             </p>
+
+            <div class="open">
+                Otwórz kalkulator →
+            </div>
 
         </a>
 
 
-        <a class="card"
-           href="kalkulator-ohma.html">
+        <!-- KALKULATOR 02 -->
 
-            <div class="card-number">
+        <a
+            class="calculator-card"
+            href="kalkulator-ohma.html"
+        >
+
+            <div class="number">
                 Kalkulator 02
             </div>
 
@@ -221,16 +401,27 @@ h1 {
             </h2>
 
             <p>
-                Oblicz napięcie, prąd, rezystancję
-                oraz moc elektryczną.
+
+                Obliczanie napięcia, prądu,
+                rezystancji i mocy oraz
+                sprawdzanie zależności
+                między podstawowymi
+                wielkościami elektrycznymi.
+
             </p>
+
+            <div class="open">
+                Otwórz kalkulator →
+            </div>
 
         </a>
 
 
-        <div class="card future">
+        <!-- KALKULATOR 03 -->
 
-            <div class="card-number">
+        <div class="calculator-card future">
+
+            <div class="number">
                 Kalkulator 03
             </div>
 
@@ -239,21 +430,67 @@ h1 {
             </h2>
 
             <p>
-                Połączone narzędzie do kompleksowych
-                obliczeń elektrycznych. Kalkulator zostanie
-                utworzony w kolejnym etapie.
+
+                Połączone narzędzie do
+                kompleksowych obliczeń
+                elektrycznych.
+
+                <br><br>
+
+                W tym miejscu powstanie
+                trzeci kalkulator łączący
+                funkcje pozostałych narzędzi.
+
             </p>
+
+            <div class="open">
+                Przygotowany do opracowania
+            </div>
 
         </div>
 
+
     </div>
 
+
+    <!-- INFORMACJA -->
+
+    <div class="info">
+
+        <strong>
+            O projekcie
+        </strong>
+
+        <br><br>
+
+        Zestaw kalkulatorów został przygotowany
+        jako praktyczne narzędzie do wykonywania
+        podstawowych obliczeń z zakresu elektroniki
+        i elektrotechniki.
+
+        <br><br>
+
+        Każdy kalkulator działa niezależnie.
+        W przyszłości zostanie dodane również
+        połączone narzędzie wykorzystujące
+        zależności pomiędzy napięciem, prądem,
+        rezystancją i mocą.
+
+    </div>
+
+
+    <!-- STOPKA -->
 
     <div class="footer">
-        Narzędzia obliczeniowe • Elektronika
+
+        LeMaCh • Narzędzia obliczeniowe • Elektronika
+
     </div>
 
+
 </div>
+
+</main>
 
 </body>
 </html>
