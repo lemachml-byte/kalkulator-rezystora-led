@@ -1,1 +1,259 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Kalkulatory elektryczne</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #f3f4f6;
+    color: #111827;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: min(900px, 92%);
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 45px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.10);
+}
+
+/* LOGO */
+
+.logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.logo img {
+    max-width: 260px;
+    max-height: 110px;
+    object-fit: contain;
+}
+
+/* NAGŁÓWEK */
+
+h1 {
+    text-align: center;
+    margin: 0;
+    font-size: 34px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.subtitle {
+    text-align: center;
+    margin: 12px 0 35px;
+    color: #64748b;
+    font-size: 17px;
+}
+
+/* KALKULATORY */
+
+.calculators {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+
+    padding: 28px;
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.10);
+    border-color: #94a3b8;
+}
+
+.card-number {
+    font-size: 14px;
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.card h2 {
+    margin: 0 0 10px;
+    font-size: 22px;
+    color: #111827;
+}
+
+.card p {
+    margin: 0;
+    line-height: 1.55;
+    color: #64748b;
+}
+
+/* TRZECI KALKULATOR */
+
+.card.future {
+    grid-column: 1 / -1;
+    background: #f1f5f9;
+    border-style: dashed;
+}
+
+.future h2 {
+    color: #334155;
+}
+
+/* STOPKA */
+
+.footer {
+    text-align: center;
+    margin-top: 35px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+/* TELEFON */
+
+@media (max-width: 700px) {
+
+    body {
+        align-items: flex-start;
+        padding: 25px 0;
+    }
+
+    .container {
+        padding: 28px 20px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .calculators {
+        grid-template-columns: 1fr;
+    }
+
+    .card.future {
+        grid-column: auto;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">
+        <img src="logo.svg" alt="Logo">
+    </div>
+
+    <h1>Kalkulatory elektryczne</h1>
+
+    <div class="subtitle">
+        Narzędzia do obliczeń podstawowych zależności elektrycznych
+    </div>
+
+    <div class="calculators">
+
+        <a class="card"
+           href="kalkulator-rezystora-led.html">
+
+            <div class="card-number">
+                Kalkulator 01
+            </div>
+
+            <h2>
+                Rezystor LED
+            </h2>
+
+            <p>
+                Oblicz rezystor ograniczający prąd LED
+                oraz sprawdź podstawowe parametry układu.
+            </p>
+
+        </a>
+
+
+        <a class="card"
+           href="kalkulator-ohma.html">
+
+            <div class="card-number">
+                Kalkulator 02
+            </div>
+
+            <h2>
+                Prawo Ohma — Rezystor — Moc
+            </h2>
+
+            <p>
+                Oblicz napięcie, prąd, rezystancję
+                oraz moc elektryczną.
+            </p>
+
+        </a>
+
+
+        <div class="card future">
+
+            <div class="card-number">
+                Kalkulator 03
+            </div>
+
+            <h2>
+                Kalkulator wspólny
+            </h2>
+
+            <p>
+                Połączone narzędzie do kompleksowych
+                obliczeń elektrycznych. Kalkulator zostanie
+                utworzony w kolejnym etapie.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+        Narzędzia obliczeniowe • Elektronika
+    </div>
+
+</div>
+
+</body>
+</html>
