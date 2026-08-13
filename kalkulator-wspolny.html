@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Kalkulator elektryczny — LeMaCh</title>
 
 <style>
@@ -17,7 +18,9 @@
     --orange:#b77900;
 }
 
-*{box-sizing:border-box}
+*{
+    box-sizing:border-box;
+}
 
 body{
     margin:0;
@@ -216,7 +219,7 @@ button{
     background:#f5f7fb;
     border:1px solid var(--border);
     color:#34415d;
-    font-family:Consolas,monospace;
+    font-family:Consolas,Monaco,monospace;
     line-height:1.8;
 }
 
@@ -265,11 +268,26 @@ button{
 }
 
 @media(max-width:680px){
-    main{padding:12px 9px 35px}
-    .card{padding:19px 14px}
-    .grid{grid-template-columns:1fr}
-    h1{font-size:25px}
-    .logo img{width:165px}
+
+    main{
+        padding:12px 9px 35px;
+    }
+
+    .card{
+        padding:19px 14px;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    h1{
+        font-size:25px;
+    }
+
+    .logo img{
+        width:165px;
+    }
 }
 </style>
 </head>
@@ -277,12 +295,15 @@ button{
 <body>
 
 <main>
+
 <section class="card">
 
-<a class="back" href="index.html">← Wszystkie kalkulatory</a>
+<a class="back" href="index.html">
+← Wszystkie kalkulatory
+</a>
 
 <div class="logo">
-    <img src="logo.svg" alt="LeMaCh">
+<img src="logo.svg" alt="LeMaCh">
 </div>
 
 <h1>Kalkulator elektryczny</h1>
@@ -292,7 +313,9 @@ Połączone obliczenia podstawowych zależności elektrycznych
 </p>
 
 
-<!-- WYBÓR -->
+<!-- =====================================================
+     WYBÓR KALKULATORA
+===================================================== -->
 
 <section class="section">
 
@@ -302,16 +325,31 @@ Wybierz rodzaj obliczenia
 </h2>
 
 <select id="mode" onchange="setMode()">
-    <option value="OHM">Prawo Ohma</option>
-    <option value="DIVIDER">Dzielnik napięcia</option>
-    <option value="SERIES">Rezystor szeregowy</option>
-    <option value="LED">Rezystor ograniczający LED</option>
+
+<option value="OHM">
+Prawo Ohma
+</option>
+
+<option value="DIVIDER">
+Dzielnik napięcia
+</option>
+
+<option value="SERIES">
+Rezystor szeregowy
+</option>
+
+<option value="LED">
+Rezystor ograniczający LED
+</option>
+
 </select>
 
 </section>
 
 
-<!-- PRAWO OHMA -->
+<!-- =====================================================
+     PRAWO OHMA
+===================================================== -->
 
 <section id="ohmSection" class="section">
 
@@ -323,66 +361,102 @@ Prawo Ohma
 <label>Co chcesz obliczyć?</label>
 
 <select id="ohmWhat" onchange="setupOhm()">
-    <option value="U">Napięcie U [V]</option>
-    <option value="I">Prąd I [A]</option>
-    <option value="R">Rezystancja R [Ω]</option>
-    <option value="P">Moc P [W]</option>
+
+<option value="U">
+Napięcie U [V]
+</option>
+
+<option value="I">
+Prąd I [A]
+</option>
+
+<option value="R">
+Rezystancja R [Ω]
+</option>
+
+<option value="P">
+Moc P [W]
+</option>
+
 </select>
+
 
 <div class="grid" style="margin-top:18px">
 
+
+<!-- U -->
+
 <div id="fieldU">
-<label>Napięcie U [V]</label>
+
+<label>
+Napięcie U [V]
+</label>
 
 <input
-    id="ohmU"
-    type="text"
-    inputmode="decimal"
-    oninput="inputConvert('ohmU','convU','V')"
+id="ohmU"
+type="text"
+inputmode="decimal"
+oninput="convertInputVoltage('ohmU','convU')"
 >
 
 <div id="convU" class="converter">
 Wpisz wartość.
 </div>
+
 </div>
 
 
+<!-- I -->
+
 <div id="fieldI">
-<label>Prąd I [A]</label>
+
+<label>
+Prąd I [A]
+</label>
 
 <input
-    id="ohmI"
-    type="text"
-    inputmode="decimal"
-    oninput="inputConvert('ohmI','convI','A')"
+id="ohmI"
+type="text"
+inputmode="decimal"
+oninput="convertInputCurrent('ohmI','convI')"
 >
 
 <div id="convI" class="converter">
 Wpisz wartość.
 </div>
+
 </div>
 
 
+<!-- R -->
+
 <div id="fieldR">
-<label>Rezystancja R [Ω]</label>
+
+<label>
+Rezystancja R [Ω]
+</label>
 
 <input
-    id="ohmR"
-    type="text"
-    inputmode="decimal"
-    oninput="inputConvert('ohmR','convR','OHM')"
+id="ohmR"
+type="text"
+inputmode="decimal"
+oninput="convertInputResistance('ohmR','convR')"
 >
 
 <div id="convR" class="converter">
 Wpisz wartość.
 </div>
+
 </div>
 
 </div>
+
 </section>
 
 
-<!-- DZIELNIK -->
+<!-- =====================================================
+     DZIELNIK
+===================================================== -->
 
 <section id="dividerSection" class="section hidden">
 
@@ -394,31 +468,72 @@ Dzielnik napięcia
 <div class="grid">
 
 <div>
-<label>Napięcie wejściowe Uwe [V]</label>
-<input id="dU" type="text" inputmode="decimal"
-oninput="inputConvert('dU','dUC','V')">
-<div id="dUC" class="converter">Wpisz wartość.</div>
+
+<label>
+Napięcie wejściowe Uwe [V]
+</label>
+
+<input
+id="dU"
+type="text"
+inputmode="decimal"
+oninput="convertInputVoltage('dU','dUC')"
+>
+
+<div id="dUC" class="converter">
+Wpisz wartość.
 </div>
+
+</div>
+
 
 <div>
-<label>Rezystancja R1 [Ω]</label>
-<input id="dR1" type="text" inputmode="decimal"
-oninput="inputConvert('dR1','dR1C','OHM')">
-<div id="dR1C" class="converter">Wpisz wartość.</div>
+
+<label>
+Rezystancja R1 [Ω]
+</label>
+
+<input
+id="dR1"
+type="text"
+inputmode="decimal"
+oninput="convertInputResistance('dR1','dR1C')"
+>
+
+<div id="dR1C" class="converter">
+Wpisz wartość.
 </div>
+
+</div>
+
 
 <div>
-<label>Rezystancja R2 [Ω]</label>
-<input id="dR2" type="text" inputmode="decimal"
-oninput="inputConvert('dR2','dR2C','OHM')">
-<div id="dR2C" class="converter">Wpisz wartość.</div>
+
+<label>
+Rezystancja R2 [Ω]
+</label>
+
+<input
+id="dR2"
+type="text"
+inputmode="decimal"
+oninput="convertInputResistance('dR2','dR2C')"
+>
+
+<div id="dR2C" class="converter">
+Wpisz wartość.
 </div>
 
 </div>
+
+</div>
+
 </section>
 
 
-<!-- REZYSTOR SZEREGOWY -->
+<!-- =====================================================
+     REZYSTOR SZEREGOWY
+===================================================== -->
 
 <section id="seriesSection" class="section hidden">
 
@@ -430,31 +545,72 @@ Rezystor szeregowy
 <div class="grid">
 
 <div>
-<label>Napięcie zasilania Uwe [V]</label>
-<input id="sU" type="text" inputmode="decimal"
-oninput="inputConvert('sU','sUC','V')">
-<div id="sUC" class="converter">Wpisz wartość.</div>
+
+<label>
+Napięcie zasilania Uwe [V]
+</label>
+
+<input
+id="sU"
+type="text"
+inputmode="decimal"
+oninput="convertInputVoltage('sU','sUC')"
+>
+
+<div id="sUC" class="converter">
+Wpisz wartość.
 </div>
+
+</div>
+
 
 <div>
-<label>Napięcie odbiornika Uodb [V]</label>
-<input id="sLoad" type="text" inputmode="decimal"
-oninput="inputConvert('sLoad','sLoadC','V')">
-<div id="sLoadC" class="converter">Wpisz wartość.</div>
+
+<label>
+Napięcie odbiornika Uodb [V]
+</label>
+
+<input
+id="sLoad"
+type="text"
+inputmode="decimal"
+oninput="convertInputVoltage('sLoad','sLoadC')"
+>
+
+<div id="sLoadC" class="converter">
+Wpisz wartość.
 </div>
+
+</div>
+
 
 <div>
-<label>Prąd I [A]</label>
-<input id="sI" type="text" inputmode="decimal"
-oninput="inputConvert('sI','sIC','A')">
-<div id="sIC" class="converter">Wpisz wartość.</div>
+
+<label>
+Prąd I [A]
+</label>
+
+<input
+id="sI"
+type="text"
+inputmode="decimal"
+oninput="convertInputCurrent('sI','sIC')"
+>
+
+<div id="sIC" class="converter">
+Wpisz wartość.
 </div>
 
 </div>
+
+</div>
+
 </section>
 
 
-<!-- LED -->
+<!-- =====================================================
+     LED
+===================================================== -->
 
 <section id="ledSection" class="section hidden">
 
@@ -466,65 +622,162 @@ Rezystor ograniczający LED
 <div class="grid">
 
 <div>
-<label>Napięcie zasilania VS [V]</label>
-<input id="lU" type="text" inputmode="decimal"
-oninput="inputConvert('lU','lUC','V')">
-<div id="lUC" class="converter">Wpisz wartość.</div>
+
+<label>
+Napięcie zasilania VS [V]
+</label>
+
+<input
+id="lU"
+type="text"
+inputmode="decimal"
+oninput="convertInputVoltage('lU','lUC')"
+>
+
+<div id="lUC" class="converter">
+Wpisz wartość.
 </div>
 
-<div>
-<label>Napięcie przewodzenia LED VF [V]</label>
-<input id="lVF" type="text" inputmode="decimal"
-oninput="inputConvert('lVF','lVFC','V')">
-<div id="lVFC" class="converter">Wpisz wartość.</div>
 </div>
 
-<div>
-<label>Prąd LED IF [mA]</label>
-<input id="lI" type="text" inputmode="decimal"
-oninput="inputConvert('lI','lIC','mA')">
-<div id="lIC" class="converter">Wpisz wartość.</div>
-</div>
 
 <div>
-<label>Tolerancja rezystora</label>
+
+<label>
+Napięcie przewodzenia LED VF [V]
+</label>
+
+<input
+id="lVF"
+type="text"
+inputmode="decimal"
+oninput="convertInputVoltage('lVF','lVFC')"
+>
+
+<div id="lVFC" class="converter">
+Wpisz wartość.
+</div>
+
+</div>
+
+
+<div>
+
+<label>
+Prąd LED IF [mA]
+</label>
+
+<input
+id="lI"
+type="text"
+inputmode="decimal"
+oninput="convertInputCurrentMA('lI','lIC')"
+>
+
+<div id="lIC" class="converter">
+Wpisz wartość.
+</div>
+
+</div>
+
+
+<div>
+
+<label>
+Tolerancja rezystora
+</label>
+
 <select id="lTol">
-    <option value="0.01">±1%</option>
-    <option value="0.05" selected>±5%</option>
-    <option value="0.10">±10%</option>
+
+<option value="0.01">
+±1%
+</option>
+
+<option value="0.05" selected>
+±5%
+</option>
+
+<option value="0.10">
+±10%
+</option>
+
 </select>
+
 </div>
 
+
 <div>
-<label>Moc znamionowa rezystora</label>
+
+<label>
+Moc znamionowa rezystora
+</label>
+
 <select id="lPower">
-    <option value="0.125">0,125 W</option>
-    <option value="0.25" selected>0,25 W</option>
-    <option value="0.5">0,5 W</option>
-    <option value="1">1 W</option>
-    <option value="2">2 W</option>
-    <option value="5">5 W</option>
+
+<option value="0.125">
+0,125 W
+</option>
+
+<option value="0.25" selected>
+0,25 W
+</option>
+
+<option value="0.5">
+0,5 W
+</option>
+
+<option value="1">
+1 W
+</option>
+
+<option value="2">
+2 W
+</option>
+
+<option value="5">
+5 W
+</option>
+
 </select>
+
 </div>
+
 
 <div>
-<label>Szereg rezystorów</label>
+
+<label>
+Szereg rezystorów
+</label>
+
 <select id="lSeries">
-    <option value="E12">E12</option>
-    <option value="E24" selected>E24</option>
+
+<option value="E12">
+E12
+</option>
+
+<option value="E24" selected>
+E24
+</option>
+
 </select>
+
 </div>
 
 </div>
+
 </section>
 
 
-<button onclick="calculate()">OBLICZ</button>
+<button onclick="calculate()">
+OBLICZ
+</button>
 
 <div id="results" class="results"></div>
 
 
-<!-- WZORY -->
+<!-- =====================================================
+     WZORY
+===================================================== -->
 
 <div class="formula">
 
@@ -544,16 +797,23 @@ RLED = (VS − VF) / IF
 </div>
 
 
-<!-- STAŁA LEGENDA -->
+<!-- =====================================================
+     STAŁA LEGENDA
+===================================================== -->
 
 <div class="legend">
 
-<h3>Stała legenda jednostek elektrycznych</h3>
+<h3>
+Stała legenda jednostek elektrycznych
+</h3>
 
 
-<h4>Napięcie — U</h4>
+<h4>
+Napięcie — U
+</h4>
 
 <table>
+
 <tr>
 <th>Symbol</th>
 <th>Nazwa</th>
@@ -561,34 +821,38 @@ RLED = (VS − VF) / IF
 </tr>
 
 <tr>
-<td><strong>µV</strong></td>
+<td>µV</td>
 <td>mikrowolt</td>
 <td>0,000001 V</td>
 </tr>
 
 <tr>
-<td><strong>mV</strong></td>
+<td>mV</td>
 <td>miliwolt</td>
 <td>0,001 V</td>
 </tr>
 
 <tr>
-<td><strong>V</strong></td>
+<td>V</td>
 <td>wolt</td>
 <td>1 V</td>
 </tr>
 
 <tr>
-<td><strong>kV</strong></td>
+<td>kV</td>
 <td>kilowolt</td>
 <td>1 000 V</td>
 </tr>
+
 </table>
 
 
-<h4>Prąd — I</h4>
+<h4>
+Prąd — I
+</h4>
 
 <table>
+
 <tr>
 <th>Symbol</th>
 <th>Nazwa</th>
@@ -596,34 +860,38 @@ RLED = (VS − VF) / IF
 </tr>
 
 <tr>
-<td><strong>µA</strong></td>
+<td>µA</td>
 <td>mikroamper</td>
 <td>0,000001 A</td>
 </tr>
 
 <tr>
-<td><strong>mA</strong></td>
+<td>mA</td>
 <td>miliamper</td>
 <td>0,001 A</td>
 </tr>
 
 <tr>
-<td><strong>A</strong></td>
+<td>A</td>
 <td>amper</td>
 <td>1 A</td>
 </tr>
 
 <tr>
-<td><strong>kA</strong></td>
+<td>kA</td>
 <td>kiloamper</td>
 <td>1 000 A</td>
 </tr>
+
 </table>
 
 
-<h4>Rezystancja — R</h4>
+<h4>
+Rezystancja — R
+</h4>
 
 <table>
+
 <tr>
 <th>Symbol</th>
 <th>Nazwa</th>
@@ -631,34 +899,38 @@ RLED = (VS − VF) / IF
 </tr>
 
 <tr>
-<td><strong>mΩ</strong></td>
+<td>mΩ</td>
 <td>miliom</td>
 <td>0,001 Ω</td>
 </tr>
 
 <tr>
-<td><strong>Ω</strong></td>
+<td>Ω</td>
 <td>om</td>
 <td>1 Ω</td>
 </tr>
 
 <tr>
-<td><strong>kΩ</strong></td>
+<td>kΩ</td>
 <td>kiloohm</td>
 <td>1 000 Ω</td>
 </tr>
 
 <tr>
-<td><strong>MΩ</strong></td>
+<td>MΩ</td>
 <td>megaohm</td>
 <td>1 000 000 Ω</td>
 </tr>
+
 </table>
 
 
-<h4>Moc — P</h4>
+<h4>
+Moc — P
+</h4>
 
 <table>
+
 <tr>
 <th>Symbol</th>
 <th>Nazwa</th>
@@ -666,28 +938,29 @@ RLED = (VS − VF) / IF
 </tr>
 
 <tr>
-<td><strong>µW</strong></td>
+<td>µW</td>
 <td>mikrowat</td>
 <td>0,000001 W</td>
 </tr>
 
 <tr>
-<td><strong>mW</strong></td>
+<td>mW</td>
 <td>miliwat</td>
 <td>0,001 W</td>
 </tr>
 
 <tr>
-<td><strong>W</strong></td>
+<td>W</td>
 <td>wat</td>
 <td>1 W</td>
 </tr>
 
 <tr>
-<td><strong>kW</strong></td>
+<td>kW</td>
 <td>kilowat</td>
 <td>1 000 W</td>
 </tr>
+
 </table>
 
 </div>
@@ -704,7 +977,7 @@ LeMaCh • Narzędzia obliczeniowe • Elektronika
 <script>
 
 /* =====================================================
-   PODSTAWOWE FUNKCJE
+   LICZBY
 ===================================================== */
 
 function num(value){
@@ -713,16 +986,16 @@ function num(value){
         return NaN;
     }
 
-    const text = String(value)
+    value=String(value)
         .trim()
         .replace(/\s/g,"")
         .replace(",", ".");
 
-    if(text === ""){
+    if(value===""){
         return NaN;
     }
 
-    return Number(text);
+    return Number(value);
 }
 
 
@@ -732,7 +1005,7 @@ function fmt(value){
         return "—";
     }
 
-    if(value === 0){
+    if(value===0){
         return "0";
     }
 
@@ -743,162 +1016,21 @@ function fmt(value){
 
 
 /* =====================================================
-   PRZELICZNIKI — JEDNOZNACZNE
+   PRZELICZNIKI WEJŚCIOWE
 ===================================================== */
 
-function convertVoltage(value, unit){
+/*
+   NAPIĘCIE:
+   V → mV
+*/
 
-    if(unit === "V"){
-        return `${fmt(value * 1000)} mV`;
-    }
+function convertInputVoltage(inputId,outputId){
 
-    if(unit === "mV"){
-        return `${fmt(value / 1000)} V`;
-    }
+    const value=num(
+        document.getElementById(inputId).value
+    );
 
-    if(unit === "µV"){
-        return `${fmt(value / 1000000)} V`;
-    }
-
-    if(unit === "kV"){
-        return `${fmt(value * 1000)} V`;
-    }
-
-    return "—";
-}
-
-
-function convertCurrent(value, unit){
-
-    if(unit === "A"){
-        return `${fmt(value * 1000)} mA`;
-    }
-
-    if(unit === "mA"){
-        return `${fmt(value / 1000)} A`;
-    }
-
-    if(unit === "µA"){
-        return `${fmt(value / 1000)} mA`;
-    }
-
-    if(unit === "kA"){
-        return `${fmt(value * 1000)} A`;
-    }
-
-    return "—";
-}
-
-
-function convertResistance(value, unit){
-
-    if(unit === "Ω"){
-
-        if(Math.abs(value) < 1){
-            return `${fmt(value * 1000)} mΩ`;
-        }
-
-        if(Math.abs(value) >= 1000000){
-            return `${fmt(value / 1000000)} MΩ`;
-        }
-
-        return `${fmt(value / 1000)} kΩ`;
-    }
-
-
-    if(unit === "mΩ"){
-        return `${fmt(value / 1000)} Ω`;
-    }
-
-
-    if(unit === "kΩ"){
-
-        if(Math.abs(value) >= 1000){
-            return `${fmt(value / 1000)} MΩ`;
-        }
-
-        return `${fmt(value * 1000)} Ω`;
-    }
-
-
-    if(unit === "MΩ"){
-        return `${fmt(value * 1000)} kΩ`;
-    }
-
-    return "—";
-}
-
-
-function convertPower(value, unit){
-
-    if(unit === "W"){
-        return `${fmt(value * 1000)} mW`;
-    }
-
-    if(unit === "mW"){
-        return `${fmt(value / 1000)} W`;
-    }
-
-    if(unit === "µW"){
-        return `${fmt(value / 1000)} mW`;
-    }
-
-    if(unit === "kW"){
-        return `${fmt(value * 1000)} W`;
-    }
-
-    return "—";
-}
-
-
-function convertByUnit(value, unit){
-
-    if(!Number.isFinite(value)){
-        return "—";
-    }
-
-    if(unit === "V" || unit === "mV" ||
-       unit === "µV" || unit === "kV"){
-
-        return convertVoltage(value,unit);
-    }
-
-
-    if(unit === "A" || unit === "mA" ||
-       unit === "µA" || unit === "kA"){
-
-        return convertCurrent(value,unit);
-    }
-
-
-    if(unit === "Ω" || unit === "mΩ" ||
-       unit === "kΩ" || unit === "MΩ"){
-
-        return convertResistance(value,unit);
-    }
-
-
-    if(unit === "W" || unit === "mW" ||
-       unit === "µW" || unit === "kW"){
-
-        return convertPower(value,unit);
-    }
-
-
-    return "—";
-}
-
-
-/* =====================================================
-   PRZELICZNIK PÓL WEJŚCIOWYCH
-===================================================== */
-
-function inputConvert(inputId,outputId,unit){
-
-    const input=document.getElementById(inputId);
     const output=document.getElementById(outputId);
-
-    const value=num(input.value);
 
     if(!Number.isFinite(value)){
 
@@ -908,19 +1040,192 @@ function inputConvert(inputId,outputId,unit){
     }
 
     output.innerHTML=
-        `<strong>${fmt(value)} ${unit}</strong> = ${convertByUnit(value,unit)}`;
+        `<strong>${fmt(value)} V</strong> = ${fmt(value*1000)} mV`;
+}
+
+
+/*
+   PRĄD:
+   A → mA
+*/
+
+function convertInputCurrent(inputId,outputId){
+
+    const value=num(
+        document.getElementById(inputId).value
+    );
+
+    const output=document.getElementById(outputId);
+
+    if(!Number.isFinite(value)){
+
+        output.innerHTML="Wpisz wartość.";
+
+        return;
+    }
+
+    output.innerHTML=
+        `<strong>${fmt(value)} A</strong> = ${fmt(value*1000)} mA`;
+}
+
+
+/*
+   PRĄD LED:
+   mA → A
+*/
+
+function convertInputCurrentMA(inputId,outputId){
+
+    const value=num(
+        document.getElementById(inputId).value
+    );
+
+    const output=document.getElementById(outputId);
+
+    if(!Number.isFinite(value)){
+
+        output.innerHTML="Wpisz wartość.";
+
+        return;
+    }
+
+    output.innerHTML=
+        `<strong>${fmt(value)} mA</strong> = ${fmt(value/1000)} A`;
+}
+
+
+/*
+   REZYSTANCJA:
+   
+   mΩ < 1 Ω
+   Ω → kΩ
+   kΩ → Ω
+   MΩ → kΩ
+*/
+
+function convertInputResistance(inputId,outputId){
+
+    const value=num(
+        document.getElementById(inputId).value
+    );
+
+    const output=document.getElementById(outputId);
+
+    if(!Number.isFinite(value)){
+
+        output.innerHTML="Wpisz wartość.";
+
+        return;
+    }
+
+
+    if(Math.abs(value)<1){
+
+        output.innerHTML=
+            `<strong>${fmt(value)} Ω</strong> = ${fmt(value*1000)} mΩ`;
+
+        return;
+    }
+
+
+    if(Math.abs(value)>=1000000){
+
+        output.innerHTML=
+            `<strong>${fmt(value)} Ω</strong> = ${fmt(value/1000000)} MΩ`;
+
+        return;
+    }
+
+
+    output.innerHTML=
+        `<strong>${fmt(value)} Ω</strong> = ${fmt(value/1000)} kΩ`;
 }
 
 
 /* =====================================================
-   PRZELICZNIK WYNIKÓW
+   PRZELICZNIKI WYNIKÓW
 ===================================================== */
 
-function resultConversion(value,unit){
+
+/*
+   NAPIĘCIE:
+   ZAWSZE V → mV
+*/
+
+function voltageResult(value){
 
     return `
-        <strong>${fmt(value)} ${unit}</strong>
-        = ${convertByUnit(value,unit)}
+        <strong>${fmt(value)} V</strong>
+        = ${fmt(value*1000)} mV
+    `;
+}
+
+
+/*
+   PRĄD:
+   ZAWSZE A → mA
+*/
+
+function currentResult(value){
+
+    return `
+        <strong>${fmt(value)} A</strong>
+        = ${fmt(value*1000)} mA
+    `;
+}
+
+
+/*
+   REZYSTANCJA:
+   ZAWSZE:
+   
+   < 1 Ω  → mΩ
+   
+   1 Ω do < 1 MΩ → kΩ
+   
+   ≥ 1 MΩ → MΩ
+*/
+
+function resistanceResult(value){
+
+    const absolute=Math.abs(value);
+
+
+    if(absolute<1){
+
+        return `
+            <strong>${fmt(value)} Ω</strong>
+            = ${fmt(value*1000)} mΩ
+        `;
+    }
+
+
+    if(absolute>=1000000){
+
+        return `
+            <strong>${fmt(value)} Ω</strong>
+            = ${fmt(value/1000000)} MΩ
+        `;
+    }
+
+
+    return `
+        <strong>${fmt(value)} Ω</strong>
+        = ${fmt(value/1000)} kΩ
+    `;
+}
+
+
+/*
+   MOC:
+   ZAWSZE W → mW
+*/
+
+function powerResult(value){
+
+    return `
+        <strong>${fmt(value)} W</strong>
+        = ${fmt(value*1000)} mW
     `;
 }
 
@@ -933,21 +1238,37 @@ function setMode(){
 
     const mode=document.getElementById("mode").value;
 
-    document.getElementById("ohmSection")
-        .classList.toggle("hidden",mode !== "OHM");
+    document
+        .getElementById("ohmSection")
+        .classList.toggle(
+            "hidden",
+            mode!=="OHM"
+        );
 
-    document.getElementById("dividerSection")
-        .classList.toggle("hidden",mode !== "DIVIDER");
+    document
+        .getElementById("dividerSection")
+        .classList.toggle(
+            "hidden",
+            mode!=="DIVIDER"
+        );
 
-    document.getElementById("seriesSection")
-        .classList.toggle("hidden",mode !== "SERIES");
+    document
+        .getElementById("seriesSection")
+        .classList.toggle(
+            "hidden",
+            mode!=="SERIES"
+        );
 
-    document.getElementById("ledSection")
-        .classList.toggle("hidden",mode !== "LED");
+    document
+        .getElementById("ledSection")
+        .classList.toggle(
+            "hidden",
+            mode!=="LED"
+        );
 
     document.getElementById("results").innerHTML="";
 
-    if(mode === "OHM"){
+    if(mode==="OHM"){
         setupOhm();
     }
 }
@@ -961,75 +1282,89 @@ function setupOhm(){
 
     const what=document.getElementById("ohmWhat").value;
 
-    const fieldU=document.getElementById("fieldU");
-    const fieldI=document.getElementById("fieldI");
-    const fieldR=document.getElementById("fieldR");
+    const U=document.getElementById("fieldU");
+    const I=document.getElementById("fieldI");
+    const R=document.getElementById("fieldR");
 
-    fieldU.classList.add("hidden");
-    fieldI.classList.add("hidden");
-    fieldR.classList.add("hidden");
+
+    U.classList.add("hidden");
+    I.classList.add("hidden");
+    R.classList.add("hidden");
+
 
     document.getElementById("ohmU").value="";
     document.getElementById("ohmI").value="";
     document.getElementById("ohmR").value="";
+
 
     document.getElementById("convU").innerHTML="Wpisz wartość.";
     document.getElementById("convI").innerHTML="Wpisz wartość.";
     document.getElementById("convR").innerHTML="Wpisz wartość.";
 
 
-    if(what === "U"){
+    if(what==="U"){
 
-        fieldI.classList.remove("hidden");
-        fieldR.classList.remove("hidden");
-
-    }
-
-
-    if(what === "I"){
-
-        fieldU.classList.remove("hidden");
-        fieldR.classList.remove("hidden");
+        I.classList.remove("hidden");
+        R.classList.remove("hidden");
 
     }
 
 
-    if(what === "R"){
+    if(what==="I"){
 
-        fieldU.classList.remove("hidden");
-        fieldI.classList.remove("hidden");
+        U.classList.remove("hidden");
+        R.classList.remove("hidden");
 
     }
 
 
-    if(what === "P"){
+    if(what==="R"){
 
-        fieldU.classList.remove("hidden");
-        fieldI.classList.remove("hidden");
+        U.classList.remove("hidden");
+        I.classList.remove("hidden");
+
+    }
+
+
+    if(what==="P"){
+
+        U.classList.remove("hidden");
+        I.classList.remove("hidden");
 
     }
 }
 
 
 /* =====================================================
-   KARTA WYNIKU
+   KARTA
 ===================================================== */
 
 function box(title,value,detail,cls=""){
 
     return `
         <div class="box ${cls}">
-            <div class="title">${title}</div>
-            <div class="value">${value}</div>
-            <div class="detail">${detail}</div>
+
+            <div class="title">
+                ${title}
+            </div>
+
+            <div class="value">
+                ${value}
+            </div>
+
+            <div class="detail">
+                ${detail}
+            </div>
+
         </div>
     `;
 }
 
 
-function showError(message){
+function error(message){
 
     document.getElementById("results").innerHTML=
+
         box(
             "BŁĄD",
             "Nie można obliczyć",
@@ -1058,21 +1393,39 @@ const E24=[
 
 function standardResistor(value,series){
 
-    const values=series === "E12" ? E12 : E24;
+    const values=
+        series==="E12"
+        ? E12
+        : E24;
 
-    const exponent=Math.floor(Math.log10(value));
+    const exponent=
+        Math.floor(
+            Math.log10(value)
+        );
 
-    const normalized=value / Math.pow(10,exponent);
+    const normalized=
+        value/
+        Math.pow(10,exponent);
+
 
     for(const x of values){
 
-        if(x >= normalized){
+        if(x>=normalized){
 
-            return x * Math.pow(10,exponent);
+            return x*
+                Math.pow(
+                    10,
+                    exponent
+                );
         }
     }
 
-    return 10 * Math.pow(10,exponent);
+
+    return 10*
+        Math.pow(
+            10,
+            exponent
+        );
 }
 
 
@@ -1082,14 +1435,18 @@ function standardResistor(value,series){
 
 function calculate(){
 
-    const mode=document.getElementById("mode").value;
+    const mode=
+        document.getElementById("mode").value;
 
 
-    /* PRAWO OHMA */
+    /* =================================================
+       PRAWO OHMA
+    ================================================= */
 
-    if(mode === "OHM"){
+    if(mode==="OHM"){
 
-        const what=document.getElementById("ohmWhat").value;
+        const what=
+            document.getElementById("ohmWhat").value;
 
         let U;
         let I;
@@ -1097,73 +1454,129 @@ function calculate(){
         let P;
 
 
-        if(what === "U"){
+        /* NAPIĘCIE */
 
-            I=num(document.getElementById("ohmI").value);
-            R=num(document.getElementById("ohmR").value);
+        if(what==="U"){
 
-            if(!Number.isFinite(I) || !Number.isFinite(R) || I<=0 || R<=0){
+            I=num(
+                document.getElementById("ohmI").value
+            );
 
-                showError(
+            R=num(
+                document.getElementById("ohmR").value
+            );
+
+
+            if(
+                !Number.isFinite(I)||
+                !Number.isFinite(R)||
+                I<=0||
+                R<=0
+            ){
+
+                error(
                     "Wprowadź prąd I i rezystancję R jako wartości większe od zera."
                 );
 
                 return;
             }
 
+
             U=I*R;
         }
 
 
-        if(what === "I"){
+        /* PRĄD */
 
-            U=num(document.getElementById("ohmU").value);
-            R=num(document.getElementById("ohmR").value);
+        if(what==="I"){
 
-            if(!Number.isFinite(U) || !Number.isFinite(R) || U<=0 || R<=0){
+            U=num(
+                document.getElementById("ohmU").value
+            );
 
-                showError(
+            R=num(
+                document.getElementById("ohmR").value
+            );
+
+
+            if(
+                !Number.isFinite(U)||
+                !Number.isFinite(R)||
+                U<=0||
+                R<=0
+            ){
+
+                error(
                     "Wprowadź napięcie U i rezystancję R jako wartości większe od zera."
                 );
 
                 return;
             }
 
+
             I=U/R;
         }
 
 
-        if(what === "R"){
+        /* REZYSTANCJA */
 
-            U=num(document.getElementById("ohmU").value);
-            I=num(document.getElementById("ohmI").value);
+        if(what==="R"){
 
-            if(!Number.isFinite(U) || !Number.isFinite(I) || U<=0 || I<=0){
+            U=num(
+                document.getElementById("ohmU").value
+            );
 
-                showError(
+            I=num(
+                document.getElementById("ohmI").value
+            );
+
+
+            if(
+                !Number.isFinite(U)||
+                !Number.isFinite(I)||
+                U<=0||
+                I<=0
+            ){
+
+                error(
                     "Wprowadź napięcie U i prąd I jako wartości większe od zera."
                 );
 
                 return;
             }
+
 
             R=U/I;
         }
 
 
-        if(what === "P"){
+        /* MOC */
 
-            U=num(document.getElementById("ohmU").value);
-            I=num(document.getElementById("ohmI").value);
+        if(what==="P"){
 
-            if(!Number.isFinite(U) || !Number.isFinite(I) || U<=0 || I<=0){
+            U=num(
+                document.getElementById("ohmU").value
+            );
 
-                showError(
+            I=num(
+                document.getElementById("ohmI").value
+            );
+
+
+            if(
+                !Number.isFinite(U)||
+                !Number.isFinite(I)||
+                U<=0||
+                I<=0
+            ){
+
+                error(
                     "Wprowadź napięcie U i prąd I jako wartości większe od zera."
                 );
 
                 return;
             }
+
 
             P=U*I;
             R=U/I;
@@ -1177,272 +1590,401 @@ function calculate(){
 
         document.getElementById("results").innerHTML=
 
+
             box(
                 "NAPIĘCIE U",
                 `${fmt(U)} V`,
-                `U = I × R<br>${resultConversion(U,"V")}`
+                `U = I × R<br>${voltageResult(U)}`
             )
 
+
             +
+
 
             box(
                 "PRĄD I",
                 `${fmt(I)} A`,
-                `I = U / R<br>${resultConversion(I,"A")}`
+                `I = U / R<br>${currentResult(I)}`
             )
 
+
             +
+
 
             box(
                 "REZYSTANCJA R",
                 `${fmt(R)} Ω`,
-                `R = U / I<br>${resultConversion(R,"Ω")}`
+                `R = U / I<br>${resistanceResult(R)}`
             )
 
+
             +
+
 
             box(
                 "MOC P",
                 `${fmt(P)} W`,
-                `P = U × I<br>${resultConversion(P,"W")}`
+                `P = U × I<br>${powerResult(P)}`
             );
+
 
         return;
     }
 
 
-    /* DZIELNIK NAPIĘCIA */
+    /* =================================================
+       DZIELNIK NAPIĘCIA
+    ================================================= */
 
-    if(mode === "DIVIDER"){
+    if(mode==="DIVIDER"){
 
-        const Uwe=num(document.getElementById("dU").value);
-        const R1=num(document.getElementById("dR1").value);
-        const R2=num(document.getElementById("dR2").value);
+        const Uwe=num(
+            document.getElementById("dU").value
+        );
+
+        const R1=num(
+            document.getElementById("dR1").value
+        );
+
+        const R2=num(
+            document.getElementById("dR2").value
+        );
+
 
         if(
-            !Number.isFinite(Uwe) ||
-            !Number.isFinite(R1) ||
-            !Number.isFinite(R2) ||
-            Uwe<=0 || R1<=0 || R2<=0
+            !Number.isFinite(Uwe)||
+            !Number.isFinite(R1)||
+            !Number.isFinite(R2)||
+            Uwe<=0||
+            R1<=0||
+            R2<=0
         ){
 
-            showError(
+            error(
                 "Wprowadź Uwe, R1 i R2 jako wartości większe od zera."
             );
 
             return;
         }
 
-        const I=Uwe/(R1+R2);
-        const Uwy=Uwe*R2/(R1+R2);
-        const P1=I*I*R1;
-        const P2=I*I*R2;
+
+        const I=
+            Uwe/(R1+R2);
+
+        const Uwy=
+            Uwe*R2/(R1+R2);
+
+        const P1=
+            I*I*R1;
+
+        const P2=
+            I*I*R2;
+
 
         document.getElementById("results").innerHTML=
+
 
             box(
                 "NAPIĘCIE WYJŚCIOWE Uwy",
                 `${fmt(Uwy)} V`,
-                `Uwy = Uwe × R2 / (R1 + R2)<br>${resultConversion(Uwy,"V")}`
+                `Uwy = Uwe × R2 / (R1 + R2)<br>${voltageResult(Uwy)}`
             )
 
+
             +
+
 
             box(
                 "PRĄD DZIELNIKA",
                 `${fmt(I)} A`,
-                `I = Uwe / (R1 + R2)<br>${resultConversion(I,"A")}`
+                `I = Uwe / (R1 + R2)<br>${currentResult(I)}`
             )
 
+
             +
+
 
             box(
                 "MOC R1",
                 `${fmt(P1)} W`,
-                `P1 = I² × R1<br>${resultConversion(P1,"W")}`
+                `P1 = I² × R1<br>${powerResult(P1)}`
             )
 
+
             +
+
 
             box(
                 "MOC R2",
                 `${fmt(P2)} W`,
-                `P2 = I² × R2<br>${resultConversion(P2,"W")}`
+                `P2 = I² × R2<br>${powerResult(P2)}`
             );
+
 
         return;
     }
 
 
-    /* REZYSTOR SZEREGOWY */
+    /* =================================================
+       REZYSTOR SZEREGOWY
+    ================================================= */
 
-    if(mode === "SERIES"){
+    if(mode==="SERIES"){
 
-        const Uwe=num(document.getElementById("sU").value);
-        const Uodb=num(document.getElementById("sLoad").value);
-        const I=num(document.getElementById("sI").value);
+        const Uwe=num(
+            document.getElementById("sU").value
+        );
+
+        const Uodb=num(
+            document.getElementById("sLoad").value
+        );
+
+        const I=num(
+            document.getElementById("sI").value
+        );
+
 
         if(
-            !Number.isFinite(Uwe) ||
-            !Number.isFinite(Uodb) ||
-            !Number.isFinite(I) ||
-            Uwe<=0 || Uodb<0 || I<=0
+            !Number.isFinite(Uwe)||
+            !Number.isFinite(Uodb)||
+            !Number.isFinite(I)||
+            Uwe<=0||
+            Uodb<0||
+            I<=0
         ){
 
-            showError("Wprowadź poprawne wartości.");
+            error(
+                "Wprowadź poprawne wartości."
+            );
 
             return;
         }
 
+
         if(Uodb>=Uwe){
 
-            showError(
+            error(
                 "Napięcie odbiornika musi być mniejsze od napięcia zasilania."
             );
 
             return;
         }
 
-        const R=(Uwe-Uodb)/I;
-        const VR=Uwe-Uodb;
-        const P=I*I*R;
+
+        const R=
+            (Uwe-Uodb)/I;
+
+        const VR=
+            Uwe-Uodb;
+
+        const P=
+            I*I*R;
+
 
         document.getElementById("results").innerHTML=
+
 
             box(
                 "REZYSTOR IDEALNY",
                 `${fmt(R)} Ω`,
-                `R = (Uwe − Uodb) / I<br>${resultConversion(R,"Ω")}`
+                `R = (Uwe − Uodb) / I<br>${resistanceResult(R)}`
             )
 
+
             +
+
 
             box(
                 "RZECZYWISTY PRĄD",
                 `${fmt(I)} A`,
-                `Wartość podana przez użytkownika.<br>${resultConversion(I,"A")}`
+                `Wartość podana przez użytkownika.<br>${currentResult(I)}`
             )
 
+
             +
+
 
             box(
                 "NAPIĘCIE NA REZYSTORZE",
                 `${fmt(VR)} V`,
-                `VR = Uwe − Uodb<br>${resultConversion(VR,"V")}`
+                `VR = Uwe − Uodb<br>${voltageResult(VR)}`
             )
 
+
             +
+
 
             box(
                 "MOC REZYSTORA",
                 `${fmt(P)} W`,
-                `P = I² × R<br>${resultConversion(P,"W")}`
+                `P = I² × R<br>${powerResult(P)}`
             )
 
+
             +
+
 
             box(
                 "ZALECANA MOC REZYSTORA",
                 `${fmt(P*2)} W`,
-                `Przyjęto zapas 2×.<br>${resultConversion(P*2,"W")}`
+                `Przyjęto zapas 2×.<br>${powerResult(P*2)}`
             );
+
 
         return;
     }
 
 
-    /* LED */
+    /* =================================================
+       LED
+    ================================================= */
 
-    if(mode === "LED"){
+    if(mode==="LED"){
 
-        const VS=num(document.getElementById("lU").value);
-        const VF=num(document.getElementById("lVF").value);
-        const IFmA=num(document.getElementById("lI").value);
+        const VS=num(
+            document.getElementById("lU").value
+        );
 
-        const tolerance=Number(document.getElementById("lTol").value);
-        const nominalPower=Number(document.getElementById("lPower").value);
-        const series=document.getElementById("lSeries").value;
+        const VF=num(
+            document.getElementById("lVF").value
+        );
+
+        const IFmA=num(
+            document.getElementById("lI").value
+        );
+
+        const tolerance=
+            Number(
+                document.getElementById("lTol").value
+            );
+
+        const nominalPower=
+            Number(
+                document.getElementById("lPower").value
+            );
+
+        const series=
+            document.getElementById("lSeries").value;
+
 
         if(
-            !Number.isFinite(VS) ||
-            !Number.isFinite(VF) ||
-            !Number.isFinite(IFmA) ||
-            VS<=0 || VF<0 || IFmA<=0
+            !Number.isFinite(VS)||
+            !Number.isFinite(VF)||
+            !Number.isFinite(IFmA)||
+            VS<=0||
+            VF<0||
+            IFmA<=0
         ){
 
-            showError(
+            error(
                 "Wprowadź poprawne wartości VS, VF i IF."
             );
 
             return;
         }
 
+
         if(VS<=VF){
 
-            showError(
+            error(
                 "Napięcie zasilania musi być większe od napięcia przewodzenia LED."
             );
 
             return;
         }
 
-        const IF=IFmA/1000;
 
-        const ideal=(VS-VF)/IF;
-        const practical=standardResistor(ideal,series);
-        const actualCurrent=(VS-VF)/practical;
-        const VR=VS-VF;
-        const P=actualCurrent*actualCurrent*practical;
-        const requiredPower=P*2;
+        const IF=
+            IFmA/1000;
 
-        const minR=practical*(1-tolerance);
-        const maxR=practical*(1+tolerance);
+        const ideal=
+            (VS-VF)/IF;
 
-        const minI=(VS-VF)/maxR;
-        const maxI=(VS-VF)/minR;
+        const practical=
+            standardResistor(
+                ideal,
+                series
+            );
+
+        const actualCurrent=
+            (VS-VF)/practical;
+
+        const VR=
+            VS-VF;
+
+        const P=
+            actualCurrent*
+            actualCurrent*
+            practical;
+
+        const requiredPower=
+            P*2;
+
+        const minR=
+            practical*(1-tolerance);
+
+        const maxR=
+            practical*(1+tolerance);
+
+        const minI=
+            (VS-VF)/maxR;
+
+        const maxI=
+            (VS-VF)/minR;
 
 
         document.getElementById("results").innerHTML=
 
+
             box(
                 "REZYSTOR IDEALNY",
                 `${fmt(ideal)} Ω`,
-                `R = (VS − VF) / IF<br>${resultConversion(ideal,"Ω")}`
+                `R = (VS − VF) / IF<br>${resistanceResult(ideal)}`
             )
 
+
             +
+
 
             box(
                 `REZYSTOR PRAKTYCZNY — ${series}`,
                 `${fmt(practical)} Ω`,
-                `Pierwsza standardowa wartość ≥ wartości idealnej.<br>${resultConversion(practical,"Ω")}`
+                `Pierwsza standardowa wartość ≥ wartości idealnej.<br>${resistanceResult(practical)}`
             )
 
+
             +
+
 
             box(
                 "RZECZYWISTY PRĄD LED",
                 `${fmt(actualCurrent*1000)} mA`,
-                `Dla rezystora ${fmt(practical)} Ω.<br>${resultConversion(actualCurrent,"A")}`
+                `Dla rezystora ${fmt(practical)} Ω.<br>${currentResult(actualCurrent)}`
             )
 
+
             +
+
 
             box(
                 "NAPIĘCIE NA REZYSTORZE",
                 `${fmt(VR)} V`,
-                `VR = VS − VF<br>${resultConversion(VR,"V")}`
+                `VR = VS − VF<br>${voltageResult(VR)}`
             )
 
+
             +
+
 
             box(
                 "MOC WYDZIELANA NA REZYSTORZE",
                 `${fmt(P)} W`,
-                `P = I² × R<br>${resultConversion(P,"W")}`
+                `P = I² × R<br>${powerResult(P)}`
             )
 
+
             +
+
 
             box(
                 "DOBÓR MOCY REZYSTORA",
@@ -1454,11 +1996,15 @@ function calculate(){
                 }<br>
                 Wymagana moc przy zapasie 2×:
                 ${fmt(requiredPower)} W.<br>
-                ${resultConversion(requiredPower,"W")}`,
-                nominalPower>=requiredPower ? "" : "warn"
+                ${powerResult(requiredPower)}`,
+                nominalPower>=requiredPower
+                ? ""
+                : "warn"
             )
 
+
             +
+
 
             box(
                 `WPŁYW TOLERANCJI ±${tolerance*100}%`,
@@ -1472,7 +2018,9 @@ function calculate(){
 }
 
 
-/* START */
+/* =====================================================
+   START
+===================================================== */
 
 setMode();
 
