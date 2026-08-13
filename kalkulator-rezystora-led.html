@@ -674,7 +674,7 @@ function fmt(
 
 
 /* =====================================================
-   AUTOMATYCZNE PRZELICZANIE JEDNOSTEK
+   AUTOMATYCZNY DOBÓR JEDNOSTKI
 ===================================================== */
 
 function bestUnit(
@@ -787,7 +787,7 @@ function bestUnit(
 
 
 /* =====================================================
-   PRZELICZNIK — ZAWSZE NA INNĄ JEDNOSTKĘ
+   PEŁNY PRZELICZNIK JEDNOSTEK
 ===================================================== */
 
 function conv(
@@ -877,7 +877,7 @@ function conv(
                     ${fmt(v,6)} µA
                 </strong>
                 =
-                ${fmt(v/1000000,9)} A
+                ${fmt(v/1000,6)} mA
             `;
 
         }
@@ -936,6 +936,18 @@ function conv(
         }
 
         if(base === "kΩ"){
+
+            if(Math.abs(v) >= 1000){
+
+                return `
+                    <strong>
+                        ${fmt(v,6)} kΩ
+                    </strong>
+                    =
+                    ${fmt(v/1000,6)} MΩ
+                `;
+
+            }
 
             return `
                 <strong>
@@ -1028,12 +1040,11 @@ function conv(
 
 
     return "";
-
 }
 
 
 /* =====================================================
-   STAŁA LEGENDA REZYSTANCJI
+   LEGENDA REZYSTANCJI
 ===================================================== */
 
 function legend(){
@@ -1087,6 +1098,10 @@ function legend(){
 }
 
 
+/* =====================================================
+   KARTA WYNIKU
+===================================================== */
+
 function box(
     t,
     v,
@@ -1134,7 +1149,7 @@ function error(t){
 
 
 /* =====================================================
-   PRZELICZNIKI PÓL
+   PRZELICZNIKI PÓL WEJŚCIOWYCH
 ===================================================== */
 
 function u(
@@ -1172,11 +1187,6 @@ function currentConv(){
     }
 
 
-    /* KRYTYCZNA POPRAWKA:
-       20 mA pokazuje 0,020 A,
-       nigdy 20 mA = 20 mA.
-    */
-
     imc.innerHTML =
 
         `<strong>
@@ -1208,7 +1218,7 @@ function setLed(){
 
 
 /* =====================================================
-   SZEREGI E12 / E24 / E96
+   SZEREGI
 ===================================================== */
 
 const E12 = [
@@ -1405,9 +1415,10 @@ function calc(){
             `
             R = (VS − VF) / IF
             <br>
-            ${bestUnit(
+            ${conv(
                 Ri,
-                "resistance"
+                "resistance",
+                "Ω"
             )}
             `
         )
@@ -1423,9 +1434,10 @@ function calc(){
             Pierwsza standardowa wartość
             ≥ wartości idealnej.
             <br>
-            ${bestUnit(
+            ${conv(
                 R,
-                "resistance"
+                "resistance",
+                "Ω"
             )}
             `
         )
@@ -1440,9 +1452,10 @@ function calc(){
             Dla rezystora
             ${fmt(R,2)} Ω.
             <br>
-            ${bestUnit(
+            ${conv(
                 Ir,
-                "current"
+                "current",
+                "A"
             )}
             `
         )
@@ -1456,9 +1469,10 @@ function calc(){
             `
             VR = VS − VF
             <br>
-            ${bestUnit(
+            ${conv(
                 Vr,
-                "voltage"
+                "voltage",
+                "V"
             )}
             `
         )
@@ -1472,9 +1486,10 @@ function calc(){
             `
             P = I² × R
             <br>
-            ${bestUnit(
+            ${conv(
                 P,
-                "power"
+                "power",
+                "W"
             )}
             `
         )
