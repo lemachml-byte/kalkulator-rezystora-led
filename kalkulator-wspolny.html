@@ -349,10 +349,6 @@ button:hover{
 </p>
 
 
-<!-- =========================
-     1. RODZAJ OBLICZENIA
-========================= -->
-
 <section class="section">
 
 <h2 class="section-title">
@@ -391,10 +387,6 @@ Rodzaj obliczenia
 </section>
 
 
-<!-- =========================
-     2. DANE WEJŚCIOWE
-========================= -->
-
 <section class="section">
 
 <h2 class="section-title">
@@ -416,14 +408,12 @@ Dane wejściowe
 <label id="l1">
 </label>
 
-
 <input
     id="a"
     type="text"
     inputmode="decimal"
     oninput="update(1)"
 >
-
 
 <div
     id="c1"
@@ -438,14 +428,12 @@ Dane wejściowe
 <label id="l2">
 </label>
 
-
 <input
     id="b"
     type="text"
     inputmode="decimal"
     oninput="update(2)"
 >
-
 
 <div
     id="c2"
@@ -460,14 +448,12 @@ Dane wejściowe
 <label id="l3">
 </label>
 
-
 <input
     id="c"
     type="text"
     inputmode="decimal"
     oninput="update(3)"
 >
-
 
 <div
     id="c3"
@@ -495,10 +481,6 @@ OBLICZ
     class="results">
 </div>
 
-
-<!-- =========================
-     WZORY
-========================= -->
 
 <div class="formula">
 
@@ -551,10 +533,6 @@ LeMaCh • Narzędzia obliczeniowe • Elektronika
 <script>
 
 
-/* =====================================================
-   KONWERSJA LICZB
-===================================================== */
-
 function num(v){
 
     if(
@@ -578,10 +556,6 @@ function num(v){
 
 }
 
-
-/* =====================================================
-   FORMATOWANIE
-===================================================== */
 
 function fmt(
     x,
@@ -608,162 +582,100 @@ function bestUnit(
         return "";
     }
 
-
     const av =
         Math.abs(v);
 
-
-    /* =========================
-       PRĄD
-    ========================= */
 
     if(type === "current"){
 
         if(av < 1e-3){
 
-            return `
-                ${fmt(v * 1e6,3)}
-                µA
-            `;
+            return `${fmt(v * 1e6,3)} µA`;
 
         }
 
         if(av < 1){
 
-            return `
-                ${fmt(v * 1e3,3)}
-                mA
-            `;
+            return `${fmt(v * 1e3,3)} mA`;
 
         }
 
         if(av < 1e3){
 
-            return `
-                ${fmt(v,4)}
-                A
-            `;
+            return `${fmt(v,4)} A`;
 
         }
 
-        return `
-            ${fmt(v / 1e3,3)}
-            kA
-        `;
+        return `${fmt(v / 1e3,3)} kA`;
 
     }
 
-
-    /* =========================
-       NAPIĘCIE
-    ========================= */
 
     if(type === "voltage"){
 
         if(av < 1){
 
-            return `
-                ${fmt(v * 1e3,3)}
-                mV
-            `;
+            return `${fmt(v * 1e3,3)} mV`;
 
         }
 
         if(av < 1e3){
 
-            return `
-                ${fmt(v,4)}
-                V
-            `;
+            return `${fmt(v,4)} V`;
 
         }
 
-        return `
-            ${fmt(v / 1e3,3)}
-            kV
-        `;
+        return `${fmt(v / 1e3,3)} kV`;
 
     }
 
-
-    /* =========================
-       REZYSTANCJA
-    ========================= */
 
     if(type === "resistance"){
 
         if(av < 1){
 
-            return `
-                ${fmt(v * 1e3,3)}
-                mΩ
-            `;
+            return `${fmt(v * 1e3,3)} mΩ`;
 
         }
 
         if(av < 1e3){
 
-            return `
-                ${fmt(v,4)}
-                Ω
-            `;
+            return `${fmt(v,4)} Ω`;
 
         }
 
         if(av < 1e6){
 
-            return `
-                ${fmt(v / 1e3,4)}
-                kΩ
-            `;
+            return `${fmt(v / 1e3,4)} kΩ`;
 
         }
 
-        return `
-            ${fmt(v / 1e6,4)}
-            MΩ
-        `;
+        return `${fmt(v / 1e6,4)} MΩ`;
 
     }
 
-
-    /* =========================
-       MOC
-    ========================= */
 
     if(type === "power"){
 
         if(av < 1e-3){
 
-            return `
-                ${fmt(v * 1e6,3)}
-                µW
-            `;
+            return `${fmt(v * 1e6,3)} µW`;
 
         }
 
         if(av < 1){
 
-            return `
-                ${fmt(v * 1e3,3)}
-                mW
-            `;
+            return `${fmt(v * 1e3,3)} mW`;
 
         }
 
         if(av < 1e3){
 
-            return `
-                ${fmt(v,4)}
-                W
-            `;
+            return `${fmt(v,4)} W`;
 
         }
 
-        return `
-            ${fmt(v / 1e3,3)}
-            kW
-        `;
+        return `${fmt(v / 1e3,3)} kW`;
 
     }
 
@@ -772,6 +684,8 @@ function bestUnit(
 
 /* =====================================================
    PRZELICZNIK
+   WAŻNE:
+   nie pokazuje tej samej jednostki po obu stronach
 ===================================================== */
 
 function conv(
@@ -787,6 +701,191 @@ function conv(
     }
 
 
+    let converted = "";
+
+
+    /* =========================
+       PRĄD
+    ========================= */
+
+    if(type === "current"){
+
+        if(base === "A"){
+
+            converted =
+                `${fmt(v * 1000,4)} mA`;
+
+        }
+
+        else if(base === "mA"){
+
+            converted =
+                `${fmt(v / 1000,6)} A`;
+
+        }
+
+        else if(base === "µA"){
+
+            converted =
+                `${fmt(v / 1000,6)} mA`;
+
+        }
+
+        else if(base === "kA"){
+
+            converted =
+                `${fmt(v * 1000,4)} A`;
+
+        }
+
+    }
+
+
+    /* =========================
+       NAPIĘCIE
+    ========================= */
+
+    else if(type === "voltage"){
+
+        if(base === "V"){
+
+            converted =
+                `${fmt(v * 1000,4)} mV`;
+
+        }
+
+        else if(base === "mV"){
+
+            converted =
+                `${fmt(v / 1000,6)} V`;
+
+        }
+
+        else if(base === "kV"){
+
+            converted =
+                `${fmt(v * 1000,4)} V`;
+
+        }
+
+    }
+
+
+    /* =========================
+       REZYSTANCJA
+    ========================= */
+
+    else if(type === "resistance"){
+
+        if(base === "mΩ"){
+
+            converted =
+                `${fmt(v / 1000,6)} Ω`;
+
+        }
+
+        else if(base === "Ω"){
+
+            if(Math.abs(v) >= 1000){
+
+                converted =
+                    `${fmt(v / 1000,6)} kΩ`;
+
+            }
+
+            else{
+
+                converted =
+                    `${fmt(v * 1000,4)} mΩ`;
+
+            }
+
+        }
+
+        else if(base === "kΩ"){
+
+            if(Math.abs(v) >= 1000){
+
+                converted =
+                    `${fmt(v / 1000,6)} MΩ`;
+
+            }
+
+            else{
+
+                converted =
+                    `${fmt(v * 1000,4)} Ω`;
+
+            }
+
+        }
+
+        else if(base === "MΩ"){
+
+            converted =
+                `${fmt(v * 1000,4)} kΩ`;
+
+        }
+
+    }
+
+
+    /* =========================
+       MOC
+    ========================= */
+
+    else if(type === "power"){
+
+        if(base === "µW"){
+
+            converted =
+                `${fmt(v / 1000,6)} mW`;
+
+        }
+
+        else if(base === "mW"){
+
+            converted =
+                `${fmt(v / 1000,6)} W`;
+
+        }
+
+        else if(base === "W"){
+
+            if(Math.abs(v) >= 1000){
+
+                converted =
+                    `${fmt(v / 1000,6)} kW`;
+
+            }
+
+            else{
+
+                converted =
+                    `${fmt(v * 1000,4)} mW`;
+
+            }
+
+        }
+
+        else if(base === "kW"){
+
+            converted =
+                `${fmt(v * 1000,4)} W`;
+
+        }
+
+    }
+
+
+    if(!converted){
+
+        converted =
+            bestUnit(v,type);
+
+    }
+
+
     return `
 
         <strong>
@@ -795,10 +894,7 @@ function conv(
 
         =
 
-        ${bestUnit(
-            v,
-            type
-        )}
+        ${converted}
 
     `;
 
@@ -818,7 +914,6 @@ function legend(){
         <h3>
             Stała legenda jednostek rezystancji
         </h3>
-
 
         <table>
 
@@ -949,10 +1044,6 @@ function box(
 }
 
 
-/* =====================================================
-   BŁĄD
-===================================================== */
-
 function error(t){
 
     return box(
@@ -982,11 +1073,13 @@ function setField(
 
     const el =
         document.getElementById(
+
             n === 1
                 ? "a"
                 : n === 2
                     ? "b"
                     : "c"
+
         );
 
 
@@ -1026,10 +1119,6 @@ function setMode(){
         "";
 
 
-    /* =========================
-       PRAWO OHMA
-    ========================= */
-
     if(m === "OHM"){
 
         setField(
@@ -1057,10 +1146,6 @@ function setMode(){
 
     }
 
-
-    /* =========================
-       DZIELNIK NAPIĘCIA
-    ========================= */
 
     if(m === "DIV"){
 
@@ -1090,10 +1175,6 @@ function setMode(){
     }
 
 
-    /* =========================
-       REZYSTOR SZEREGOWY
-    ========================= */
-
     if(m === "SER"){
 
         setField(
@@ -1121,10 +1202,6 @@ function setMode(){
 
     }
 
-
-    /* =========================
-       REZYSTOR LED
-    ========================= */
 
     if(m === "LED"){
 
@@ -1164,11 +1241,13 @@ function update(n){
 
     const el =
         document.getElementById(
+
             n === 1
                 ? "a"
                 : n === 2
                     ? "b"
                     : "c"
+
         );
 
 
@@ -1183,6 +1262,7 @@ function update(n){
     document.getElementById(
         "c" + n
     ).innerHTML =
+
         conv(
             num(el.value),
             el.dataset.kind,
@@ -1266,8 +1346,6 @@ function calc(){
     const C =
         num(c.value);
 
-
-    /* WALIDACJA */
 
     if(
         !Number.isFinite(A) ||
