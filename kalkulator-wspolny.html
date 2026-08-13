@@ -19,7 +19,6 @@
     --muted:#68748a;
     --green:#16803c;
     --red:#b42318;
-    --orange:#b77900;
 }
 
 *{
@@ -195,11 +194,6 @@ button:hover{
     background:#fff4f4;
 }
 
-.warn{
-    border-left-color:var(--orange);
-    background:#fff8e8;
-}
-
 .title{
     color:var(--muted);
     font-size:12px;
@@ -304,6 +298,7 @@ button:hover{
     .logo img{
         width:165px;
     }
+
 }
 
 </style>
@@ -396,10 +391,7 @@ inputmode="decimal"
 oninput="update(1)"
 >
 
-<div
-id="c1"
-class="converter"
-></div>
+<div id="c1" class="converter"></div>
 
 </div>
 
@@ -415,10 +407,7 @@ inputmode="decimal"
 oninput="update(2)"
 >
 
-<div
-id="c2"
-class="converter"
-></div>
+<div id="c2" class="converter"></div>
 
 </div>
 
@@ -434,13 +423,9 @@ inputmode="decimal"
 oninput="update(3)"
 >
 
-<div
-id="c3"
-class="converter"
-></div>
+<div id="c3" class="converter"></div>
 
 </div>
-
 
 </div>
 
@@ -452,10 +437,7 @@ OBLICZ
 </button>
 
 
-<div
-id="res"
-class="results"
-></div>
+<div id="res" class="results"></div>
 
 
 <!-- =====================================================
@@ -464,9 +446,7 @@ WZORY
 
 <div class="formula">
 
-<strong>
-Podstawowe wzory
-</strong>
+<strong>Podstawowe wzory</strong>
 
 <br>
 
@@ -522,9 +502,7 @@ Stała legenda jednostek elektrycznych
 </h3>
 
 
-<h4>
-Napięcie — U
-</h4>
+<h4>Napięcie — U</h4>
 
 <table>
 
@@ -535,25 +513,25 @@ Napięcie — U
 </tr>
 
 <tr>
-<td><strong>µV</strong></td>
+<td>µV</td>
 <td>mikrowolt</td>
 <td>0,000001 V</td>
 </tr>
 
 <tr>
-<td><strong>mV</strong></td>
+<td>mV</td>
 <td>milivolt</td>
 <td>0,001 V</td>
 </tr>
 
 <tr>
-<td><strong>V</strong></td>
+<td>V</td>
 <td>wolt</td>
 <td>1 V</td>
 </tr>
 
 <tr>
-<td><strong>kV</strong></td>
+<td>kV</td>
 <td>kilowolt</td>
 <td>1 000 V</td>
 </tr>
@@ -561,9 +539,7 @@ Napięcie — U
 </table>
 
 
-<h4>
-Prąd — I
-</h4>
+<h4>Prąd — I</h4>
 
 <table>
 
@@ -574,25 +550,25 @@ Prąd — I
 </tr>
 
 <tr>
-<td><strong>µA</strong></td>
+<td>µA</td>
 <td>mikroamper</td>
 <td>0,000001 A</td>
 </tr>
 
 <tr>
-<td><strong>mA</strong></td>
+<td>mA</td>
 <td>miliamper</td>
 <td>0,001 A</td>
 </tr>
 
 <tr>
-<td><strong>A</strong></td>
+<td>A</td>
 <td>amper</td>
 <td>1 A</td>
 </tr>
 
 <tr>
-<td><strong>kA</strong></td>
+<td>kA</td>
 <td>kiloamper</td>
 <td>1 000 A</td>
 </tr>
@@ -600,9 +576,7 @@ Prąd — I
 </table>
 
 
-<h4>
-Rezystancja — R
-</h4>
+<h4>Rezystancja — R</h4>
 
 <table>
 
@@ -613,31 +587,31 @@ Rezystancja — R
 </tr>
 
 <tr>
-<td><strong>µΩ</strong></td>
+<td>µΩ</td>
 <td>mikroom</td>
 <td>0,000001 Ω</td>
 </tr>
 
 <tr>
-<td><strong>mΩ</strong></td>
+<td>mΩ</td>
 <td>miliom</td>
 <td>0,001 Ω</td>
 </tr>
 
 <tr>
-<td><strong>Ω</strong></td>
+<td>Ω</td>
 <td>om</td>
 <td>1 Ω</td>
 </tr>
 
 <tr>
-<td><strong>kΩ</strong></td>
+<td>kΩ</td>
 <td>kiloohm</td>
 <td>1 000 Ω</td>
 </tr>
 
 <tr>
-<td><strong>MΩ</strong></td>
+<td>MΩ</td>
 <td>megaohm</td>
 <td>1 000 000 Ω</td>
 </tr>
@@ -645,9 +619,7 @@ Rezystancja — R
 </table>
 
 
-<h4>
-Moc — P
-</h4>
+<h4>Moc — P</h4>
 
 <table>
 
@@ -658,25 +630,25 @@ Moc — P
 </tr>
 
 <tr>
-<td><strong>µW</strong></td>
+<td>µW</td>
 <td>mikrowat</td>
 <td>0,000001 W</td>
 </tr>
 
 <tr>
-<td><strong>mW</strong></td>
+<td>mW</td>
 <td>miliwat</td>
 <td>0,001 W</td>
 </tr>
 
 <tr>
-<td><strong>W</strong></td>
+<td>W</td>
 <td>wat</td>
 <td>1 W</td>
 </tr>
 
 <tr>
-<td><strong>kW</strong></td>
+<td>kW</td>
 <td>kilowat</td>
 <td>1 000 W</td>
 </tr>
@@ -684,9 +656,7 @@ Moc — P
 </table>
 
 
-<h4>
-Ładunek elektryczny — Q
-</h4>
+<h4>Ładunek elektryczny — Q</h4>
 
 <table>
 
@@ -697,19 +667,19 @@ Moc — P
 </tr>
 
 <tr>
-<td><strong>µC</strong></td>
+<td>µC</td>
 <td>mikrokulomb</td>
 <td>0,000001 C</td>
 </tr>
 
 <tr>
-<td><strong>mC</strong></td>
+<td>mC</td>
 <td>milkulomb</td>
 <td>0,001 C</td>
 </tr>
 
 <tr>
-<td><strong>C</strong></td>
+<td>C</td>
 <td>kulomb</td>
 <td>1 C</td>
 </tr>
@@ -717,9 +687,7 @@ Moc — P
 </table>
 
 
-<h4>
-Częstotliwość — f
-</h4>
+<h4>Częstotliwość — f</h4>
 
 <table>
 
@@ -730,25 +698,25 @@ Częstotliwość — f
 </tr>
 
 <tr>
-<td><strong>Hz</strong></td>
+<td>Hz</td>
 <td>herc</td>
 <td>1 Hz</td>
 </tr>
 
 <tr>
-<td><strong>kHz</strong></td>
+<td>kHz</td>
 <td>kilohertz</td>
 <td>1 000 Hz</td>
 </tr>
 
 <tr>
-<td><strong>MHz</strong></td>
+<td>MHz</td>
 <td>megahertz</td>
 <td>1 000 000 Hz</td>
 </tr>
 
 <tr>
-<td><strong>GHz</strong></td>
+<td>GHz</td>
 <td>gigahertz</td>
 <td>1 000 000 000 Hz</td>
 </tr>
@@ -756,9 +724,7 @@ Częstotliwość — f
 </table>
 
 
-<h4>
-Energia — E
-</h4>
+<h4>Energia — E</h4>
 
 <table>
 
@@ -769,25 +735,25 @@ Energia — E
 </tr>
 
 <tr>
-<td><strong>J</strong></td>
+<td>J</td>
 <td>dżul</td>
 <td>1 J</td>
 </tr>
 
 <tr>
-<td><strong>kJ</strong></td>
+<td>kJ</td>
 <td>kilodżul</td>
 <td>1 000 J</td>
 </tr>
 
 <tr>
-<td><strong>Wh</strong></td>
+<td>Wh</td>
 <td>watogodzina</td>
 <td>3 600 J</td>
 </tr>
 
 <tr>
-<td><strong>kWh</strong></td>
+<td>kWh</td>
 <td>kilowatogodzina</td>
 <td>3 600 000 J</td>
 </tr>
@@ -859,7 +825,8 @@ function bestUnit(v,type){
         return "";
     }
 
-    const av = Math.abs(v);
+    const av =
+        Math.abs(v);
 
 
     /* NAPIĘCIE */
@@ -945,6 +912,7 @@ function bestUnit(v,type){
         return `${fmt(v/1000)} kW`;
     }
 
+
     return "";
 }
 
@@ -967,24 +935,49 @@ function conv(v,type,base){
 
 
 /* =====================================================
-E24 — POPRAWNA SKALA
+E24 — POPRAWIONA FUNKCJA
 =====================================================
 
-Wartości bazowe E24:
-1.0  1.1  1.2  1.3  1.5  1.6
-1.8  2.0  2.2  2.4  2.7  3.0
-3.3  3.6  3.9  4.3  4.7  5.1
-5.6  6.2  6.8  7.5  8.2  9.1
+Standard E24:
+
+1.0
+1.1
+1.2
+1.3
+1.5
+1.6
+1.8
+2.0
+2.2
+2.4
+2.7
+3.0
+3.3
+3.6
+3.9
+4.3
+4.7
+5.1
+5.6
+6.2
+6.8
+7.5
+8.2
+9.1
+
+Algorytm sprawdza rzeczywiste wartości
+rezystorów w odpowiedniej dekadzie.
 
 Przykłady:
+
 150 Ω → 150 Ω
 350 Ω → 360 Ω
 500 Ω → 510 Ω
 1000 Ω → 1000 Ω
+10000 Ω → 10000 Ω
 ===================================================== */
 
 const E24 = [
-
     1.0,
     1.1,
     1.2,
@@ -1009,7 +1002,6 @@ const E24 = [
     7.5,
     8.2,
     9.1
-
 ];
 
 
@@ -1023,46 +1015,54 @@ function e24(x){
     }
 
 
+    /*
+       Wyznaczamy dekadę.
+
+       350 Ω:
+       log10(350) ≈ 2,544
+       floor = 2
+
+       czyli szukamy wartości
+       około 1–10 × 100 Ω.
+    */
+
     const exponent =
         Math.floor(
             Math.log10(x)
         );
 
 
-    const base =
-        x /
-        Math.pow(
-            10,
-            exponent
-        );
-
+    /*
+       Sprawdzamy bieżącą dekadę.
+    */
 
     for(
-        const value
+        const base
         of E24
     ){
 
+        const candidate =
+            base *
+            Math.pow(
+                10,
+                exponent
+            );
+
+
         if(
-            value >=
-            base -
-            1e-12
+            candidate >=
+            x
         ){
 
-            return (
-                value *
-                Math.pow(
-                    10,
-                    exponent
-                )
-            );
+            return candidate;
         }
     }
 
 
     /*
-       Jeżeli wartość przekracza 9,1
-       w danej dekadzie, przechodzimy
-       do następnej dekady.
+       Jeżeli żadna wartość
+       nie pasuje w bieżącej dekadzie,
+       bierzemy 1,0 z następnej dekady.
     */
 
     return (
@@ -1108,12 +1108,6 @@ function setField(
         kind;
 
 
-    /*
-       Wartość startowa jest wpisana
-       faktycznie do pola.
-       Użytkownik może ją zmienić.
-    */
-
     el.value =
         value;
 
@@ -1142,12 +1136,12 @@ function setField(
 
 
 /* =====================================================
-ZMIANA RODZAJU OBLICZENIA
+ZMIANA TRYBU
 ===================================================== */
 
 function setMode(){
 
-    const m =
+    const mode =
         document.getElementById(
             "mode"
         ).value;
@@ -1159,9 +1153,7 @@ function setMode(){
         "";
 
 
-    /* PRAWO OHMA */
-
-    if(m === "OHM"){
+    if(mode === "OHM"){
 
         setField(
             1,
@@ -1186,9 +1178,7 @@ function setMode(){
     }
 
 
-    /* DZIELNIK NAPIĘCIA */
-
-    if(m === "DIV"){
+    if(mode === "DIV"){
 
         setField(
             1,
@@ -1213,9 +1203,7 @@ function setMode(){
     }
 
 
-    /* REZYSTOR SZEREGOWY */
-
-    if(m === "SER"){
+    if(mode === "SER"){
 
         setField(
             1,
@@ -1240,9 +1228,7 @@ function setMode(){
     }
 
 
-    /* LED */
-
-    if(m === "LED"){
+    if(mode === "LED"){
 
         setField(
             1,
@@ -1343,7 +1329,7 @@ function box(
 
 
 /* =====================================================
-LEGENDA WYNIKÓW
+LEGENDA
 ===================================================== */
 
 function legend(){
@@ -1355,6 +1341,7 @@ function legend(){
     <h3>
     Stała legenda jednostek elektrycznych
     </h3>
+
 
     <h4>Napięcie — U</h4>
 
@@ -1706,7 +1693,9 @@ function calc(){
         const U = A;
         const I = B;
         const R = C;
-        const P = U * I;
+
+        const P =
+            U * I;
 
 
         html += box(
