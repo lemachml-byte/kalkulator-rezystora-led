@@ -200,6 +200,24 @@ input::placeholder{
 }
 
 /* =========================
+   PRZELICZNIK JEDNOSTEK
+   ========================= */
+
+.converter{
+ margin-top:7px;
+ padding:7px 10px;
+ border-radius:8px;
+ background:#f5f7fb;
+ color:#536078;
+ font-size:13px;
+ line-height:1.4;
+}
+
+.converter strong{
+ color:var(--navy);
+}
+
+/* =========================
    PRZYCISK
    ========================= */
 
@@ -336,10 +354,6 @@ button:active{
  margin-top:10px;
 }
 
-.help-item strong{
- color:var(--text);
-}
-
 .warning{
  margin-top:18px;
  padding:18px;
@@ -472,7 +486,12 @@ button:active{
  step="0.01"
  min="0.01"
  placeholder="np. 5"
+ oninput="updateVoltageConverter()"
 >
+
+<div class="converter" id="vsConverter">
+ Wpisz wartość napięcia.
+</div>
 
 <div class="small">
  Napięcie rzeczywiście dostępne ze źródła zasilania.
@@ -509,7 +528,7 @@ button:active{
 
 <select id="led" onchange="setLED()">
 
-<option value="custom" selected>
+<option value="custom">
  Wybierz typ LED
 </option>
 
@@ -557,7 +576,12 @@ button:active{
  step="0.01"
  min="0"
  placeholder="np. 2,0"
+ oninput="updateVFConverter()"
 >
+
+<div class="converter" id="vfConverter">
+ Wpisz wartość napięcia.
+</div>
 
 <div class="small">
  Spadek napięcia na LED przy określonym prądzie.
@@ -579,7 +603,7 @@ button:active{
  onchange="setCurrent()"
 >
 
-<option value="custom" selected>
+<option value="custom">
  Wybierz wartość prądu
 </option>
 
@@ -607,8 +631,13 @@ button:active{
  step="0.1"
  min="0.01"
  placeholder="np. 20"
+ oninput="updateCurrentConverter()"
  style="margin-top:8px"
 >
+
+<div class="converter" id="currentConverter">
+ Wpisz wartość prądu.
+</div>
 
 <div class="small">
  Nie należy automatycznie przyjmować 20 mA dla każdej LED.
@@ -805,44 +834,23 @@ Jest to spadek napięcia na przewodzącej LED.
 
 <div class="help-item">
 <strong>3. Prąd LED I<sub>F</sub></strong><br>
-To prąd, który chcemy uzyskać w obwodzie.
+Podaj wymagany prąd LED w miliamperach.
+Kalkulator automatycznie przelicza go również na ampery.
 </div>
 
 <div class="help-item">
 <strong>4. Rezystor</strong><br>
-Rezystor ogranicza prąd LED i przejmuje napięcie
-V<sub>S</sub> − V<sub>F</sub>.
-</div>
-
-<div class="help-item">
-<strong>5. Moc</strong><br>
-Rezystor musi mieć moc znamionową większą od
-mocy wydzielanej podczas pracy.
+Kalkulator oblicza wartość idealną, dobiera najbliższą
+wartość z wybranego szeregu i sprawdza moc rezystora.
 </div>
 
 </div>
 
 
-<!-- =========================
-     OSTRZEŻENIE
-     ========================= -->
-
-<div class="warning">
-
-<strong>WAŻNE:</strong><br>
-
-Kalkulator wykonuje obliczenia projektowe.
-Rzeczywiste V<sub>F</sub> LED zależy m.in. od prądu,
-temperatury i konkretnego egzemplarza.
-
+<div class="footer">
+ LeMaCh • Narzędzia obliczeniowe • Elektronika
 </div>
 
-
-<footer class="footer">
-
-LeMaCh • Narzędzia obliczeniowe • Elektronika
-
-</footer>
 
 </section>
 
@@ -852,59 +860,137 @@ LeMaCh • Narzędzia obliczeniowe • Elektronika
 <script>
 
 /* =========================
-   STANDARDOWE SZEREGI
+   FUNKCJE POMOCNICZE
    ========================= */
 
-const E12=[
-10,12,15,18,22,27,33,39,47,56,68,82
-];
+function formatNumber(value, decimals = 2){
 
-const E24=[
-10,11,12,13,15,16,18,20,22,24,27,30,
-33,36,39,43,47,51,56,62,68,75,82,91
-];
+ if(!Number.isFinite(value)){
+  return "—";
+ }
 
-const E96=[
-10,10.2,10.5,10.7,11,11.3,11.5,11.8,
-12.1,12.4,12.7,13,13.3,13.7,14,14.3,
-14.7,15,15.4,15.8,16.2,16.5,16.9,17.4,
-17.8,18.2,18.7,19.1,19.6,20,20.5,21,
-21.5,22,22.6,23.2,23.7,24.3,24.9,25.5,
-26.1,26.7,27.4,28,28.7,29.4,30.1,30.9,
-31.6,32.4,33.2,34,34.8,35.7,36.5,37.4,
-38.3,39.2,40.2,41.2,42.2,43.2,44.2,45.3,
-46.4,47.5,48.7,49.9,51.1,52.3,53.6,54.9,
-56.2,57.6,59,60.4,61.9,63.4,64.9,66.5,
-68.1,69.8,71.5,73.2,75,76.8,78.7,80.6,
-82.5,84.5,86.6,88.7,90.9,93.1,95.3,97.6
-];
+ return value.toFixed(decimals);
+}
 
 
 /* =========================
-   PARAMETRY LED
+   PRZELICZNIKI
+   ========================= */
+
+function updateVoltageConverter(){
+
+ const value = parseFloat(
+  document.getElementById("vs").value
+ );
+
+ const output =
+  document.getElementById("vsConverter");
+
+ if(!Number.isFinite(value)){
+  output.innerHTML = "Wpisz wartość napięcia.";
+  return;
+ }
+
+ if(value < 1){
+
+  output.innerHTML =
+   "<strong>" +
+   formatNumber(value * 1000, 2) +
+   " mV</strong> = " +
+   formatNumber(value, 3) +
+   " V";
+
+ }else{
+
+  output.innerHTML =
+   "<strong>" +
+   formatNumber(value, 2) +
+   " V</strong> = " +
+   formatNumber(value * 1000, 0) +
+   " mV";
+
+ }
+
+}
+
+
+function updateVFConverter(){
+
+ const value = parseFloat(
+  document.getElementById("vf").value
+ );
+
+ const output =
+  document.getElementById("vfConverter");
+
+ if(!Number.isFinite(value)){
+  output.innerHTML = "Wpisz wartość napięcia.";
+  return;
+ }
+
+ output.innerHTML =
+  "<strong>" +
+  formatNumber(value, 2) +
+  " V</strong> = " +
+  formatNumber(value * 1000, 0) +
+  " mV";
+
+}
+
+
+function updateCurrentConverter(){
+
+ const value = parseFloat(
+  document.getElementById("im").value
+ );
+
+ const output =
+  document.getElementById("currentConverter");
+
+ if(!Number.isFinite(value)){
+  output.innerHTML = "Wpisz wartość prądu.";
+  return;
+ }
+
+ const amps = value / 1000;
+
+ output.innerHTML =
+  "<strong>" +
+  formatNumber(value, 2) +
+  " mA</strong> = " +
+  formatNumber(amps, 4) +
+  " A";
+
+}
+
+
+/* =========================
+   TYP LED
    ========================= */
 
 function setLED(){
 
- const type=document.getElementById("led").value;
+ const type =
+  document.getElementById("led").value;
 
- const values={
+ const vf =
+  document.getElementById("vf");
+
+ const values = {
+
   red:2.0,
   yellow:2.1,
   green:2.2,
   blue:3.0,
   white:3.2
+
  };
 
- const vf=document.getElementById("vf");
+ if(values[type] !== undefined){
 
- if(values[type]!==undefined){
+  vf.value = values[type];
 
-  vf.value=values[type];
-
- }else{
-
-  vf.value="";
+  updateVFConverter();
 
  }
 
@@ -917,17 +1003,17 @@ function setLED(){
 
 function setCurrent(){
 
- const select=document.getElementById("currentSelect");
+ const select =
+  document.getElementById("currentSelect");
 
- const input=document.getElementById("im");
+ const current =
+  document.getElementById("im");
 
- if(select.value!=="custom"){
+ if(select.value !== "custom"){
 
-  input.value=select.value;
+  current.value = select.value;
 
- }else{
-
-  input.value="";
+  updateCurrentConverter();
 
  }
 
@@ -935,60 +1021,59 @@ function setCurrent(){
 
 
 /* =========================
-   FORMATOWANIE REZYSTANCJI
+   SZEREGI REZYSTORÓW
    ========================= */
 
-function fmtResistance(r){
+const seriesValues = {
 
- if(r>=1000000){
+ E12:[
+  10,12,15,18,22,27,33,39,47,56,68,82
+ ],
 
-  return (r/1000000).toFixed(2)+" MΩ";
+ E24:[
+  10,11,12,13,15,16,18,20,22,24,27,30,
+  33,36,39,43,47,51,56,62,68,75,82,91
+ ],
 
- }
+ E96:[
+  10,10.2,10.5,11,11.3,11.5,12.1,12.4,
+  12.7,13,13.3,13.7,14,14.3,15,15.4,
+  15.8,16.2,16.5,16.9,17.4,17.8,18.2,
+  18.7,19.1,19.6,20,20.5,21,21.5,22,
+  22.6,23.2,23.7,24.3,24.9,25.5,26.1,
+  26.7,27.4,28,28.7,29.4,30.1,30.9,31.6,
+  32.4,33.2,34,34.8,35.7,36.5,37.4,38.3,
+  39.2,40.2,41.2,42.2,43.2,44.2,45.3,46.4,
+  47.5,48.7,49.9,51.1,52.3,53.6,54.9,56.2,
+  57.6,59,60.4,61.9,63.4,64.9,66.5,68.1,
+  69.8,71.5,73.2,75,76.8,78.7,80.6,82.5,
+  84.5,86.6,88.7,90.9,93.1,95.3,97.6
+ ]
 
- if(r>=1000){
-
-  return (r/1000).toFixed(2)+" kΩ";
-
- }
-
- return r.toFixed(2)+" Ω";
-
-}
-
-
-/* =========================
-   FORMATOWANIE LICZB
-   ========================= */
-
-function fmtNumber(value,decimals=4){
-
- return Number(value).toFixed(decimals);
-
-}
+};
 
 
-/* =========================
-   DOBÓR NAJBLIŻSZEJ
-   WARTOŚCI STANDARDOWEJ
-   ========================= */
+function practicalResistor(value, series){
 
-function nextHigher(r,arr){
+ const values =
+  seriesValues[series];
 
- let best=null;
+ let best = null;
 
- for(let e=-1;e<=7;e++){
+ for(let decade = -1; decade <= 7; decade++){
 
-  for(const x of arr){
+  const multiplier =
+   Math.pow(10, decade);
 
-   const v=x*Math.pow(10,e);
+  for(const base of values){
 
-   if(v>=r){
+   const candidate =
+    base * multiplier;
 
-    if(best===null || v<best){
+   if(candidate >= value){
 
-     best=v;
-
+    if(best === null || candidate < best){
+     best = candidate;
     }
 
    }
@@ -1003,70 +1088,73 @@ function nextHigher(r,arr){
 
 
 /* =========================
-   GŁÓWNE OBLICZENIA
+   OBLICZENIA
    ========================= */
 
 function calc(){
 
- const vs=Number(
-  document.getElementById("vs").value
- );
-
- const vf=Number(
-  document.getElementById("vf").value
- );
-
- const im=Number(
-  document.getElementById("im").value
- );
-
- const tol=Number(
-  document.getElementById("tol").value
- );
-
- const pw=Number(
-  document.getElementById("pw").value
- );
-
- const series=
-  document.getElementById("series").value;
-
- const results=
+ const results =
   document.getElementById("results");
+
+ results.innerHTML = "";
+
+
+ const vs =
+  parseFloat(document.getElementById("vs").value);
+
+ const vf =
+  parseFloat(document.getElementById("vf").value);
+
+ const im =
+  parseFloat(document.getElementById("im").value);
+
+ const tolerance =
+  parseFloat(document.getElementById("tol").value);
+
+ const ratedPower =
+  parseFloat(document.getElementById("pw").value);
+
+ const series =
+  document.getElementById("series").value;
 
 
  /* =========================
-    WALIDACJA DANYCH
+    WALIDACJA
     ========================= */
 
  if(
   !Number.isFinite(vs) ||
   !Number.isFinite(vf) ||
-  !Number.isFinite(im) ||
-  vs<=0 ||
-  vf<0 ||
-  im<=0
+  !Number.isFinite(im)
  ){
 
-  results.innerHTML=`
-
+  results.innerHTML = `
    <div class="box bad">
-
-    <div class="title">
-     BŁĄD
-    </div>
-
-    <div class="value">
-     Uzupełnij dane
-    </div>
-
+    <div class="title">BŁĄD DANYCH</div>
+    <div class="value">Brak danych</div>
     <div class="detail">
-     Podaj napięcie zasilania,
-     napięcie LED oraz prąd LED.
+     Uzupełnij wszystkie wymagane pola.
     </div>
-
    </div>
+  `;
 
+  return;
+
+ }
+
+
+ if(vs <= 0 || vf < 0 || im <= 0){
+
+  results.innerHTML = `
+   <div class="box bad">
+    <div class="title">BŁĄD DANYCH</div>
+    <div class="value">Nieprawidłowe wartości</div>
+    <div class="detail">
+     Napięcie zasilania musi być większe od 0 V,
+     napięcie LED nie może być ujemne,
+     a prąd LED musi być większy od 0 mA.
+    </div>
+   </div>
   `;
 
   return;
@@ -1075,13 +1163,20 @@ function calc(){
 
 
  /* =========================
-    KONTROLA NAPIĘCIA
+    PRĄD A
     ========================= */
 
- if(vs<=vf){
+ const currentA =
+  im / 1000;
 
-  results.innerHTML=`
 
+ /* =========================
+    VS ≤ VF
+    ========================= */
+
+ if(vs <= vf){
+
+  results.innerHTML = `
    <div class="box bad">
 
     <div class="title">
@@ -1095,12 +1190,11 @@ function calc(){
     <div class="detail">
      Napięcie zasilania musi być większe
      od napięcia przewodzenia LED.
-     Nie można prawidłowo dobrać
-     rezystora ograniczającego prąd.
+     Nie można prawidłowo dobrać rezystora
+     ograniczającego prąd.
     </div>
 
    </div>
-
   `;
 
   return;
@@ -1109,312 +1203,259 @@ function calc(){
 
 
  /* =========================
-    PRĄD W AMPERACH
-    ========================= */
-
- const I=im/1000;
-
-
- /* =========================
     REZYSTOR IDEALNY
     ========================= */
 
- const R=(vs-vf)/I;
+ const ideal =
+  (vs - vf) / currentA;
 
 
  /* =========================
-    NAPIĘCIE NA REZYSTORZE
+    REZYSTOR PRAKTYCZNY
     ========================= */
 
- const Vr=vs-vf;
-
-
- /* =========================
-    MOC IDEALNA
-    ========================= */
-
- const P=I*I*R;
-
-
- /* =========================
-    DOBÓR SZEREGU
-    ========================= */
-
- let arr=E24;
-
- if(series==="E12"){
-  arr=E12;
- }
-
- if(series==="E96"){
-  arr=E96;
- }
-
-
- const practical=nextHigher(R,arr);
+ const practical =
+  practicalResistor(ideal, series);
 
 
  /* =========================
     RZECZYWISTY PRĄD
     ========================= */
 
- const actualI=Vr/practical;
+ const realCurrentA =
+  (vs - vf) / practical;
 
- const actualIm=actualI*1000;
-
-
- /* =========================
-    RZECZYWISTA MOC
-    ========================= */
-
- const actualP=
-  actualI*actualI*practical;
+ const realCurrentMA =
+  realCurrentA * 1000;
 
 
  /* =========================
-    ZALECANA MOC
+    NAPIĘCIE NA REZYSTORZE
     ========================= */
 
- const recommendedP=
-  actualP*2;
+ const resistorVoltage =
+  vs - vf;
 
 
  /* =========================
-    TOLERANCJA REZYSTORA
+    MOC
     ========================= */
 
- const tolerance=tol/100;
+ const resistorPower =
+  Math.pow(realCurrentA,2) * practical;
 
- const rMin=
-  practical*(1-tolerance);
 
- const rMax=
-  practical*(1+tolerance);
+ const requiredPower =
+  resistorPower * 2;
 
 
  /* =========================
-    PRĄD PRZY MIN/MAX R
+    ZAKRES TOLERANCJI
     ========================= */
 
- const currentMax=
-  Vr/rMin;
+ const toleranceDecimal =
+  tolerance / 100;
 
- const currentMin=
-  Vr/rMax;
+ const minimumResistance =
+  practical * (1 - toleranceDecimal);
 
-
- const currentMaxmA=
-  currentMax*1000;
-
- const currentMinmA=
-  currentMin*1000;
+ const maximumResistance =
+  practical * (1 + toleranceDecimal);
 
 
- /* =========================
-    OCENA MOCY
-    ========================= */
+ const maximumCurrent =
+  resistorVoltage / minimumResistance;
 
- const powerOK=
-  pw>=recommendedP;
-
-
- /* =========================
-    OCENA TOLERANCJI
-    ========================= */
-
- let toleranceClass="good";
-
- if(
-  currentMinmA<im*0.9 ||
-  currentMaxmA>im*1.1
- ){
-
-  toleranceClass="warn";
-
- }
+ const minimumCurrent =
+  resistorVoltage / maximumResistance;
 
 
  /* =========================
     WYNIKI
     ========================= */
 
- results.innerHTML=`
+ results.innerHTML = `
 
- <div class="box good">
+  <div class="box good">
 
-  <div class="title">
-   REZYSTOR IDEALNY
-  </div>
+   <div class="title">
+    REZYSTOR IDEALNY
+   </div>
 
-  <div class="value">
-   ${fmtResistance(R)}
-  </div>
+   <div class="value">
+    ${formatNumber(ideal,2)} Ω
+   </div>
 
-  <div class="detail">
-   R = (V<sub>S</sub> − V<sub>F</sub>) / I<sub>F</sub>
-   = (${vs} − ${vf}) / ${im} mA
-  </div>
-
- </div>
-
-
- <div class="box good">
-
-  <div class="title">
-   REZYSTOR PRAKTYCZNY — ${series}
-  </div>
-
-  <div class="value">
-   ${fmtResistance(practical)}
-  </div>
-
-  <div class="detail">
-   Wybrana została pierwsza standardowa
-   wartość równa lub większa od wartości idealnej.
-  </div>
-
- </div>
-
-
- <div class="box good">
-
-  <div class="title">
-   RZECZYWISTY PRĄD LED
-  </div>
-
-  <div class="value">
-   ${actualIm.toFixed(4)} mA
-  </div>
-
-  <div class="detail">
-   Dla rezystora ${fmtResistance(practical)}
-   przy zasilaniu ${vs.toFixed(2)} V.
-  </div>
-
- </div>
-
-
- <div class="box">
-
-  <div class="title">
-   NAPIĘCIE NA REZYSTORZE
-  </div>
-
-  <div class="value">
-   ${Vr.toFixed(2)} V
-  </div>
-
-  <div class="detail">
-   V<sub>R</sub> = V<sub>S</sub> − V<sub>F</sub>
-  </div>
-
- </div>
-
-
- <div class="box">
-
-  <div class="title">
-   MOC WYDZIELANA NA REZYSTORZE
-  </div>
-
-  <div class="value">
-   ${actualP.toFixed(4)} W
-  </div>
-
-  <div class="detail">
-   Rezystor ${fmtResistance(practical)}
-   rozprasza około ${actualP.toFixed(4)} W.
-  </div>
-
- </div>
-
-
- <div class="box ${powerOK ? "good" : "bad"}">
-
-  <div class="title">
-   DOBÓR MOCY REZYSTORA
-  </div>
-
-  <div class="value">
-   ${pw.toFixed(3)} W
-  </div>
-
-  <div class="detail">
-
-   ${
-    powerOK
-    ?
-    "Moc znamionowa ma odpowiedni zapas."
-    :
-    "Moc znamionowa jest zbyt mała."
-   }
-
-   <br>
-
-   Wymagana moc przy zapasie 2×:
-   ${recommendedP.toFixed(4)} W.
+   <div class="detail">
+    R = (V<sub>S</sub> − V<sub>F</sub>) / I<sub>F</sub>
+    = (${formatNumber(vs,2)} − ${formatNumber(vf,2)})
+    / ${formatNumber(im,2)} mA
+   </div>
 
   </div>
 
- </div>
 
+  <div class="box good">
 
- <div class="box ${toleranceClass}">
+   <div class="title">
+    REZYSTOR PRAKTYCZNY — ${series}
+   </div>
 
-  <div class="title">
-   WPŁYW TOLERANCJI ±${tol}%
-  </div>
+   <div class="value">
+    ${formatNumber(practical,2)} Ω
+   </div>
 
-  <div class="value">
-   ${fmtResistance(rMin)}
-   —
-   ${fmtResistance(rMax)}
-  </div>
-
-  <div class="detail">
-   Prąd LED może wynosić około
-   ${currentMinmA.toFixed(2)}
-   —
-   ${currentMaxmA.toFixed(2)}
-   mA,
-   zależnie od rzeczywistej rezystancji.
-  </div>
-
- </div>
-
-
- <div class="box">
-
-  <div class="title">
-   PODSUMOWANIE
-  </div>
-
-  <div class="detail">
-
-   Dla zasilania
-   <strong>${vs.toFixed(2)} V</strong>,
-   LED o V<sub>F</sub> =
-   <strong>${vf.toFixed(2)} V</strong>
-   i prądu projektowego
-   <strong>${im.toFixed(2)} mA</strong>
-   wartość idealna wynosi
-   <strong>${fmtResistance(R)}</strong>.
-
-   <br><br>
-
-   Z szeregu
-   <strong>${series}</strong>
-   kalkulator wybiera
-   <strong>${fmtResistance(practical)}</strong>.
-
-   <br><br>
-
-   Rzeczywisty prąd LED:
-   <strong>${actualIm.toFixed(4)} mA</strong>.
+   <div class="detail">
+    Wybrana została pierwsza standardowa wartość
+    równa lub większa od wartości idealnej.
+   </div>
 
   </div>
 
- </div>
+
+  <div class="box good">
+
+   <div class="title">
+    RZECZYWISTY PRĄD LED
+   </div>
+
+   <div class="value">
+    ${formatNumber(realCurrentMA,4)} mA
+   </div>
+
+   <div class="detail">
+    Dla rezystora ${formatNumber(practical,2)} Ω
+    przy zasilaniu ${formatNumber(vs,2)} V.
+    <br>
+    ${formatNumber(realCurrentA,4)} A
+   </div>
+
+  </div>
+
+
+  <div class="box good">
+
+   <div class="title">
+    NAPIĘCIE NA REZYSTORZE
+   </div>
+
+   <div class="value">
+    ${formatNumber(resistorVoltage,2)} V
+   </div>
+
+   <div class="detail">
+    VR = V<sub>S</sub> − V<sub>F</sub>
+    <br>
+    ${formatNumber(resistorVoltage * 1000,0)} mV
+   </div>
+
+  </div>
+
+
+  <div class="box good">
+
+   <div class="title">
+    MOC WYDZIELANA NA REZYSTORZE
+   </div>
+
+   <div class="value">
+    ${formatNumber(resistorPower,4)} W
+   </div>
+
+   <div class="detail">
+    Rezystor ${formatNumber(practical,2)} Ω
+    rozprasza około ${formatNumber(resistorPower,4)} W.
+    <br>
+    ${formatNumber(resistorPower * 1000,2)} mW
+   </div>
+
+  </div>
+
+
+  <div class="box ${ratedPower >= requiredPower ? "good" : "warn"}">
+
+   <div class="title">
+    DOBÓR MOCY REZYSTORA
+   </div>
+
+   <div class="value">
+    ${formatNumber(ratedPower,3)} W
+   </div>
+
+   <div class="detail">
+
+    ${
+     ratedPower >= requiredPower
+     ?
+     "Moc znamionowa ma odpowiedni zapas."
+     :
+     "Moc znamionowa jest zbyt mała — wybierz mocniejszy rezystor."
+    }
+
+    <br>
+
+    Wymagana moc przy zapasie 2×:
+    ${formatNumber(requiredPower,4)} W
+
+   </div>
+
+  </div>
+
+
+  <div class="box good">
+
+   <div class="title">
+    WPŁYW TOLERANCJI ±${tolerance}%
+   </div>
+
+   <div class="value">
+    ${formatNumber(minimumResistance,2)} Ω —
+    ${formatNumber(maximumResistance,2)} Ω
+   </div>
+
+   <div class="detail">
+    Prąd LED może wynosić około
+    ${formatNumber(minimumCurrent * 1000,2)} —
+    ${formatNumber(maximumCurrent * 1000,2)} mA,
+    zależnie od rzeczywistej rezystancji.
+   </div>
+
+  </div>
+
+
+  <div class="box good">
+
+   <div class="title">
+    PODSUMOWANIE
+   </div>
+
+   <div class="detail">
+
+    Dla zasilania
+    <strong>${formatNumber(vs,2)} V</strong>,
+    LED o V<sub>F</sub> =
+    <strong>${formatNumber(vf,2)} V</strong>
+    i prądu projektowego
+    <strong>${formatNumber(im,2)} mA</strong>
+    wartość idealna wynosi
+    <strong>${formatNumber(ideal,2)} Ω</strong>.
+
+    <br><br>
+
+    Z szeregu <strong>${series}</strong>
+    kalkulator wybiera
+    <strong>${formatNumber(practical,2)} Ω</strong>.
+
+    <br><br>
+
+    Rzeczywisty prąd LED:
+    <strong>${formatNumber(realCurrentMA,4)} mA</strong>
+    =
+    <strong>${formatNumber(realCurrentA,4)} A</strong>.
+
+   </div>
+
+  </div>
 
  `;
 
@@ -1422,11 +1463,12 @@ function calc(){
 
 
 /* =========================
-   START — BRAK WYNIKÓW
+   START
    ========================= */
 
-document.getElementById("results").innerHTML="";
-
+updateVoltageConverter();
+updateVFConverter();
+updateCurrentConverter();
 
 </script>
 
