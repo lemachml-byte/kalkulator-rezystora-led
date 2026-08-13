@@ -1,346 +1,318 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pl">
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+
+<meta name="viewport"
+      content="width=device-width,initial-scale=1">
 
 <title>Kalkulator elektryczny — LeMaCh</title>
 
 <style>
 
-* {
-    box-sizing: border-box;
+:root{
+    --navy:#27376d;
+    --navy2:#1f2d5a;
+    --bg:#f3f4f6;
+    --border:#d8e0eb;
+    --text:#172033;
+    --muted:#68748a;
+    --green:#16803c;
+    --red:#b42318;
+    --orange:#b77900
 }
 
-:root {
-    --navy: #27376d;
-    --navy-dark: #1f2d5a;
-    --blue: #eef2fb;
-    --blue-strong: #dfe7f7;
-    --border: #d8e0eb;
-    --text: #172033;
-    --muted: #68748a;
-    --green: #16803c;
-    --green-bg: #f0fdf4;
-    --red: #b91c1c;
-    --red-bg: #fff4f4;
-    --orange: #b77900;
-    --orange-bg: #fff8e8;
-    --white: #ffffff;
+*{
+    box-sizing:border-box
 }
 
-body {
-    margin: 0;
-    background: #f3f4f6;
-    color: var(--text);
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
     font-family:
         -apple-system,
         BlinkMacSystemFont,
         "Segoe UI",
         Arial,
-        sans-serif;
+        sans-serif
 }
 
-main {
-    max-width: 920px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
+main{
+    max-width:980px;
+    margin:auto;
+    padding:24px 14px 55px
 }
 
-.card {
-    background: var(--white);
-    border-radius: 24px;
-    padding: 34px;
-    box-shadow: 0 10px 35px rgba(0,0,0,0.10);
+.card{
+    background:#fff;
+    border-radius:22px;
+    padding:30px;
+    box-shadow:0 10px 35px rgba(0,0,0,.08)
 }
 
-.top-navigation {
-    margin-bottom: 18px;
+.back{
+    display:inline-block;
+    margin-bottom:20px;
+    padding:9px 14px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    color:var(--navy);
+    text-decoration:none;
+    font-weight:700
 }
 
-.back-top {
-    display: inline-block;
-    padding: 9px 14px;
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    background: #fff;
-    color: var(--navy);
-    font-size: 13px;
-    font-weight: 700;
-    text-decoration: none;
+.logo{
+    text-align:center;
+    margin-bottom:16px
 }
 
-.back-top:hover {
-    background: var(--blue);
+.logo img{
+    width:190px;
+    max-width:70%
 }
 
-.logo {
-    text-align: center;
-    margin-bottom: 18px;
+h1{
+    margin:0;
+    text-align:center;
+    color:var(--navy);
+    font-size:30px
 }
 
-.logo img {
-    width: 190px;
-    max-width: 70%;
-    height: auto;
+.subtitle{
+    text-align:center;
+    color:var(--muted);
+    margin:8px 0 26px
 }
 
-h1 {
-    margin: 0;
-    text-align: center;
-    color: var(--navy);
-    font-size: 32px;
-    line-height: 1.2;
+.section{
+    margin-top:20px;
+    padding:20px;
+    border:1px solid var(--border);
+    border-radius:15px;
+    background:#fbfcfe
 }
 
-.subtitle {
-    margin-top: 10px;
-    margin-bottom: 30px;
-    text-align: center;
-    color: var(--muted);
-    font-size: 15px;
+.section-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:0 0 16px;
+    color:var(--navy);
+    font-size:17px
 }
 
-.section {
-    margin-bottom: 20px;
-    padding: 22px;
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    border-radius: 16px;
+.num{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:27px;
+    height:27px;
+    border-radius:50%;
+    background:var(--navy);
+    color:#fff;
+    font-size:13px;
+    font-weight:800
 }
 
-.section-heading {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 16px;
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px
 }
 
-.section-number {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    flex: 0 0 24px;
-    border-radius: 50%;
-    background: var(--navy);
-    color: #fff;
-    font-size: 13px;
-    font-weight: 800;
+.full{
+    grid-column:1/-1
 }
 
-.section-title {
-    font-size: 17px;
-    font-weight: 800;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-}
-
-.field label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 700;
+label{
+    display:block;
+    margin-bottom:7px;
+    font-weight:750
 }
 
 input,
-select {
-    width: 100%;
-    min-height: 52px;
-    padding: 13px 15px;
-    border: 1px solid #cbd5e1;
-    border-radius: 11px;
-    background: #fff;
-    color: var(--text);
-    font-size: 17px;
+select{
+    width:100%;
+    min-height:48px;
+    padding:11px 13px;
+    border:1px solid #cbd3e1;
+    border-radius:10px;
+    background:#fff;
+    color:var(--text);
+    font-size:16px
 }
 
 input:focus,
-select:focus {
-    outline: none;
-    border-color: var(--navy);
-    box-shadow: 0 0 0 3px rgba(39,55,109,0.12);
+select:focus{
+    outline:3px solid rgba(39,55,109,.14);
+    border-color:var(--navy)
 }
 
-.help {
-    margin-top: 7px;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.4;
+.converter{
+    margin-top:7px;
+    padding:7px 10px;
+    border-radius:8px;
+    background:#f1f4f9;
+    color:#536078;
+    font-size:13px;
+    line-height:1.45
 }
 
-.converter {
-    margin-top: 7px;
-    padding: 6px 9px;
-    border-radius: 8px;
-    background: #f1f4f9;
-    color: #536078;
-    font-size: 13px;
-    line-height: 1.4;
+.converter strong{
+    color:var(--navy)
 }
 
-.converter strong {
-    color: var(--navy);
+button{
+    width:100%;
+    min-height:54px;
+    margin-top:20px;
+    padding:14px 18px;
+    border:0;
+    border-radius:11px;
+    background:var(--navy);
+    color:#fff;
+    font-size:17px;
+    font-weight:800;
+    cursor:pointer
 }
 
-button {
-    width: 100%;
-    min-height: 54px;
-    padding: 15px;
-    border: 0;
-    border-radius: 12px;
-    background: var(--navy);
-    color: #fff;
-    font-size: 17px;
-    font-weight: 800;
-    cursor: pointer;
+button:hover{
+    background:var(--navy2)
 }
 
-button:hover {
-    background: var(--navy-dark);
+.results{
+    margin-top:22px;
+    display:grid;
+    gap:12px
 }
 
-.results {
-    margin-top: 24px;
+.box{
+    padding:17px;
+    border:1px solid var(--border);
+    border-radius:14px;
+    background:#fff
 }
 
-.result {
-    margin-top: 14px;
-    padding: 20px;
-    background: #fff;
-    border: 1px solid var(--border);
-    border-left: 5px solid var(--green);
-    border-radius: 13px;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+.good{
+    border-left:5px solid var(--green);
+    background:#f0fdf4
 }
 
-.result:first-child {
-    margin-top: 0;
+.bad{
+    border-left:5px solid var(--red);
+    background:#fff4f4
 }
 
-.result-title {
-    margin-bottom: 6px;
-    color: var(--muted);
-    font-size: 13px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: .3px;
+.warn{
+    border-left:5px solid var(--orange);
+    background:#fff8e8
 }
 
-.result-value {
-    margin-bottom: 7px;
-    color: var(--text);
-    font-size: 30px;
-    font-weight: 800;
+.title{
+    color:var(--muted);
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.04em;
+    text-transform:uppercase
 }
 
-.formula {
-    color: #475569;
-    font-size: 14px;
-    line-height: 1.5;
+.value{
+    margin-top:4px;
+    color:var(--navy);
+    font-size:28px;
+    font-weight:850
 }
 
-.warning {
-    margin-top: 20px;
-    padding: 18px;
-    background: var(--red-bg);
-    border-left: 5px solid var(--red);
-    border-radius: 12px;
-    color: #7f1d1d;
+.detail{
+    margin-top:7px;
+    color:#536078;
+    font-size:14px;
+    line-height:1.5
 }
 
-.warning-title {
-    margin-bottom: 8px;
-    font-weight: 800;
+.formula{
+    margin-top:20px;
+    padding:18px;
+    border-radius:13px;
+    background:#f5f7fb;
+    border:1px solid var(--border);
+    color:#34415d;
+    font-family:
+        Consolas,
+        Monaco,
+        monospace;
+    line-height:1.8
 }
 
-.info {
-    margin-top: 14px;
-    padding: 18px;
-    background: var(--orange-bg);
-    border-left: 5px solid var(--orange);
-    border-radius: 12px;
-    color: #684900;
-    line-height: 1.55;
+.legend{
+    margin-top:20px;
+    padding:18px;
+    border:1px solid var(--border);
+    border-radius:13px;
+    background:#f8fafc
 }
 
-.formulas {
-    margin-top: 26px;
-    padding: 20px;
-    background: var(--blue);
-    border: 1px solid var(--blue-strong);
-    border-radius: 15px;
+.legend h3{
+    margin:0 0 10px;
+    color:var(--navy);
+    font-size:16px
 }
 
-.formulas-title {
-    margin-bottom: 12px;
-    color: var(--navy);
-    font-weight: 800;
+.legend table{
+    border-collapse:collapse;
+    width:100%
 }
 
-.formulas div {
-    margin: 7px 0;
-    font-family: Consolas, "Courier New", monospace;
-    font-size: 15px;
+.legend th,
+.legend td{
+    text-align:left;
+    padding:6px 8px;
+    border-bottom:1px solid var(--border);
+    font-size:14px
 }
 
-.note {
-    margin-top: 20px;
-    padding: 18px;
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    border-left: 5px solid var(--navy);
-    border-radius: 12px;
-    color: var(--navy-dark);
-    line-height: 1.55;
+.legend th{
+    color:var(--muted)
 }
 
-.footer {
-    margin-top: 28px;
-    padding-top: 18px;
-    border-top: 1px solid var(--border);
-    text-align: center;
-    color: #94a3b8;
-    font-size: 13px;
+.footer{
+    margin-top:26px;
+    padding-top:16px;
+    border-top:1px solid var(--border);
+    text-align:center;
+    color:#8791a3;
+    font-size:12px
 }
 
-@media (max-width: 700px) {
+@media(max-width:680px){
 
-    main {
-        padding: 12px 10px 40px;
+    main{
+        padding:12px 9px 35px
     }
 
-    .card {
-        padding: 20px;
-        border-radius: 18px;
+    .card{
+        padding:19px 14px
     }
 
-    .grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
+    .grid{
+        grid-template-columns:1fr
     }
 
-    h1 {
-        font-size: 27px;
+    .full{
+        grid-column:auto
     }
 
-    .logo img {
-        width: 160px;
+    h1{
+        font-size:25px
     }
 
-    .section {
-        padding: 18px;
+    .logo img{
+        width:165px
     }
 
-    .result-value {
-        font-size: 27px;
-    }
 }
 
 </style>
@@ -351,56 +323,62 @@ button:hover {
 
 <main>
 
-<div class="card">
+<section class="card">
 
-<div class="top-navigation">
-<a class="back-top" href="index.html">
+<a class="back"
+   href="index.html">
     ← Wszystkie kalkulatory
 </a>
-</div>
+
 
 <div class="logo">
-<img src="logo.svg" alt="LeMaCh">
+
+<img
+    src="logo.svg"
+    alt="LeMaCh">
+
 </div>
+
 
 <h1>
     Kalkulator elektryczny
 </h1>
 
-<div class="subtitle">
-    Połączone obliczenia napięcia, prądu, rezystancji, mocy i LED
-</div>
+<p class="subtitle">
+    Prawo Ohma, dzielnik napięcia, rezystor szeregowy i LED
+</p>
 
 
 <!-- =========================
-     WYBÓR OBLICZENIA
+     1. RODZAJ OBLICZENIA
 ========================= -->
 
-<div class="section">
+<section class="section">
 
-<div class="section-heading">
+<h2 class="section-title">
 
-<div class="section-number">
+<span class="num">
 1
-</div>
+</span>
 
-<div class="section-title">
-Wybierz rodzaj obliczenia
-</div>
+Rodzaj obliczenia
 
-</div>
+</h2>
 
-<select id="tryb" onchange="zmienTryb()">
+
+<select
+    id="mode"
+    onchange="setMode()">
 
 <option value="OHM">
     Prawo Ohma
 </option>
 
-<option value="DZIELNIK">
+<option value="DIV">
     Dzielnik napięcia
 </option>
 
-<option value="SZEREG">
+<option value="SER">
     Rezystor szeregowy
 </option>
 
@@ -410,272 +388,151 @@ Wybierz rodzaj obliczenia
 
 </select>
 
-<div class="help" id="opisTrybu"></div>
-
-</div>
+</section>
 
 
 <!-- =========================
-     DANE
+     2. DANE WEJŚCIOWE
 ========================= -->
 
-<div class="section">
+<section class="section">
 
-<div class="section-heading">
+<h2 class="section-title">
 
-<div class="section-number">
+<span class="num">
 2
-</div>
+</span>
 
-<div class="section-title">
 Dane wejściowe
-</div>
 
-</div>
+</h2>
+
 
 <div class="grid">
 
 
-<div class="field">
+<div>
 
-<label id="label1">
-Napięcie U [V]
+<label id="l1">
 </label>
 
+
 <input
-id="input1"
-type="text"
-inputmode="decimal"
-placeholder="np. 12"
-oninput="przeliczPole(1)"
+    id="a"
+    type="text"
+    inputmode="decimal"
+    oninput="update(1)"
 >
 
+
 <div
-class="converter"
-id="converter1"
->
-Wpisz wartość.
+    id="c1"
+    class="converter">
 </div>
-
-<div
-class="help"
-id="help1"
-></div>
 
 </div>
 
 
-<div class="field">
+<div>
 
-<label id="label2">
-Prąd I [A]
+<label id="l2">
 </label>
 
+
 <input
-id="input2"
-type="text"
-inputmode="decimal"
-placeholder="np. 0,02"
-oninput="przeliczPole(2)"
+    id="b"
+    type="text"
+    inputmode="decimal"
+    oninput="update(2)"
 >
 
+
 <div
-class="converter"
-id="converter2"
->
-Wpisz wartość.
+    id="c2"
+    class="converter">
 </div>
-
-<div
-class="help"
-id="help2"
-></div>
 
 </div>
 
 
-<div
-class="field"
-id="field3"
-style="display:none;"
->
+<div class="full">
 
-<label id="label3">
-Rezystancja R [Ω]
+<label id="l3">
 </label>
 
-<input
-id="input3"
-type="text"
-inputmode="decimal"
-placeholder="np. 600"
-oninput="przeliczPole(3)"
->
-
-<div
-class="converter"
-id="converter3"
->
-Wpisz wartość.
-</div>
-
-<div
-class="help"
-id="help3"
-></div>
-
-</div>
-
-
-<div
-class="field"
-id="field4"
-style="display:none;"
->
-
-<label id="label4">
-Wartość 4
-</label>
 
 <input
-id="input4"
-type="text"
-inputmode="decimal"
-placeholder=""
-oninput="przeliczPole(4)"
+    id="c"
+    type="text"
+    inputmode="decimal"
+    oninput="update(3)"
 >
 
-<div
-class="converter"
-id="converter4"
->
-Wpisz wartość.
-</div>
 
 <div
-class="help"
-id="help4"
-></div>
-
-</div>
-
-
+    id="c3"
+    class="converter">
 </div>
 
 </div>
 
 
-<!-- =========================
-     OBLICZENIE
-========================= -->
-
-<div class="section">
-
-<div class="section-heading">
-
-<div class="section-number">
-3
 </div>
 
-<div class="section-title">
-Obliczenie
-</div>
+</section>
 
-</div>
 
-<button onclick="oblicz()">
+<button
+    onclick="calc()">
+
 OBLICZ
+
 </button>
 
-</div>
-
-
-<!-- =========================
-     WYNIKI
-========================= -->
 
 <div
-id="wyniki"
-class="results"
-></div>
+    id="res"
+    class="results">
+</div>
 
 
 <!-- =========================
      WZORY
 ========================= -->
 
-<div class="formulas">
-
-<div class="formulas-title">
-Podstawowe zależności
-</div>
-
-<div>
-U = I × R
-</div>
-
-<div>
-I = U / R
-</div>
-
-<div>
-R = U / I
-</div>
-
-<div>
-P = U × I
-</div>
-
-<div>
-Uwy = Uwe × R2 / (R1 + R2)
-</div>
-
-<div>
-R = (Uwe − Uodb) / I
-</div>
-
-<div>
-RLED = (Uz − VF) / ILED
-</div>
-
-</div>
-
-
-<!-- =========================
-     INFORMACJA
-========================= -->
-
-<div class="note">
+<div class="formula">
 
 <strong>
-Kalkulator wspólny
+Wzory
 </strong>
 
-<br><br>
+<br>
 
-Łączy cztery podstawowe zastosowania
-obliczeń rezystancyjnych:
-
-<br><br>
-
-1. Prawo Ohma i moc.
+U = I × R
 
 <br>
 
-2. Dzielnik napięcia.
+I = U / R
 
 <br>
 
-3. Dobór rezystora szeregowego.
+R = U / I
 
 <br>
 
-4. Dobór rezystora ograniczającego prąd LED.
+P = U × I
 
-<br><br>
+<br>
 
-Wartości prądu są dodatkowo prezentowane
-w amperach i miliamperach.
+Uwy = Uwe × R2 / (R1 + R2)
+
+<br>
+
+R = (Uwe − Uodb) / I
+
+<br>
+
+RLED = (Uz − VF) / ILED
 
 </div>
 
@@ -686,396 +543,374 @@ LeMaCh • Narzędzia obliczeniowe • Elektronika
 
 </div>
 
-</div>
+</section>
 
 </main>
 
 
 <script>
 
+
 /* =====================================================
-   LICZBA
+   KONWERSJA LICZB
 ===================================================== */
 
-function liczba(v) {
+function num(v){
 
-    if (
-        v === undefined ||
+    if(
         v === null ||
+        v === undefined ||
         String(v).trim() === ""
-    ) {
+    ){
+
         return NaN;
+
     }
+
 
     return parseFloat(
+
         String(v)
-        .replace(",", ".")
-        .replace(/\s/g, "")
+            .replace(",",".")
+            .replace(/\s/g,"")
+
     );
+
 }
 
 
 /* =====================================================
-   FORMAT
+   FORMATOWANIE
 ===================================================== */
 
-function f(x, n = 4) {
+function fmt(
+    x,
+    n = 4
+){
 
-    if (!Number.isFinite(x)) {
-        return "—";
+    return Number.isFinite(x)
+        ? Number(x.toFixed(n)).toString()
+        : "—";
+
+}
+
+
+/* =====================================================
+   AUTOMATYCZNY DOBÓR JEDNOSTKI
+===================================================== */
+
+function bestUnit(
+    v,
+    type
+){
+
+    if(!Number.isFinite(v)){
+        return "";
     }
 
-    return Number(
-        x.toFixed(n)
-    ).toString();
+
+    const av =
+        Math.abs(v);
+
+
+    /* =========================
+       PRĄD
+    ========================= */
+
+    if(type === "current"){
+
+        if(av < 1e-3){
+
+            return `
+                ${fmt(v * 1e6,3)}
+                µA
+            `;
+
+        }
+
+        if(av < 1){
+
+            return `
+                ${fmt(v * 1e3,3)}
+                mA
+            `;
+
+        }
+
+        if(av < 1e3){
+
+            return `
+                ${fmt(v,4)}
+                A
+            `;
+
+        }
+
+        return `
+            ${fmt(v / 1e3,3)}
+            kA
+        `;
+
+    }
+
+
+    /* =========================
+       NAPIĘCIE
+    ========================= */
+
+    if(type === "voltage"){
+
+        if(av < 1){
+
+            return `
+                ${fmt(v * 1e3,3)}
+                mV
+            `;
+
+        }
+
+        if(av < 1e3){
+
+            return `
+                ${fmt(v,4)}
+                V
+            `;
+
+        }
+
+        return `
+            ${fmt(v / 1e3,3)}
+            kV
+        `;
+
+    }
+
+
+    /* =========================
+       REZYSTANCJA
+    ========================= */
+
+    if(type === "resistance"){
+
+        if(av < 1){
+
+            return `
+                ${fmt(v * 1e3,3)}
+                mΩ
+            `;
+
+        }
+
+        if(av < 1e3){
+
+            return `
+                ${fmt(v,4)}
+                Ω
+            `;
+
+        }
+
+        if(av < 1e6){
+
+            return `
+                ${fmt(v / 1e3,4)}
+                kΩ
+            `;
+
+        }
+
+        return `
+            ${fmt(v / 1e6,4)}
+            MΩ
+        `;
+
+    }
+
+
+    /* =========================
+       MOC
+    ========================= */
+
+    if(type === "power"){
+
+        if(av < 1e-3){
+
+            return `
+                ${fmt(v * 1e6,3)}
+                µW
+            `;
+
+        }
+
+        if(av < 1){
+
+            return `
+                ${fmt(v * 1e3,3)}
+                mW
+            `;
+
+        }
+
+        if(av < 1e3){
+
+            return `
+                ${fmt(v,4)}
+                W
+            `;
+
+        }
+
+        return `
+            ${fmt(v / 1e3,3)}
+            kW
+        `;
+
+    }
+
 }
 
 
 /* =====================================================
-   FORMAT PRĄDU
+   PRZELICZNIK
 ===================================================== */
 
-function prad(x) {
+function conv(
+    v,
+    type,
+    base
+){
+
+    if(!Number.isFinite(v)){
+
+        return "Wpisz wartość.";
+
+    }
+
 
     return `
-        ${f(x, 6)} A
-        <br>
-        <strong>${f(x * 1000, 4)} mA</strong>
+
+        <strong>
+            ${fmt(v,6)} ${base}
+        </strong>
+
+        =
+
+        ${bestUnit(
+            v,
+            type
+        )}
+
     `;
 
 }
 
 
 /* =====================================================
-   PRZELICZNIKI POD POLAMI
+   STAŁA LEGENDA REZYSTANCJI
 ===================================================== */
 
-function przeliczPole(nr) {
+function legend(){
 
-    const input =
-        document.getElementById(
-            "input" + nr
-        );
+    return `
 
-    const converter =
-        document.getElementById(
-            "converter" + nr
-        );
+    <div class="legend">
 
-    const typ =
-        input.dataset.typ;
+        <h3>
+            Stała legenda jednostek rezystancji
+        </h3>
 
-    const x =
-        liczba(input.value);
 
-    if (!Number.isFinite(x)) {
+        <table>
 
-        converter.innerHTML =
-            "Wpisz wartość.";
+            <tr>
 
-        return;
-    }
+                <th>
+                    Symbol
+                </th>
 
+                <th>
+                    Nazwa
+                </th>
 
-    if (typ === "A") {
+                <th>
+                    Wartość
+                </th>
 
-        converter.innerHTML =
-            `<strong>${f(x,6)} A</strong> =
-             ${f(x * 1000,3)} mA`;
+            </tr>
 
-        return;
-    }
 
+            <tr>
 
-    if (typ === "V") {
+                <td>
+                    <strong>mΩ</strong>
+                </td>
 
-        converter.innerHTML =
-            `<strong>${f(x,4)} V</strong> =
-             ${f(x * 1000,2)} mV`;
+                <td>
+                    miliom
+                </td>
 
-        return;
-    }
+                <td>
+                    0,001 Ω
+                </td>
 
+            </tr>
 
-    if (typ === "OHM") {
 
-        converter.innerHTML =
-            `<strong>${f(x,3)} Ω</strong> =
-             ${f(x / 1000,5)} kΩ`;
+            <tr>
 
-        return;
-    }
+                <td>
+                    <strong>Ω</strong>
+                </td>
 
+                <td>
+                    om
+                </td>
 
-    if (typ === "W") {
+                <td>
+                    1 Ω
+                </td>
 
-        converter.innerHTML =
-            `<strong>${f(x,5)} W</strong> =
-             ${f(x * 1000,3)} mW`;
+            </tr>
 
-        return;
-    }
 
-}
+            <tr>
 
+                <td>
+                    <strong>kΩ</strong>
+                </td>
 
-/* =====================================================
-   USTAWIENIE POLA
-===================================================== */
+                <td>
+                    kiloohm
+                </td>
 
-function ustawPole(
-    nr,
-    widoczne,
-    label,
-    typ,
-    placeholder,
-    help
-) {
+                <td>
+                    1 000 Ω
+                </td>
 
-    const field =
-        document.getElementById(
-            "field" + nr
-        );
+            </tr>
 
-    field.style.display =
-        widoczne ? "" : "none";
 
-    if (!widoczne) {
-        return;
-    }
+            <tr>
 
-    document.getElementById(
-        "label" + nr
-    ).innerHTML = label;
+                <td>
+                    <strong>MΩ</strong>
+                </td>
 
-    const input =
-        document.getElementById(
-            "input" + nr
-        );
+                <td>
+                    megaohm
+                </td>
 
-    input.dataset.typ =
-        typ;
-
-    input.placeholder =
-        placeholder;
+                <td>
+                    1 000 000 Ω
+                </td>
 
-    input.value = "";
-
-    document.getElementById(
-        "help" + nr
-    ).innerHTML = help;
-
-    document.getElementById(
-        "converter" + nr
-    ).innerHTML =
-        "Wpisz wartość.";
-
-}
-
-
-/* =====================================================
-   ZMIANA TRYBU
-===================================================== */
-
-function zmienTryb() {
-
-    const tryb =
-        document.getElementById(
-            "tryb"
-        ).value;
-
-
-    document.getElementById(
-        "wyniki"
-    ).innerHTML = "";
-
-
-    /* =========================
-       PRAWO OHMA
-    ========================= */
-
-    if (tryb === "OHM") {
-
-        document.getElementById(
-            "opisTrybu"
-        ).innerHTML =
-        "Obliczanie napięcia, prądu, rezystancji i mocy.";
-
-        ustawPole(
-            1,
-            true,
-            "Napięcie U [V]",
-            "V",
-            "np. 12",
-            "Napięcie przyłożone do odbiornika."
-        );
-
-        ustawPole(
-            2,
-            true,
-            "Prąd I [A]",
-            "A",
-            "np. 0,02",
-            "Dla 20 mA wpisz 0,02 A."
-        );
-
-        ustawPole(
-            3,
-            true,
-            "Rezystancja R [Ω]",
-            "OHM",
-            "np. 600",
-            "Rezystancja odbiornika."
-        );
-
-        ustawPole(
-            4,
-            false
-        );
-
-        return;
-    }
-
-
-    /* =========================
-       DZIELNIK
-    ========================= */
-
-    if (tryb === "DZIELNIK") {
-
-        document.getElementById(
-            "opisTrybu"
-        ).innerHTML =
-        "Obliczanie napięcia wyjściowego oraz prądu dzielnika.";
-
-        ustawPole(
-            1,
-            true,
-            "Napięcie wejściowe Uwe [V]",
-            "V",
-            "np. 12",
-            "Napięcie zasilające dzielnik."
-        );
-
-        ustawPole(
-            2,
-            true,
-            "Rezystancja R1 [Ω]",
-            "OHM",
-            "np. 1000",
-            "Górny rezystor dzielnika."
-        );
-
-        ustawPole(
-            3,
-            true,
-            "Rezystancja R2 [Ω]",
-            "OHM",
-            "np. 2000",
-            "Dolny rezystor dzielnika."
-        );
-
-        ustawPole(
-            4,
-            false
-        );
-
-        return;
-    }
-
-
-    /* =========================
-       REZYSTOR SZEREGOWY
-    ========================= */
-
-    if (tryb === "SZEREG") {
-
-        document.getElementById(
-            "opisTrybu"
-        ).innerHTML =
-        "Dobór rezystora ograniczającego napięcie odbiornika.";
-
-        ustawPole(
-            1,
-            true,
-            "Napięcie zasilania Uwe [V]",
-            "V",
-            "np. 12",
-            "Napięcie źródła."
-        );
-
-        ustawPole(
-            2,
-            true,
-            "Napięcie odbiornika Uodb [V]",
-            "V",
-            "np. 5",
-            "Wymagane napięcie odbiornika."
-        );
-
-        ustawPole(
-            3,
-            true,
-            "Prąd I [A]",
-            "A",
-            "np. 0,02",
-            "Wymagany prąd odbiornika."
-        );
-
-        ustawPole(
-            4,
-            false
-        );
-
-        return;
-    }
-
-
-    /* =========================
-       LED
-    ========================= */
-
-    if (tryb === "LED") {
-
-        document.getElementById(
-            "opisTrybu"
-        ).innerHTML =
-        "Dobór rezystora ograniczającego prąd LED.";
-
-        ustawPole(
-            1,
-            true,
-            "Napięcie zasilania Uz [V]",
-            "V",
-            "np. 5",
-            "Napięcie źródła zasilania."
-        );
-
-        ustawPole(
-            2,
-            true,
-            "Napięcie LED VF [V]",
-            "V",
-            "np. 2",
-            "Spadek napięcia na LED."
-        );
-
-        ustawPole(
-            3,
-            true,
-            "Prąd LED ILED [A]",
-            "A",
-            "np. 0,02",
-            "Dla 20 mA wpisz 0,02 A."
-        );
-
-        ustawPole(
-            4,
-            false
-        );
-
-        return;
-    }
+            </tr>
+
+        </table>
+
+    </div>
+
+    `;
 
 }
 
@@ -1084,26 +919,27 @@ function zmienTryb() {
    KARTA WYNIKU
 ===================================================== */
 
-function wynik(
-    tytul,
-    wartosc,
-    wzor
-) {
+function box(
+    t,
+    v,
+    d,
+    cl = "good"
+){
 
     return `
 
-    <div class="result">
+    <div class="box ${cl}">
 
-        <div class="result-title">
-            ${tytul}
+        <div class="title">
+            ${t}
         </div>
 
-        <div class="result-value">
-            ${wartosc}
+        <div class="value">
+            ${v}
         </div>
 
-        <div class="formula">
-            ${wzor}
+        <div class="detail">
+            ${d}
         </div>
 
     </div>
@@ -1117,25 +953,241 @@ function wynik(
    BŁĄD
 ===================================================== */
 
-function blad(tekst) {
+function error(t){
+
+    return box(
+        "BŁĄD",
+        "Nie można obliczyć",
+        t,
+        "bad"
+    )
+
+    +
+
+    legend();
+
+}
+
+
+/* =====================================================
+   USTAWIANIE PÓL
+===================================================== */
+
+function setField(
+    n,
+    label,
+    kind,
+    placeholder
+){
+
+    const el =
+        document.getElementById(
+            n === 1
+                ? "a"
+                : n === 2
+                    ? "b"
+                    : "c"
+        );
+
 
     document.getElementById(
-        "wyniki"
-    ).innerHTML = `
+        "l" + n
+    ).innerHTML =
+        label;
 
-    <div class="warning">
 
-        <div class="warning-title">
-            BŁĄD DOBORU
-        </div>
+    el.placeholder =
+        placeholder;
 
-        <div>
-            ${tekst}
-        </div>
 
-    </div>
+    el.dataset.kind =
+        kind;
 
-    `;
+
+    document.getElementById(
+        "c" + n
+    ).innerHTML =
+        "Wpisz wartość.";
+
+}
+
+
+/* =====================================================
+   WYBÓR TRYBU
+===================================================== */
+
+function setMode(){
+
+    const m =
+        mode.value;
+
+
+    res.innerHTML =
+        "";
+
+
+    /* =========================
+       PRAWO OHMA
+    ========================= */
+
+    if(m === "OHM"){
+
+        setField(
+            1,
+            "Napięcie U [V]",
+            "voltage",
+            "np. 12"
+        );
+
+
+        setField(
+            2,
+            "Prąd I [A]",
+            "current",
+            "np. 0,02"
+        );
+
+
+        setField(
+            3,
+            "Rezystancja R [Ω]",
+            "resistance",
+            "np. 600"
+        );
+
+    }
+
+
+    /* =========================
+       DZIELNIK NAPIĘCIA
+    ========================= */
+
+    if(m === "DIV"){
+
+        setField(
+            1,
+            "Napięcie wejściowe Uwe [V]",
+            "voltage",
+            "np. 12"
+        );
+
+
+        setField(
+            2,
+            "Rezystancja R1 [Ω]",
+            "resistance",
+            "np. 1000"
+        );
+
+
+        setField(
+            3,
+            "Rezystancja R2 [Ω]",
+            "resistance",
+            "np. 2000"
+        );
+
+    }
+
+
+    /* =========================
+       REZYSTOR SZEREGOWY
+    ========================= */
+
+    if(m === "SER"){
+
+        setField(
+            1,
+            "Napięcie zasilania Uwe [V]",
+            "voltage",
+            "np. 12"
+        );
+
+
+        setField(
+            2,
+            "Napięcie odbiornika Uodb [V]",
+            "voltage",
+            "np. 5"
+        );
+
+
+        setField(
+            3,
+            "Prąd I [A]",
+            "current",
+            "np. 0,02"
+        );
+
+    }
+
+
+    /* =========================
+       REZYSTOR LED
+    ========================= */
+
+    if(m === "LED"){
+
+        setField(
+            1,
+            "Napięcie zasilania Uz [V]",
+            "voltage",
+            "np. 5"
+        );
+
+
+        setField(
+            2,
+            "Napięcie LED VF [V]",
+            "voltage",
+            "np. 2"
+        );
+
+
+        setField(
+            3,
+            "Prąd LED ILED [A]",
+            "current",
+            "np. 0,02"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   AKTUALIZACJA PRZELICZNIKA
+===================================================== */
+
+function update(n){
+
+    const el =
+        document.getElementById(
+            n === 1
+                ? "a"
+                : n === 2
+                    ? "b"
+                    : "c"
+        );
+
+
+    const base =
+        el.dataset.kind === "current"
+            ? "A"
+            : el.dataset.kind === "voltage"
+                ? "V"
+                : "Ω";
+
+
+    document.getElementById(
+        "c" + n
+    ).innerHTML =
+        conv(
+            num(el.value),
+            el.dataset.kind,
+            base
+        );
 
 }
 
@@ -1145,150 +1197,183 @@ function blad(tekst) {
 ===================================================== */
 
 const E24 = [
-    10, 11, 12, 13, 15, 16,
-    18, 20, 22, 24, 27, 30,
-    33, 36, 39, 43, 47, 51,
-    56, 62, 68, 75, 82, 91
+
+    10,11,12,13,15,16,
+    18,20,22,24,27,30,
+    33,36,39,43,47,51,
+    56,62,68,75,82,91
+
 ];
 
 
-function e24(x) {
+/* =====================================================
+   DOBÓR E24
+===================================================== */
 
-    if (x <= 0) {
-        return NaN;
-    }
+function e24(x){
 
-    const exponent =
+    const e =
         Math.floor(
             Math.log10(x)
         );
 
-    const base =
-        x / Math.pow(10, exponent);
 
-    let selected =
+    const b =
+        x /
+        10 ** e;
+
+
+    let z =
         E24.find(
-            v => v >= base
+            v => v >= b
         );
 
-    if (selected === undefined) {
-        selected = 10;
-        return selected *
-               Math.pow(10, exponent + 1);
+
+    if(z === undefined){
+
+        z = 10;
+
+        return z *
+               10 ** (e + 1);
+
     }
 
-    return selected *
-           Math.pow(10, exponent);
+
+    return z *
+           10 ** e;
+
 }
 
 
 /* =====================================================
-   OBLICZ
+   GŁÓWNE OBLICZENIA
 ===================================================== */
 
-function oblicz() {
+function calc(){
 
-    const tryb =
-        document.getElementById(
-            "tryb"
-        ).value;
+    const m =
+        mode.value;
 
 
-    const a =
-        liczba(
-            document.getElementById(
-                "input1"
-            ).value
-        );
-
-    const b =
-        liczba(
-            document.getElementById(
-                "input2"
-            ).value
-        );
-
-    const c =
-        liczba(
-            document.getElementById(
-                "input3"
-            ).value
-        );
+    const A =
+        num(a.value);
 
 
-    if (
-        !Number.isFinite(a) ||
-        !Number.isFinite(b) ||
-        !Number.isFinite(c)
-    ) {
+    const B =
+        num(b.value);
 
-        blad(
-            "Wprowadź wszystkie wymagane wartości."
-        );
+
+    const C =
+        num(c.value);
+
+
+    /* WALIDACJA */
+
+    if(
+        !Number.isFinite(A) ||
+        !Number.isFinite(B) ||
+        !Number.isFinite(C) ||
+        A <= 0 ||
+        B <= 0 ||
+        C <= 0
+    ){
+
+        res.innerHTML =
+            error(
+                "Uzupełnij wszystkie pola wartościami większymi od zera."
+            );
 
         return;
+
     }
 
 
-    if (
-        a <= 0 ||
-        b <= 0 ||
-        c <= 0
-    ) {
-
-        blad(
-            "Wszystkie wartości muszą być większe od zera."
-        );
-
-        return;
-    }
-
-
-    let html = "";
+    let h =
+        "";
 
 
     /* =================================================
        PRAWO OHMA
     ================================================= */
 
-    if (tryb === "OHM") {
+    if(m === "OHM"){
 
-        const U = a;
-        const I = b;
-        const R = c;
-
-        const P = U * I;
+        const U =
+            A;
 
 
-        html += wynik(
-            "PRĄD I",
-            prad(I),
-            `I = U / R = ${f(U,2)} V / ${f(R,2)} Ω`
-        );
+        const I =
+            B;
 
 
-        html += wynik(
-            "MOC P",
-            `${f(P,4)} W`,
-            `P = U × I = ${f(U,2)} V × ${f(I,6)} A`
-        );
+        const R =
+            C;
 
 
-        html += wynik(
+        const P =
+            U * I;
+
+
+        h =
+
+        box(
             "NAPIĘCIE U",
-            `${f(U,2)} V`,
-            "Wartość podana przez użytkownika."
-        );
+            `${fmt(U,2)} V`,
+            `
+            U = I × R
+            <br>
+            ${bestUnit(
+                U,
+                "voltage"
+            )}
+            `
+        )
 
+        +
 
-        html += wynik(
+        box(
+            "PRĄD I",
+            `${fmt(I,6)} A`,
+            `
+            I = U / R
+            <br>
+            ${bestUnit(
+                I,
+                "current"
+            )}
+            `
+        )
+
+        +
+
+        box(
             "REZYSTANCJA R",
-            `${f(R,2)} Ω`,
-            "Wartość podana przez użytkownika."
+            `${fmt(R,2)} Ω`,
+            `
+            R = U / I
+            <br>
+            ${bestUnit(
+                R,
+                "resistance"
+            )}
+            `
+        )
+
+        +
+
+        box(
+            "MOC P",
+            `${fmt(P,4)} W`,
+            `
+            P = U × I
+            <br>
+            ${bestUnit(
+                P,
+                "power"
+            )}
+            `
         );
 
-
-        return pokazWyniki(html);
     }
 
 
@@ -1296,57 +1381,103 @@ function oblicz() {
        DZIELNIK NAPIĘCIA
     ================================================= */
 
-    if (tryb === "DZIELNIK") {
+    if(m === "DIV"){
 
-        const Uwe = a;
-        const R1 = b;
-        const R2 = c;
+        const U =
+            A;
+
+
+        const R1 =
+            B;
+
+
+        const R2 =
+            C;
+
 
         const I =
-            Uwe /
+            U /
             (R1 + R2);
 
+
         const Uwy =
-            Uwe *
+            U *
             R2 /
             (R1 + R2);
 
+
         const P1 =
-            I * I * R1;
+            I *
+            I *
+            R1;
+
 
         const P2 =
-            I * I * R2;
+            I *
+            I *
+            R2;
 
 
-        html += wynik(
+        h =
+
+        box(
             "NAPIĘCIE WYJŚCIOWE Uwy",
-            `${f(Uwy,4)} V`,
-            `Uwy = Uwe × R2 / (R1 + R2)`
-        );
+            `${fmt(Uwy,4)} V`,
+            `
+            Uwy = Uwe × R2 / (R1 + R2)
+            <br>
+            ${bestUnit(
+                Uwy,
+                "voltage"
+            )}
+            `
+        )
 
+        +
 
-        html += wynik(
+        box(
             "PRĄD DZIELNIKA",
-            prad(I),
-            `I = Uwe / (R1 + R2)`
-        );
+            `${fmt(I,6)} A`,
+            `
+            I = Uwe / (R1 + R2)
+            <br>
+            ${bestUnit(
+                I,
+                "current"
+            )}
+            `
+        )
 
+        +
 
-        html += wynik(
+        box(
             "MOC R1",
-            `${f(P1,4)} W`,
-            `P1 = I² × R1`
-        );
+            `${fmt(P1,4)} W`,
+            `
+            P1 = I² × R1
+            <br>
+            ${bestUnit(
+                P1,
+                "power"
+            )}
+            `
+        )
 
+        +
 
-        html += wynik(
+        box(
             "MOC R2",
-            `${f(P2,4)} W`,
-            `P2 = I² × R2`
+            `${fmt(P2,4)} W`,
+            `
+            P2 = I² × R2
+            <br>
+            ${bestUnit(
+                P2,
+                "power"
+            )}
+            `
         );
 
-
-        return pokazWyniki(html);
     }
 
 
@@ -1354,251 +1485,308 @@ function oblicz() {
        REZYSTOR SZEREGOWY
     ================================================= */
 
-    if (tryb === "SZEREG") {
+    if(m === "SER"){
 
-        const Uwe = a;
-        const Uodb = b;
-        const I = c;
+        const U =
+            A;
 
 
-        if (Uodb >= Uwe) {
+        const Uo =
+            B;
 
-            blad(
-                "Napięcie odbiornika musi być mniejsze od napięcia zasilania."
-            );
+
+        const I =
+            C;
+
+
+        if(U <= Uo){
+
+            res.innerHTML =
+                error(
+                    "Napięcie odbiornika musi być mniejsze od napięcia zasilania."
+                );
 
             return;
+
         }
 
 
-        const Rideal =
-            (Uwe - Uodb) /
+        const Ri =
+            (U - Uo) /
             I;
 
 
-        const Re24 =
-            e24(Rideal);
+        const R =
+            e24(Ri);
 
 
-        const Ireal =
-            (Uwe - Uodb) /
-            Re24;
+        const Ir =
+            (U - Uo) /
+            R;
 
 
         const P =
-            Ireal *
-            Ireal *
-            Re24;
+            Ir *
+            Ir *
+            R;
 
 
-        const Pzal =
-            P * 2;
+        h =
 
-
-        html += wynik(
+        box(
             "REZYSTOR IDEALNY",
-            `${f(Rideal,2)} Ω`,
-            `R = (Uwe − Uodb) / I`
-        );
+            `${fmt(Ri,2)} Ω`,
+            `
+            R = (Uwe − Uodb) / I
+            <br>
+            ${bestUnit(
+                Ri,
+                "resistance"
+            )}
+            `
+        )
 
+        +
 
-        html += wynik(
+        box(
             "REZYSTOR PRAKTYCZNY — E24",
-            `${f(Re24,2)} Ω`,
-            "Pierwsza standardowa wartość E24 ≥ wartości idealnej."
-        );
+            `${fmt(R,2)} Ω`,
+            `
+            Pierwsza standardowa
+            wartość E24 ≥ wartości idealnej.
+            <br>
+            ${bestUnit(
+                R,
+                "resistance"
+            )}
+            `
+        )
 
+        +
 
-        html += wynik(
+        box(
             "RZECZYWISTY PRĄD",
-            prad(Ireal),
-            `I = (Uwe − Uodb) / R_E24`
-        );
+            `${fmt(Ir * 1000,4)} mA`,
+            `
+            I = (Uwe − Uodb) / R_E24
+            <br>
+            ${bestUnit(
+                Ir,
+                "current"
+            )}
+            `
+        )
 
+        +
 
-        html += wynik(
+        box(
             "MOC REZYSTORA",
-            `${f(P,4)} W`,
-            `P = I² × R`
-        );
+            `${fmt(P,4)} W`,
+            `
+            P = I² × R
+            <br>
+            ${bestUnit(
+                P,
+                "power"
+            )}
+            `
+        )
 
+        +
 
-        html += wynik(
+        box(
             "ZALECANA MOC REZYSTORA",
-            `${f(Pzal,4)} W`,
-            "Przyjęto zapas 2× względem mocy wydzielanej."
+            `${fmt(P * 2,4)} W`,
+            `
+            Przyjęto zapas 2×
+            względem mocy wydzielanej.
+            `
         );
 
-
-        return pokazWyniki(html);
     }
 
 
     /* =================================================
-       LED
+       REZYSTOR LED
     ================================================= */
 
-    if (tryb === "LED") {
+    if(m === "LED"){
 
-        const Uz = a;
-        const Vf = b;
-        const Iled = c;
+        const U =
+            A;
 
 
-        if (Uz <= Vf) {
+        const V =
+            B;
 
-            blad(
-                "Napięcie zasilania musi być większe od napięcia przewodzenia LED. Nie można prawidłowo dobrać rezystora ograniczającego prąd."
-            );
+
+        const I =
+            C;
+
+
+        if(U <= V){
+
+            res.innerHTML =
+                error(
+                    "Napięcie zasilania musi być większe od napięcia przewodzenia LED. Nie można prawidłowo dobrać rezystora ograniczającego prąd."
+                );
 
             return;
+
         }
 
 
-        const Rideal =
-            (Uz - Vf) /
-            Iled;
+        const Ri =
+            (U - V) /
+            I;
 
 
-        const Re24 =
-            e24(Rideal);
+        const R =
+            e24(Ri);
 
 
-        const Ireal =
-            (Uz - Vf) /
-            Re24;
+        const Ir =
+            (U - V) /
+            R;
 
 
         const Vr =
-            Uz - Vf;
+            U - V;
 
 
         const P =
-            Ireal *
-            Ireal *
-            Re24;
+            Ir *
+            Ir *
+            R;
 
 
-        const Pzal =
-            P * 2;
+        const lo =
+            R *
+            0.95;
 
 
-        html += wynik(
+        const hi =
+            R *
+            1.05;
+
+
+        const Imin =
+            (U - V) /
+            hi;
+
+
+        const Imax =
+            (U - V) /
+            lo;
+
+
+        h =
+
+        box(
             "REZYSTOR IDEALNY",
-            `${f(Rideal,2)} Ω`,
-            `R = (Uz − VF) / ILED`
-        );
+            `${fmt(Ri,2)} Ω`,
+            `
+            R = (Uz − VF) / ILED
+            <br>
+            ${bestUnit(
+                Ri,
+                "resistance"
+            )}
+            `
+        )
 
+        +
 
-        html += wynik(
+        box(
             "REZYSTOR PRAKTYCZNY — E24",
-            `${f(Re24,2)} Ω`,
-            "Pierwsza standardowa wartość E24 ≥ wartości idealnej."
-        );
+            `${fmt(R,2)} Ω`,
+            `
+            Pierwsza standardowa
+            wartość E24 ≥ wartości idealnej.
+            <br>
+            ${bestUnit(
+                R,
+                "resistance"
+            )}
+            `
+        )
 
+        +
 
-        html += wynik(
+        box(
             "RZECZYWISTY PRĄD LED",
-            prad(Ireal),
-            `Dla rezystora ${f(Re24,2)} Ω przy zasilaniu ${f(Uz,2)} V.`
-        );
+            `${fmt(Ir * 1000,4)} mA`,
+            `
+            Dla rezystora
+            ${fmt(R,2)} Ω.
+            <br>
+            ${bestUnit(
+                Ir,
+                "current"
+            )}
+            `
+        )
 
+        +
 
-        html += wynik(
+        box(
             "NAPIĘCIE NA REZYSTORZE",
-            `${f(Vr,2)} V`,
-            "VR = Uz − VF"
-        );
+            `${fmt(Vr,2)} V`,
+            `
+            VR = Uz − VF
+            <br>
+            ${bestUnit(
+                Vr,
+                "voltage"
+            )}
+            `
+        )
 
+        +
 
-        html += wynik(
+        box(
             "MOC WYDZIELANA NA REZYSTORZE",
-            `${f(P,4)} W`,
-            `P = I² × R`
-        );
+            `${fmt(P,4)} W`,
+            `
+            P = I² × R
+            <br>
+            ${bestUnit(
+                P,
+                "power"
+            )}
+            `
+        )
 
+        +
 
-        html += wynik(
+        box(
             "DOBÓR MOCY REZYSTORA",
-            `${f(Pzal,4)} W`,
-            `Wymagana moc przy zapasie 2×: ${f(Pzal,4)} W.`
-        );
+            `${fmt(P * 2,4)} W`,
+            `
+            Wymagana moc przy zapasie 2×.
+            `
+        )
 
+        +
 
-        const minR =
-            Re24 * 0.95;
-
-        const maxR =
-            Re24 * 1.05;
-
-        const maxI =
-            (Uz - Vf) /
-            minR;
-
-        const minI =
-            (Uz - Vf) /
-            maxR;
-
-
-        html += wynik(
+        box(
             "WPŁYW TOLERANCJI ±5%",
-            `${f(minR,2)} Ω — ${f(maxR,2)} Ω`,
-            `Prąd LED może wynosić około ${f(minI * 1000,2)} — ${f(maxI * 1000,2)} mA.`
+            `${fmt(lo,2)} Ω — ${fmt(hi,2)} Ω`,
+            `
+            Prąd LED może wynosić około
+            ${fmt(Imin * 1000,2)}
+            —
+            ${fmt(Imax * 1000,2)}
+            mA.
+            `
         );
 
-
-        html += `
-
-        <div class="info">
-
-            <strong>PODSUMOWANIE</strong>
-
-            <br><br>
-
-            Dla zasilania
-            <strong>${f(Uz,2)} V</strong>,
-
-            LED o VF =
-            <strong>${f(Vf,2)} V</strong>
-
-            i prądu projektowego
-            <strong>${f(Iled * 1000,2)} mA</strong>
-
-            wartość idealna wynosi
-            <strong>${f(Rideal,2)} Ω</strong>.
-
-            <br><br>
-
-            Z szeregu
-            <strong>E24</strong>
-            kalkulator wybiera
-            <strong>${f(Re24,2)} Ω</strong>.
-
-            <br><br>
-
-            Rzeczywisty prąd LED:
-            <strong>${f(Ireal * 1000,4)} mA</strong>.
-
-        </div>
-
-        `;
-
-
-        return pokazWyniki(html);
     }
 
-}
 
-
-/* =====================================================
-   POKAŻ WYNIKI
-===================================================== */
-
-function pokazWyniki(html) {
-
-    document.getElementById(
-        "wyniki"
-    ).innerHTML = html;
+    res.innerHTML =
+        h +
+        legend();
 
 }
 
@@ -1607,7 +1795,7 @@ function pokazWyniki(html) {
    START
 ===================================================== */
 
-zmienTryb();
+setMode();
 
 
 </script>
