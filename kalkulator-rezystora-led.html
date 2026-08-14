@@ -1746,4 +1746,117 @@ function calc(){
         `
         IF = (VS − VF) / R
         <br>
-        IF = (${fmt(VS)} V − ${fmt(VF)}
+        IF = (${fmt(VS)} V − ${fmt(VF)} V) / ${fmt(Rprakt)} Ω = ${fmt(actualCurrentA)} A
+        <br>
+        ${fmt(actualCurrentA)} A = ${fmt(actualCurrentMA)} mA
+        `,
+        "good",
+        `Bo użyliśmy rezystora praktycznego (${fmt(Rprakt)} Ω), a nie idealnego, rzeczywisty prąd nieznacznie różni się od zadanego IF = ${fmt(IFmA)} mA.`
+    );
+
+
+    /* =================================================
+    4. NAPIĘCIE NA REZYSTORZE
+    ================================================= */
+
+    html += resultBox(
+        "NAPIĘCIE NA REZYSTORZE",
+        `${fmt(voltageOnResistor)} V`,
+        `
+        VR = VS − VF
+        <br>
+        VR = ${fmt(VS)} V − ${fmt(VF)} V = ${fmt(voltageOnResistor)} V
+        <br>
+        ${fmt(voltageOnResistor)} V = ${fmt(voltageOnResistor * 1000)} mV
+        `,
+        "good",
+        `Napięcie zasilania rozkłada się na LED (VF) i rezystor (VR). Suma VF + VR zawsze musi dać VS.`
+    );
+
+
+    /* =================================================
+    5. MOC
+    ================================================= */
+
+    html += resultBox(
+        "MOC WYDZIELANA NA REZYSTORZE",
+        `${fmt(resistorPower)} W`,
+        `
+        P = I² × R
+        <br>
+        P = (${fmt(actualCurrentA)} A)² × ${fmt(Rprakt)} Ω = ${fmt(resistorPower)} W
+        <br>
+        ${fmt(resistorPower)} W = ${fmt(resistorPower * 1000)} mW
+        `,
+        "good",
+        `Rezystor zamienia tę moc na ciepło. Im więcej prądu przez niego płynie, tym mocniej się grzeje (moc rośnie z kwadratem prądu).`
+    );
+
+
+    /* =================================================
+    6. DOBÓR MOCY
+    ================================================= */
+
+    html += resultBox(
+        "DOBÓR MOCY REZYSTORA",
+        `${fmt(ratedPower)} W`,
+        `
+        Moc znamionowa: ${fmt(ratedPower)} W.
+        <br>
+        Wymagana moc przy zapasie 2×:
+        Pz = P × 2 = ${fmt(resistorPower)} W × 2 = ${fmt(requiredPower)} W
+        = ${fmt(requiredPower * 1000)} mW
+        `,
+        powerOK ? "good" : "warn",
+        powerOK
+            ? `Wybrana moc znamionowa (${fmt(ratedPower)} W) ma co najmniej dwukrotny zapas względem obliczonej mocy rzeczywistej — to standardowa praktyka inżynierska, chroniąca rezystor przed przegrzaniem i przyspieszonym starzeniem.`
+            : `Wybrana moc znamionowa (${fmt(ratedPower)} W) jest niższa niż zalecana wartość z zapasem 2× (${fmt(requiredPower)} W). Rezystor będzie pracował zbyt blisko granicy swoich możliwości — rozważ mocniejszy typ (np. 0,5 W lub 1 W).`
+    );
+
+
+    /* =================================================
+    7. TOLERANCJA
+    ================================================= */
+
+    html += resultBox(
+        `WPŁYW TOLERANCJI ±${fmt(tolerance)}%`,
+        `${fmt(Rmin)} Ω — ${fmt(Rmax)} Ω`,
+        `
+        Rezystor ${fmt(Rprakt)} Ω ±${fmt(tolerance)}% może w praktyce mieć od ${fmt(Rmin)} Ω do ${fmt(Rmax)} Ω.
+        <br>
+        Prąd LED może wynosić około
+        ${fmt(IminMA)} — ${fmt(ImaxMA)} mA.
+        `,
+        "good",
+        `Tolerancja to realna niepewność produkcyjna rezystora, nie tylko liczba na etykiecie. Warto sprawdzić, czy skrajne wartości prądu (${fmt(IminMA)}–${fmt(ImaxMA)} mA) nadal mieszczą się w bezpiecznym zakresie dla Twojej diody z jej karty katalogowej.`
+    );
+
+
+    document.getElementById(
+        "res"
+    ).innerHTML =
+        html;
+}
+
+
+/* =====================================================
+START — POLA POZOSTAJĄ PUSTE
+===================================================== */
+
+document.getElementById(
+    "vs"
+).value = "";
+
+document.getElementById(
+    "vf"
+).value = "";
+
+document.getElementById(
+    "im"
+).value = "";
+
+</script>
+
+</body>
+
+</html>
