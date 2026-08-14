@@ -126,6 +126,59 @@ label{
     font-weight:750;
 }
 
+/* ============ NOWE: wiersz etykiety + przycisk "?" ============ */
+
+.label-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:7px;
+}
+
+.label-row label{
+    margin-bottom:0;
+}
+
+.qbtn{
+    flex:0 0 auto;
+    width:23px;
+    height:23px;
+    min-height:0;
+    margin:0;
+    padding:0;
+    border-radius:50%;
+    border:1px solid var(--navy);
+    background:#fff;
+    color:var(--navy);
+    font-weight:800;
+    font-size:13px;
+    line-height:1;
+    cursor:pointer;
+}
+
+.qbtn:hover{
+    background:var(--navy);
+    color:#fff;
+}
+
+.tip{
+    margin:0 0 10px;
+    padding:10px 12px;
+    border-radius:8px;
+    background:#eef2fb;
+    border-left:3px solid var(--navy);
+    color:#34415d;
+    font-size:13px;
+    line-height:1.55;
+}
+
+.tip.hidden{
+    display:none;
+}
+
+/* ================================================================ */
+
 input,
 select{
     width:100%;
@@ -221,6 +274,23 @@ button:hover{
     font-size:14px;
     line-height:1.55;
 }
+
+/* ============ NOWE: blok "dlaczego" w karcie wyniku ============ */
+
+.why{
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px dashed var(--border);
+    color:#3d4a63;
+    font-size:13px;
+    line-height:1.55;
+}
+
+.why b{
+    color:var(--navy);
+}
+
+/* ================================================================ */
 
 .formula{
     margin-top:20px;
@@ -350,9 +420,16 @@ Zasilanie
 </h2>
 
 
-<label>
+<div class="label-row">
+<label for="vs">
 Napięcie zasilania VS [V]
 </label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-vs')" aria-label="Wyjaśnienie: napięcie zasilania">?</button>
+</div>
+
+<div id="tip-vs" class="tip hidden">
+VS to napięcie źródła, do którego podłączasz obwód LED + rezystor — np. zasilacz, bateria, port USB (zwykle 5 V) albo wyjście mikrokontrolera (np. Arduino: 5 V lub 3,3 V).
+</div>
 
 
 <input
@@ -390,10 +467,16 @@ Parametry LED
 
 <div>
 
-<label>
+<div class="label-row">
+<label for="led">
 Typ LED
 </label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-led')" aria-label="Wyjaśnienie: typ LED">?</button>
+</div>
 
+<div id="tip-led" class="tip hidden">
+Różne kolory LED mają różne napięcie przewodzenia VF, bo są zrobione z różnych materiałów półprzewodnikowych. Wybór z listy tylko podpowiada typową wartość VF — dokładną wartość dla Twojej konkretnej diody sprawdź w karcie katalogowej (datasheet).
+</div>
 
 <select
 id="led"
@@ -431,10 +514,16 @@ Biała — ok. 3,2 V
 
 <div>
 
-<label>
+<div class="label-row">
+<label for="vf">
 Napięcie przewodzenia VF [V]
 </label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-vf')" aria-label="Wyjaśnienie: napięcie przewodzenia">?</button>
+</div>
 
+<div id="tip-vf" class="tip hidden">
+VF (forward voltage) to spadek napięcia na samej diodzie LED, gdy płynie przez nią prąd w kierunku przewodzenia. To nie jest napięcie zasilania — to "strata" napięcia na diodzie. Wartość podaje producent w karcie katalogowej.
+</div>
 
 <input
 id="vf"
@@ -454,10 +543,16 @@ Wpisz wartość.
 
 <div>
 
-<label>
+<div class="label-row">
+<label for="im">
 Prąd LED IF [mA]
 </label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-if')" aria-label="Wyjaśnienie: prąd LED">?</button>
+</div>
 
+<div id="tip-if" class="tip hidden">
+IF (forward current) to prąd, jaki ma płynąć przez LED w normalnej pracy. Typowo dla małych diod 3–5 mm: 10–20 mA. Przekroczenie maksymalnego IF z karty katalogowej może trwale uszkodzić diodę.
+</div>
 
 <input
 id="im"
@@ -499,10 +594,16 @@ Parametry rezystora
 
 <div>
 
-<label>
+<div class="label-row">
+<label for="tol">
 Tolerancja
 </label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-tol')" aria-label="Wyjaśnienie: tolerancja">?</button>
+</div>
 
+<div id="tip-tol" class="tip hidden">
+Tolerancja to dopuszczalne odchylenie rzeczywistej rezystancji rezystora od wartości nominalnej. Rezystor 150 Ω ±5% może w praktyce mieć od 142,5 Ω do 157,5 Ω — to wpływa na rzeczywisty prąd płynący przez LED.
+</div>
 
 <select id="tol">
 
@@ -525,10 +626,16 @@ Tolerancja
 
 <div>
 
-<label>
+<div class="label-row">
+<label for="rated">
 Moc znamionowa
 </label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-rated')" aria-label="Wyjaśnienie: moc znamionowa">?</button>
+</div>
 
+<div id="tip-rated" class="tip hidden">
+Moc znamionowa to maksymalna moc, jaką rezystor może bezpiecznie i długotrwale rozproszyć jako ciepło. Dobiera się ją z zapasem (tu: 2×) względem obliczonej mocy rzeczywistej, żeby rezystor się nie przegrzewał.
+</div>
 
 <select id="rated">
 
@@ -559,10 +666,16 @@ Moc znamionowa
 
 <div class="full">
 
-<label>
+<div class="label-row">
+<label for="series">
 Szereg rezystorów
 </label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-series')" aria-label="Wyjaśnienie: szereg rezystorów">?</button>
+</div>
 
+<div id="tip-series" class="tip hidden">
+E12 / E24 / E96 to znormalizowane zestawy wartości rezystorów dostępnych w sklepach (norma IEC 60063). E12 ma najmniej wartości (skok co ok. 10%), E96 najwięcej (skok co ok. 1%) — im gęstszy szereg, tym dokładniej można dobrać rezystor do wartości idealnej.
+</div>
 
 <select id="series">
 
@@ -954,6 +1067,23 @@ function fmt(value, digits=10){
 
 
 /* =====================================================
+NOWE: PRZEŁĄCZANIE PODPOWIEDZI (TOOLTIP)
+===================================================== */
+
+function toggleTip(id){
+
+    const el =
+        document.getElementById(id);
+
+    if(!el){
+        return;
+    }
+
+    el.classList.toggle("hidden");
+}
+
+
+/* =====================================================
 PRZELICZANIE NAPIĘCIA
 ===================================================== */
 
@@ -1323,14 +1453,21 @@ function standardResistor(value, series){
 
 /* =====================================================
 KARTA WYNIKU
+NOWE: opcjonalny piąty argument "why" — blok "dlaczego"
 ===================================================== */
 
 function resultBox(
     title,
     value,
     detail,
-    type="good"
+    type="good",
+    why=""
 ){
+
+    const whyHtml =
+        why
+        ? `<div class="why"><b>Dlaczego:</b> ${why}</div>`
+        : "";
 
     return `
 
@@ -1347,6 +1484,8 @@ function resultBox(
         <div class="detail">
             ${detail}
         </div>
+
+        ${whyHtml}
 
     </div>
 
@@ -1571,8 +1710,12 @@ function calc(){
         `
         R = (VS − VF) / IF
         <br>
+        R = (${fmt(VS)} V − ${fmt(VF)} V) / ${fmt(IF)} A = ${fmt(Rideal)} Ω
+        <br>
         ${fmt(Rideal)} Ω = ${fmt(Rideal / 1000)} kΩ
-        `
+        `,
+        "good",
+        `To rezystancja, przy której popłynie dokładnie zadany prąd IF. W sprzedaży zwykle nie kupisz takiej dokładnej wartości — dlatego w kolejnym kroku dobieramy najbliższy rezystor standardowy.`
     );
 
 
@@ -1587,7 +1730,9 @@ function calc(){
         Pierwsza standardowa wartość ${series} ≥ wartości idealnej.
         <br>
         ${fmt(Rprakt)} Ω = ${fmt(Rprakt / 1000)} kΩ
-        `
+        `,
+        "good",
+        `Zaokrąglamy w górę (nie w dół), bo mniejszy rezystor niż idealny oznaczałby większy prąd przez LED niż zaplanowany IF — a to skraca żywotność diody lub ją uszkadza. Trochę mniejszy prąd jest bezpieczny, większy — nie.`
     );
 
 
@@ -1599,10 +1744,14 @@ function calc(){
         "RZECZYWISTY PRĄD LED",
         `${fmt(actualCurrentMA)} mA`,
         `
-        Dla rezystora ${fmt(Rprakt)} Ω.
+        IF = (VS − VF) / R
+        <br>
+        IF = (${fmt(VS)} V − ${fmt(VF)} V) / ${fmt(Rprakt)} Ω = ${fmt(actualCurrentA)} A
         <br>
         ${fmt(actualCurrentA)} A = ${fmt(actualCurrentMA)} mA
-        `
+        `,
+        "good",
+        `Bo użyliśmy rezystora praktycznego (${fmt(Rprakt)} Ω), a nie idealnego, rzeczywisty prąd nieznacznie różni się od zadanego IF = ${fmt(IFmA)} mA.`
     );
 
 
@@ -1616,8 +1765,12 @@ function calc(){
         `
         VR = VS − VF
         <br>
+        VR = ${fmt(VS)} V − ${fmt(VF)} V = ${fmt(voltageOnResistor)} V
+        <br>
         ${fmt(voltageOnResistor)} V = ${fmt(voltageOnResistor * 1000)} mV
-        `
+        `,
+        "good",
+        `Napięcie zasilania rozkłada się na LED (VF) i rezystor (VR). Suma VF + VR zawsze musi dać VS.`
     );
 
 
@@ -1631,8 +1784,12 @@ function calc(){
         `
         P = I² × R
         <br>
+        P = (${fmt(actualCurrentA)} A)² × ${fmt(Rprakt)} Ω = ${fmt(resistorPower)} W
+        <br>
         ${fmt(resistorPower)} W = ${fmt(resistorPower * 1000)} mW
-        `
+        `,
+        "good",
+        `Rezystor zamienia tę moc na ciepło. Im więcej prądu przez niego płynie, tym mocniej się grzeje (moc rośnie z kwadratem prądu).`
     );
 
 
@@ -1647,10 +1804,13 @@ function calc(){
         Moc znamionowa: ${fmt(ratedPower)} W.
         <br>
         Wymagana moc przy zapasie 2×:
-        ${fmt(requiredPower)} W
+        Pz = P × 2 = ${fmt(resistorPower)} W × 2 = ${fmt(requiredPower)} W
         = ${fmt(requiredPower * 1000)} mW
         `,
-        powerOK ? "good" : "warn"
+        powerOK ? "good" : "warn",
+        powerOK
+            ? `Wybrana moc znamionowa (${fmt(ratedPower)} W) ma co najmniej dwukrotny zapas względem obliczonej mocy rzeczywistej — to standardowa praktyka inżynierska, chroniąca rezystor przed przegrzaniem i przyspieszonym starzeniem.`
+            : `Wybrana moc znamionowa (${fmt(ratedPower)} W) jest niższa niż zalecana wartość z zapasem 2× (${fmt(requiredPower)} W). Rezystor będzie pracował zbyt blisko granicy swoich możliwości — rozważ mocniejszy typ (np. 0,5 W lub 1 W).`
     );
 
 
@@ -1662,9 +1822,13 @@ function calc(){
         `WPŁYW TOLERANCJI ±${fmt(tolerance)}%`,
         `${fmt(Rmin)} Ω — ${fmt(Rmax)} Ω`,
         `
+        Rezystor ${fmt(Rprakt)} Ω ±${fmt(tolerance)}% może w praktyce mieć od ${fmt(Rmin)} Ω do ${fmt(Rmax)} Ω.
+        <br>
         Prąd LED może wynosić około
         ${fmt(IminMA)} — ${fmt(ImaxMA)} mA.
-        `
+        `,
+        "good",
+        `Tolerancja to realna niepewność produkcyjna rezystora, nie tylko liczba na etykiecie. Warto sprawdzić, czy skrajne wartości prądu (${fmt(IminMA)}–${fmt(ImaxMA)} mA) nadal mieszczą się w bezpiecznym zakresie dla Twojej diody z jej karty katalogowej.`
     );
 
 
