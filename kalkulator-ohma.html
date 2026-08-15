@@ -405,6 +405,21 @@ details.collapsible .collapsible-body{
     color:var(--muted);
 }
 
+.legend th:nth-child(1),
+.legend td:nth-child(1){
+    width:15%;
+}
+
+.legend th:nth-child(2),
+.legend td:nth-child(2){
+    width:45%;
+}
+
+.legend th:nth-child(3),
+.legend td:nth-child(3){
+    width:40%;
+}
+
 .legend th:last-child,
 .legend td:last-child{
     text-align:right;
@@ -990,12 +1005,36 @@ Energia — E
 <li>W dzielniku napięcia większy rezystor ma większy spadek napięcia.</li>
 </ul>
 
-<h4>4. Multimetr — podstawy</h4>
+<h4>4. Multimetr — ikony i obsługa (uniwersalnie)</h4>
 <ul>
-<li>Pomiar napięcia DC: czarna sonda → COM, czerwona → V/Ω; napięcie mierzymy równolegle do elementu.</li>
-<li>Rezystancję mierzymy WYŁĄCZNIE przy odłączonym zasilaniu badanego obwodu.</li>
-<li>Prąd mierzymy szeregowo (multimetr "w torze" prądu) — inaczej niż napięcie.</li>
+<li><b>OFF</b> — pozycja wyłączona.</li>
+<li><b>Ṽ</b> (V z falą ~) — napięcie zmienne (AC), np. gniazdko sieciowe 230 V.</li>
+<li><b>V̄</b> (V z kreską/kreskami) — napięcie stałe (DC), np. baterie, zasilacze, Arduino.</li>
+<li><b>Ω</b> — rezystancja; często w tej samej pozycji co brzęczyk (test ciągłości obwodu) i symbol diody (test diody).</li>
+<li><b>Hz / %</b> — częstotliwość sygnału i wypełnienie (duty cycle).</li>
+<li><b>CAP</b> — pojemność kondensatorów.</li>
+<li><b>µA / mA / A</b> — zakresy prądu: mikroamper, miliamper, pełny amper. Wybierz zakres zbliżony do spodziewanej wartości.</li>
+<li><b>MAX/MIN</b> — rejestruje najwyższą i najniższą wartość odczytaną podczas pomiaru.</li>
+<li><b>HOLD</b> — zamraża aktualny odczyt na wyświetlaczu.</li>
+<li><b>Bluetooth / latarka</b> — funkcje dodatkowe w bardziej zaawansowanych modelach (transmisja odczytu do telefonu, podświetlenie miejsca pomiaru).</li>
+<li><b>Kategoria pomiarowa (CAT I–CAT IV)</b> — określa, do jakiego typu obwodu miernik jest bezpieczny. Do prac przy domowej instalacji elektrycznej potrzebny jest multimetr co najmniej CAT III.</li>
 </ul>
+
+<h4>Gniazda sond</h4>
+<ul>
+<li><b>COM</b> — gniazdo wspólne; ZAWSZE podłączasz tu czarną sondę, niezależnie od rodzaju pomiaru.</li>
+<li><b>VΩmA</b> (czasem razem z Hz%, CAP) — gniazdo dla czerwonej sondy przy pomiarze napięcia, rezystancji i małych prądów.</li>
+<li><b>A / 10A</b> — osobne gniazdo dla czerwonej sondy TYLKO przy pomiarze większych prądów (sprawdź opisany limit, np. „MAX 10 A FUSED”).</li>
+</ul>
+
+<h4>Uproszczona procedura pomiaru</h4>
+<ul>
+<li><b>Napięcie (V):</b> sondy do COM i VΩmA, wybierz AC (~) lub DC (=) zgodnie z badanym źródłem, dotknij obu punktów obwodu RÓWNOLEGLE — obwód pozostaje zamknięty przez cały pomiar.</li>
+<li><b>Rezystancja (Ω):</b> odłącz zasilanie badanego obwodu przed pomiarem, sondy jak przy napięciu, mierz na wyjętym lub odłączonym elemencie.</li>
+<li><b>Prąd (A/mA/µA):</b> sondy do COM i gniazda prądowego (mA/µA lub A — zgodnie ze spodziewaną wartością), PRZERWIJ obwód i wepnij multimetr szeregowo „w tor” prądu — inaczej niż przy napięciu.</li>
+</ul>
+
+<div class="hint">Zasada bezpieczeństwa: jeśli nie znasz rzędu wielkości mierzonej wartości, zacznij od najwyższego dostępnego zakresu (chyba że multimetr ma auto-zakres). Nigdy nie mierz prądu tak, jak mierzysz napięcie (równolegle) — to zwarcie i realne ryzyko uszkodzenia miernika lub obrażeń.</div>
 
 <h4>5. Pytania kontrolne — sprawdź się</h4>
 <ul>
@@ -1009,7 +1048,7 @@ Energia — E
 
 
 <div class="intro" style="margin-top:20px;">
-Dobierasz rezystor do diody LED? Skorzystaj z <a href="kalkulator-rezystora-led.html" style="color:var(--navy);font-weight:700;">Kalkulatora rezystora LED</a>.
+Dobierasz rezystor do diody LED? Skorzystaj z <a href="kalkulator-rezystora-led.html" style="color:var(--navy);font-weight:700;">Kalkulatora rezystora LED</a>. Potrzebujesz dzielnika napięcia, rezystancji zastępczej kilku rezystorów albo dekodera kodu kolorów? Sprawdź <a href="kalkulator-wspolny.html" style="color:var(--navy);font-weight:700;">Kalkulator wspólny</a>.
 </div>
 
 
