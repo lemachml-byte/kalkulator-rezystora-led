@@ -11,286 +11,449 @@
 <style>
 
 :root{
---navy:#27376d;
---navy2:#1f2d5a;
---bg:#f3f4f6;
---border:#d8e0eb;
---text:#172033;
---muted:#68748a;
---green:#16803c;
---red:#b42318;
---orange:#b77900;
+    --navy:#27376d;
+    --navy2:#1f2d5a;
+    --bg:#f3f4f6;
+    --border:#d8e0eb;
+    --text:#172033;
+    --muted:#68748a;
+    --green:#16803c;
+    --red:#b42318;
+    --orange:#b77900;
 }
 
 *{
-box-sizing:border-box;
+    box-sizing:border-box;
 }
 
 body{
-margin:0;
-background:var(--bg);
-color:var(--text);
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
 }
 
 main{
-max-width:980px;
-margin:auto;
-padding:24px 14px 55px;
+    max-width:980px;
+    margin:auto;
+    padding:24px 14px 55px;
 }
 
 .card{
-background:#fff;
-border-radius:22px;
-padding:30px;
-box-shadow:0 10px 35px rgba(0,0,0,.08);
+    background:#fff;
+    border-radius:22px;
+    padding:30px;
+    box-shadow:0 10px 35px rgba(0,0,0,.08);
 }
 
 .back{
-display:inline-block;
-margin-bottom:20px;
-padding:9px 14px;
-border:1px solid var(--border);
-border-radius:9px;
-color:var(--navy);
-text-decoration:none;
-font-weight:700;
+    display:inline-block;
+    margin-bottom:20px;
+    padding:9px 14px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    color:var(--navy);
+    text-decoration:none;
+    font-weight:700;
 }
 
 .logo{
-text-align:center;
-margin-bottom:16px;
+    text-align:center;
+    margin-bottom:16px;
 }
 
 .logo img{
-width:190px;
-max-width:70%;
+    width:190px;
+    max-width:70%;
 }
 
 h1{
-margin:0;
-text-align:center;
-color:var(--navy);
-font-size:30px;
+    margin:0;
+    text-align:center;
+    color:var(--navy);
+    font-size:30px;
 }
 
 .subtitle{
-text-align:center;
-color:var(--muted);
-margin:8px 0 26px;
+    text-align:center;
+    color:var(--muted);
+    margin:8px 0 20px;
+}
+
+.intro{
+    margin:0 0 26px;
+    padding:16px 18px;
+    border-radius:13px;
+    background:#eef2fb;
+    border-left:4px solid var(--navy);
+    color:#2f3c58;
+    font-size:14.5px;
+    line-height:1.6;
+}
+
+.intro b{
+    color:var(--navy);
 }
 
 .section{
-margin-top:20px;
-padding:20px;
-border:1px solid var(--border);
-border-radius:15px;
-background:#fbfcfe;
+    margin-top:20px;
+    padding:20px;
+    border:1px solid var(--border);
+    border-radius:15px;
+    background:#fbfcfe;
 }
 
 .section-title{
-display:flex;
-align-items:center;
-gap:10px;
-margin:0 0 16px;
-color:var(--navy);
-font-size:17px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:0 0 16px;
+    color:var(--navy);
+    font-size:17px;
 }
 
 .num{
-display:flex;
-align-items:center;
-justify-content:center;
-width:27px;
-height:27px;
-border-radius:50%;
-background:var(--navy);
-color:#fff;
-font-size:13px;
-font-weight:800;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:27px;
+    height:27px;
+    border-radius:50%;
+    background:var(--navy);
+    color:#fff;
+    font-size:13px;
+    font-weight:800;
 }
 
 .grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:18px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
 }
 
 label{
-display:block;
-margin-bottom:7px;
-font-weight:750;
+    display:block;
+    margin-bottom:7px;
+    font-weight:750;
+}
+
+.label-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:7px;
+}
+
+.label-row label{
+    margin-bottom:0;
+}
+
+.qbtn{
+    flex:0 0 auto;
+    width:23px;
+    height:23px;
+    min-height:0;
+    margin:0;
+    padding:0;
+    border-radius:50%;
+    border:1px solid var(--navy);
+    background:#fff;
+    color:var(--navy);
+    font-weight:800;
+    font-size:13px;
+    line-height:1;
+    cursor:pointer;
+}
+
+.qbtn:hover{
+    background:var(--navy);
+    color:#fff;
+}
+
+.tip{
+    margin:0 0 10px;
+    padding:10px 12px;
+    border-radius:8px;
+    background:#eef2fb;
+    border-left:3px solid var(--navy);
+    color:#34415d;
+    font-size:13px;
+    line-height:1.55;
+}
+
+.tip.hidden{
+    display:none;
 }
 
 input,
 select{
-width:100%;
-min-height:48px;
-padding:11px 13px;
-border:1px solid #cbd3e1;
-border-radius:10px;
-background:#fff;
-color:var(--text);
-font-size:16px;
+    width:100%;
+    min-height:48px;
+    padding:11px 13px;
+    border:1px solid #cbd3e1;
+    border-radius:10px;
+    background:#fff;
+    color:var(--text);
+    font-size:16px;
 }
 
 input:focus,
 select:focus{
-outline:3px solid rgba(39,55,109,.14);
-border-color:var(--navy);
+    outline:3px solid rgba(39,55,109,.14);
+    border-color:var(--navy);
 }
 
 .converter{
-margin-top:7px;
-padding:7px 10px;
-border-radius:8px;
-background:#f1f4f9;
-color:#536078;
-font-size:13px;
-line-height:1.45;
+    margin-top:7px;
+    padding:7px 10px;
+    border-radius:8px;
+    background:#f1f4f9;
+    color:#536078;
+    font-size:13px;
+    line-height:1.45;
 }
 
 .converter strong{
-color:var(--navy);
+    color:var(--navy);
 }
 
 button{
-width:100%;
-min-height:54px;
-margin-top:20px;
-padding:14px 18px;
-border:0;
-border-radius:11px;
-background:var(--navy);
-color:#fff;
-font-size:17px;
-font-weight:800;
-cursor:pointer;
+    width:100%;
+    min-height:54px;
+    margin-top:20px;
+    padding:14px 18px;
+    border:0;
+    border-radius:11px;
+    background:var(--navy);
+    color:#fff;
+    font-size:17px;
+    font-weight:800;
+    cursor:pointer;
 }
 
 button:hover{
-background:var(--navy2);
+    background:var(--navy2);
+}
+
+.copybtn{
+    background:#fff;
+    color:var(--navy);
+    border:1px solid var(--navy);
+    min-height:44px;
+    font-size:14px;
+    margin-top:4px;
+}
+
+.copybtn:hover{
+    background:#eef2fb;
+    color:var(--navy);
 }
 
 .results{
-margin-top:22px;
-display:grid;
-gap:12px;
+    margin-top:22px;
+    display:grid;
+    gap:12px;
 }
 
 .box{
-padding:17px;
-border:1px solid var(--border);
-border-radius:14px;
-background:#fff;
-border-left:5px solid var(--green);
+    padding:17px;
+    border:1px solid var(--border);
+    border-radius:14px;
+    background:#fff;
+    border-left:5px solid var(--green);
 }
 
 .bad{
-border-left-color:var(--red);
-background:#fff4f4;
+    border-left-color:var(--red);
+    background:#fff4f4;
+}
+
+.warn{
+    border-left-color:var(--orange);
+    background:#fff8e8;
 }
 
 .title{
-color:var(--muted);
-font-size:12px;
-font-weight:800;
-letter-spacing:.04em;
-text-transform:uppercase;
+    color:var(--muted);
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.04em;
+    text-transform:uppercase;
 }
 
 .value{
-margin-top:4px;
-color:var(--navy);
-font-size:28px;
-font-weight:850;
+    margin-top:4px;
+    color:var(--navy);
+    font-size:28px;
+    font-weight:850;
 }
 
 .detail{
-margin-top:7px;
-color:#536078;
-font-size:14px;
-line-height:1.5;
+    margin-top:7px;
+    color:#536078;
+    font-size:14px;
+    line-height:1.55;
 }
 
-.formula{
-margin-top:20px;
-padding:18px;
-border-radius:13px;
-background:#f5f7fb;
-border:1px solid var(--border);
-color:#34415d;
-font-family:Consolas,Monaco,monospace;
-line-height:1.8;
+.why{
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px dashed var(--border);
+    color:#3d4a63;
+    font-size:13px;
+    line-height:1.55;
 }
 
-.legend{
-margin-top:20px;
-padding:18px;
-border:1px solid var(--border);
-border-radius:13px;
-background:#f8fafc;
+.why b{
+    color:var(--navy);
 }
 
-.legend h3{
-margin:0 0 10px;
-color:var(--navy);
-font-size:16px;
+.formula-heading{
+    margin:20px 0 10px;
+    color:var(--navy);
+    font-size:16px;
+    font-weight:800;
+}
+
+.formula-list{
+    display:grid;
+    gap:10px;
+}
+
+.formula-item{
+    padding:12px 14px;
+    border:1px solid var(--border);
+    border-radius:11px;
+    background:#f5f7fb;
+}
+
+.formula-eq{
+    font-family:Consolas,Monaco,monospace;
+    color:var(--navy);
+    font-weight:800;
+    font-size:15px;
+}
+
+.formula-desc{
+    margin-top:4px;
+    color:#536078;
+    font-size:13px;
+    line-height:1.5;
+}
+
+details.collapsible{
+    margin-top:20px;
+    border:1px solid var(--border);
+    border-radius:13px;
+    background:#f8fafc;
+    padding:0;
+    overflow:hidden;
+}
+
+details.collapsible summary{
+    cursor:pointer;
+    list-style:none;
+    padding:16px 18px;
+    color:var(--navy);
+    font-weight:800;
+    font-size:16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+details.collapsible summary::-webkit-details-marker{
+    display:none;
+}
+
+details.collapsible summary::after{
+    content:"▾";
+    font-size:14px;
+    color:var(--muted);
+    transition:transform .15s;
+}
+
+details.collapsible[open] summary::after{
+    transform:rotate(180deg);
+}
+
+details.collapsible .collapsible-body{
+    padding:0 18px 18px;
 }
 
 .legend h4{
-margin:18px 0 8px;
-color:var(--navy);
-font-size:14px;
+    margin:18px 0 8px;
+    color:var(--navy);
+    font-size:14px;
 }
 
 .legend table{
-border-collapse:collapse;
-width:100%;
+    border-collapse:collapse;
+    width:100%;
 }
 
 .legend th,
 .legend td{
-text-align:left;
-padding:6px 8px;
-border-bottom:1px solid var(--border);
-font-size:14px;
+    text-align:left;
+    padding:6px 8px;
+    border-bottom:1px solid var(--border);
+    font-size:14px;
 }
 
 .legend th{
-color:var(--muted);
+    color:var(--muted);
+}
+
+.cheatsheet h4{
+    margin:16px 0 8px;
+    color:var(--navy);
+    font-size:14px;
+}
+
+.cheatsheet ul{
+    margin:0;
+    padding-left:18px;
+    color:#34415d;
+    font-size:14px;
+    line-height:1.7;
+}
+
+.cheatsheet .formula-eq{
+    display:block;
+    margin:4px 0 10px;
 }
 
 .footer{
-margin-top:26px;
-padding-top:16px;
-border-top:1px solid var(--border);
-text-align:center;
-color:#8791a3;
-font-size:12px;
+    margin-top:26px;
+    padding-top:16px;
+    border-top:1px solid var(--border);
+    text-align:center;
+    color:#8791a3;
+    font-size:12px;
 }
 
 @media(max-width:680px){
 
-main{
-padding:12px 9px 35px;
-}
+    main{
+        padding:12px 9px 35px;
+    }
 
-.card{
-padding:19px 14px;
-}
+    .card{
+        padding:19px 14px;
+    }
 
-.grid{
-grid-template-columns:1fr;
-}
+    .grid{
+        grid-template-columns:1fr;
+    }
 
-h1{
-font-size:25px;
-}
+    h1{
+        font-size:25px;
+    }
 
-.logo img{
-width:165px;
-}
+    .logo img{
+        width:165px;
+    }
 
 }
 
@@ -325,20 +488,28 @@ Kalkulator podstawowych zależności elektrycznych
 </p>
 
 
+<div class="intro">
+<b>Po co ten kalkulator?</b> Prawo Ohma (U = I × R) to fundament elektroniki — wiąże ze sobą napięcie, prąd i rezystancję. Podaj dwie znane wielkości, wybierz, którą ma znaleźć kalkulator, a resztę (w tym moc) obliczy automatycznie.
+</div>
+
+
 <!-- =====================================================
 1. WYBÓR OBLICZENIA
 ===================================================== -->
 
 <section class="section">
 
-<h2 class="section-title">
-
+<div class="label-row">
+<h2 class="section-title" style="margin:0;">
 <span class="num">1</span>
-
 Co chcesz obliczyć?
-
 </h2>
+<button type="button" class="qbtn" onclick="toggleTip('tip-mode')" aria-label="Wyjaśnienie: wybór obliczenia">?</button>
+</div>
 
+<div id="tip-mode" class="tip hidden">
+Wybierz wielkość, którą kalkulator ma obliczyć. Pozostałe dwie musisz znać i wpisać poniżej — kalkulator zawsze pokaże też wszystkie 4 wielkości (U, I, R, P) razem.
+</div>
 
 <select
 id="mode"
@@ -386,7 +557,12 @@ Dane wejściowe
 
 <div>
 
+<div class="label-row">
 <label id="l1"></label>
+<button type="button" class="qbtn" onclick="toggleTip('tip1')" aria-label="Wyjaśnienie pola 1">?</button>
+</div>
+
+<div id="tip1" class="tip hidden"></div>
 
 <input
 id="a"
@@ -407,7 +583,12 @@ Wpisz wartość.
 
 <div>
 
+<div class="label-row">
 <label id="l2"></label>
+<button type="button" class="qbtn" onclick="toggleTip('tip2')" aria-label="Wyjaśnienie pola 2">?</button>
+</div>
+
+<div id="tip2" class="tip hidden"></div>
 
 <input
 id="b"
@@ -446,35 +627,41 @@ class="results"
 WZORY
 ===================================================== -->
 
-<div class="formula">
+<div class="formula-heading">
+Wzory używane w kalkulatorze
+</div>
 
-<strong>
-Wzory
-</strong>
+<div class="formula-list">
 
-<br>
+<div class="formula-item">
+<div class="formula-eq">U = I × R</div>
+<div class="formula-desc">Napięcie jako iloczyn prądu i rezystancji — podstawowe prawo Ohma.</div>
+</div>
 
-U = I × R
+<div class="formula-item">
+<div class="formula-eq">I = U / R</div>
+<div class="formula-desc">Prąd płynący przez element o danej rezystancji przy danym napięciu.</div>
+</div>
 
-<br>
+<div class="formula-item">
+<div class="formula-eq">R = U / I</div>
+<div class="formula-desc">Rezystancja elementu, przez który przy danym napięciu płynie dany prąd.</div>
+</div>
 
-I = U / R
+<div class="formula-item">
+<div class="formula-eq">P = U × I</div>
+<div class="formula-desc">Moc jako iloczyn napięcia i prądu — obliczana zawsze, niezależnie od trybu.</div>
+</div>
 
-<br>
+<div class="formula-item">
+<div class="formula-eq">P = I² × R</div>
+<div class="formula-desc">Moc wyrażona przez prąd i rezystancję — przydatne przy doborze mocy rezystora.</div>
+</div>
 
-R = U / I
-
-<br>
-
-P = U × I
-
-<br>
-
-P = I² × R
-
-<br>
-
-P = U² / R
+<div class="formula-item">
+<div class="formula-eq">P = U² / R</div>
+<div class="formula-desc">Moc wyrażona przez napięcie i rezystancję.</div>
+</div>
 
 </div>
 
@@ -483,11 +670,9 @@ P = U² / R
 STAŁA LEGENDA
 ===================================================== -->
 
-<div class="legend">
-
-<h3>
-Stała legenda jednostek elektrycznych
-</h3>
+<details class="collapsible">
+<summary>Stała legenda jednostek elektrycznych</summary>
+<div class="collapsible-body legend">
 
 
 <h4>
@@ -751,6 +936,56 @@ Energia — E
 </table>
 
 </div>
+</details>
+
+
+<!-- =====================================================
+ŚCIĄGA
+===================================================== -->
+
+<details class="collapsible">
+<summary>Ściąga — repetytorium elektroniki</summary>
+<div class="collapsible-body cheatsheet">
+
+<h4>1. Podstawowe wielkości</h4>
+<ul>
+<li><b>U</b> — napięcie [V]; różnica potencjałów.</li>
+<li><b>I</b> — prąd [A]; przepływ ładunku elektrycznego.</li>
+<li><b>R</b> — rezystancja [Ω]; przeciwstawianie się przepływowi prądu.</li>
+<li><b>P</b> — moc [W]; szybkość wydzielania lub zużywania energii.</li>
+</ul>
+
+<h4>2. Najważniejsze wzory ogólne</h4>
+<div class="formula-eq">Prawo Ohma: U = I × R;&nbsp; I = U / R;&nbsp; R = U / I</div>
+<div class="formula-eq">Moc: P = U × I = I² × R = U² / R</div>
+<div class="formula-eq">Dzielnik napięcia: Uwy = Uwe × R2 / (R1 + R2)</div>
+<div class="formula-eq">Prąd dzielnika: I = Uwe / (R1 + R2)</div>
+<div class="hint">Dzielnik napięcia nie jest liczony w tym kalkulatorze — to wzór pomocniczy, do Kalkulatora wspólnego.</div>
+
+<h4>3. Zasady do zapamiętania</h4>
+<ul>
+<li>Przy tym samym napięciu: większa rezystancja → mniejszy prąd.</li>
+<li>W połączeniu szeregowym przez wszystkie elementy płynie ten sam prąd.</li>
+<li>W szeregu napięcie zasilania jest sumą spadków napięcia na elementach.</li>
+<li>W dzielniku napięcia większy rezystor ma większy spadek napięcia.</li>
+</ul>
+
+<h4>4. Multimetr — podstawy</h4>
+<ul>
+<li>Pomiar napięcia DC: czarna sonda → COM, czerwona → V/Ω; napięcie mierzymy równolegle do elementu.</li>
+<li>Rezystancję mierzymy WYŁĄCZNIE przy odłączonym zasilaniu badanego obwodu.</li>
+<li>Prąd mierzymy szeregowo (multimetr "w torze" prądu) — inaczej niż napięcie.</li>
+</ul>
+
+<h4>5. Pytania kontrolne — sprawdź się</h4>
+<ul>
+<li>Co dzieje się z prądem, gdy zwiększamy R przy tym samym U?</li>
+<li>W obwodzie: zasilanie → R1 → punkt pomiarowy → R2 → masa — który rezystor jest w liczniku wzoru dzielnika napięcia?</li>
+<li>Dlaczego pomiar multimetrem może się nieznacznie różnić od obliczenia teoretycznego?</li>
+</ul>
+
+</div>
+</details>
 
 
 <div class="footer">
@@ -774,187 +1009,186 @@ LICZBY
 
 function num(v){
 
-if(
-v===null ||
-v===undefined ||
-String(v).trim()===""
-){
+    if(
+        v===null ||
+        v===undefined ||
+        String(v).trim()===""
+    ){
+        return NaN;
+    }
 
-return NaN;
-
-}
-
-return parseFloat(
-String(v)
-.replace(",",".")
-.replace(/\s/g,"")
-);
-
+    return parseFloat(
+        String(v)
+        .replace(",",".")
+        .replace(/\s/g,"")
+    );
 }
 
 
-function fmt(v,n=10){
+/* =====================================================
+FORMATOWANIE
+max 4 cyfry znaczące, notacja zwykła, przecinek dziesiętny
+(standard PL, ustalony 2026-08-14 dla wszystkich kalkulatorów LeMaCh)
+===================================================== */
 
-if(!Number.isFinite(v)){
+function fmt(value, sig=4){
 
-return "—";
+    if(!Number.isFinite(value)){
+        return "—";
+    }
 
+    if(value === 0){
+        return "0";
+    }
+
+    const negative =
+        value < 0;
+
+    const abs =
+        Math.abs(value);
+
+    const exponent =
+        Math.floor(
+            Math.log10(abs)
+        );
+
+    const decimals =
+        Math.max(
+            0,
+            Math.min(20, sig - 1 - exponent)
+        );
+
+    let s =
+        abs.toFixed(decimals);
+
+    if(s.indexOf(".") !== -1){
+        s =
+            s
+            .replace(/0+$/,"")
+            .replace(/\.$/,"");
+    }
+
+    if(negative){
+        s = "-" + s;
+    }
+
+    return s.replace(".", ",");
 }
 
-return Number(
-v.toFixed(n)
-).toString();
 
+/* =====================================================
+TOOLTIP
+===================================================== */
+
+function toggleTip(id){
+
+    const el =
+        document.getElementById(id);
+
+    if(!el){
+        return;
+    }
+
+    el.classList.toggle("hidden");
 }
+
+
+const TIP_TEXT = {
+    voltage: "U (napięcie) to różnica potencjałów elektrycznych między dwoma punktami obwodu — \"siła napędowa\" dla prądu. Jednostka: wolt [V].",
+    current: "I (prąd) to ilość ładunku elektrycznego przepływająca przez przewodnik w jednostce czasu. Jednostka: amper [A].",
+    resistance: "R (rezystancja) to opór, jaki element stawia przepływowi prądu. Jednostka: om [Ω]."
+};
 
 
 /* =====================================================
 PRZELICZENIA
-
-WAŻNE:
-12 V       → 12000 mV
-0,02 A     → 20 mA
-600 Ω      → 0,6 kΩ
-0,24 W     → 240 mW
 ===================================================== */
 
 function convertUnit(v,type){
 
-if(!Number.isFinite(v)){
+    if(!Number.isFinite(v)){
+        return "";
+    }
 
-return "";
 
+    if(type==="voltage"){
+
+        if(Math.abs(v)>=1000){
+            return `${fmt(v/1000)} kV`;
+        }
+
+        return `${fmt(v*1000)} mV`;
+    }
+
+
+    if(type==="current"){
+
+        if(Math.abs(v)>=1000){
+            return `${fmt(v/1000)} kA`;
+        }
+
+        return `${fmt(v*1000)} mA`;
+    }
+
+
+    if(type==="resistance"){
+
+        if(Math.abs(v)<1){
+            return `${fmt(v*1000)} mΩ`;
+        }
+
+        if(Math.abs(v)>=1000000){
+            return `${fmt(v/1000000)} MΩ`;
+        }
+
+        return `${fmt(v/1000)} kΩ`;
+    }
+
+
+    if(type==="power"){
+
+        if(Math.abs(v)>=1000){
+            return `${fmt(v/1000)} kW`;
+        }
+
+        return `${fmt(v*1000)} mW`;
+    }
+
+    return "";
 }
 
-
-/* NAPIĘCIE */
-
-if(type==="voltage"){
-
-if(Math.abs(v)>=1000){
-
-return `${fmt(v/1000)} kV`;
-
-}
-
-return `${fmt(v*1000)} mV`;
-
-}
-
-
-/* PRĄD */
-
-if(type==="current"){
-
-if(Math.abs(v)>=1000){
-
-return `${fmt(v/1000)} kA`;
-
-}
-
-return `${fmt(v*1000)} mA`;
-
-}
-
-
-/* REZYSTANCJA */
-
-if(type==="resistance"){
-
-if(Math.abs(v)<1){
-
-return `${fmt(v*1000)} mΩ`;
-
-}
-
-if(Math.abs(v)>=1000000){
-
-return `${fmt(v/1000000)} MΩ`;
-
-}
-
-return `${fmt(v/1000)} kΩ`;
-
-}
-
-
-/* MOC */
-
-if(type==="power"){
-
-if(Math.abs(v)>=1000){
-
-return `${fmt(v/1000)} kW`;
-
-}
-
-return `${fmt(v*1000)} mW`;
-
-}
-
-return "";
-
-}
-
-
-/* =====================================================
-PRZELICZENIE POLA
-===================================================== */
 
 function conv(v,type,base){
 
-if(!Number.isFinite(v)){
+    if(!Number.isFinite(v)){
+        return "Wpisz wartość.";
+    }
 
-return "Wpisz wartość.";
-
-}
-
-return `
-
-<strong>
-${fmt(v)} ${base}
-</strong>
-
-=
-
-${convertUnit(v,type)}
-
-`;
-
+    return `<strong>${fmt(v)} ${base}</strong> = ${convertUnit(v,type)}`;
 }
 
 
 /* =====================================================
-USTAWIENIE POLA
+USTAWIENIE POLA (Z TOOLTIPEM ZALEŻNYM OD RODZAJU)
 ===================================================== */
 
-function setField(
-n,
-label,
-kind,
-placeholder
-){
+function setField(n, label, kind, placeholder){
 
-const el=
-document.getElementById(
-n===1 ? "a" : "b"
-);
+    const el =
+        document.getElementById(n===1 ? "a" : "b");
 
-document.getElementById(
-"l"+n
-).innerHTML=label;
+    document.getElementById("l"+n).innerHTML = label;
 
-el.placeholder=
-placeholder;
+    el.placeholder = placeholder;
+    el.dataset.kind = kind;
 
-el.dataset.kind=
-kind;
+    document.getElementById("c"+n).innerHTML = "Wpisz wartość.";
 
-document.getElementById(
-"c"+n
-).innerHTML=
-"Wpisz wartość.";
+    const tipEl =
+        document.getElementById("tip"+n);
 
+    tipEl.innerHTML = TIP_TEXT[kind] || "";
+    tipEl.classList.add("hidden");
 }
 
 
@@ -964,89 +1198,31 @@ TRYB
 
 function setMode(){
 
-const m=
-document.getElementById("mode").value;
+    const m =
+        document.getElementById("mode").value;
 
-document.getElementById(
-"res"
-).innerHTML="";
+    document.getElementById("res").innerHTML = "";
 
 
-if(m==="U"){
+    if(m==="U"){
+        setField(1, "Prąd I [A]", "current", "np. 0,02");
+        setField(2, "Rezystancja R [Ω]", "resistance", "np. 600");
+    }
 
-setField(
-1,
-"Prąd I [A]",
-"current",
-"np. 0,02"
-);
+    if(m==="I"){
+        setField(1, "Napięcie U [V]", "voltage", "np. 12");
+        setField(2, "Rezystancja R [Ω]", "resistance", "np. 600");
+    }
 
-setField(
-2,
-"Rezystancja R [Ω]",
-"resistance",
-"np. 600"
-);
+    if(m==="R"){
+        setField(1, "Napięcie U [V]", "voltage", "np. 12");
+        setField(2, "Prąd I [A]", "current", "np. 0,02");
+    }
 
-}
-
-
-if(m==="I"){
-
-setField(
-1,
-"Napięcie U [V]",
-"voltage",
-"np. 12"
-);
-
-setField(
-2,
-"Rezystancja R [Ω]",
-"resistance",
-"np. 600"
-);
-
-}
-
-
-if(m==="R"){
-
-setField(
-1,
-"Napięcie U [V]",
-"voltage",
-"np. 12"
-);
-
-setField(
-2,
-"Prąd I [A]",
-"current",
-"np. 0,02"
-);
-
-}
-
-
-if(m==="P"){
-
-setField(
-1,
-"Napięcie U [V]",
-"voltage",
-"np. 12"
-);
-
-setField(
-2,
-"Prąd I [A]",
-"current",
-"np. 0,02"
-);
-
-}
-
+    if(m==="P"){
+        setField(1, "Napięcie U [V]", "voltage", "np. 12");
+        setField(2, "Prąd I [A]", "current", "np. 0,02");
+    }
 }
 
 
@@ -1056,30 +1232,17 @@ AKTUALIZACJA PRZELICZNIKA
 
 function update(n){
 
-const el=
-document.getElementById(
-n===1 ? "a" : "b"
-);
+    const el =
+        document.getElementById(n===1 ? "a" : "b");
 
-const type=
-el.dataset.kind;
+    const type =
+        el.dataset.kind;
 
-const base=
-type==="current"
-? "A"
-: type==="voltage"
-? "V"
-: "Ω";
+    const base =
+        type==="current" ? "A" : type==="voltage" ? "V" : "Ω";
 
-document.getElementById(
-"c"+n
-).innerHTML=
-conv(
-num(el.value),
-type,
-base
-);
-
+    document.getElementById("c"+n).innerHTML =
+        conv(num(el.value), type, base);
 }
 
 
@@ -1087,49 +1250,72 @@ base
 KARTA WYNIKU
 ===================================================== */
 
-function box(
-title,
-value,
-detail,
-cls="good"
-){
+function box(title, value, detail, cls="good", why=""){
 
-return `
+    const whyHtml =
+        why
+        ? `<div class="why"><b>Dlaczego:</b> ${why}</div>`
+        : "";
 
-<div class="box ${cls}">
+    return `
 
-<div class="title">
-${title}
-</div>
+    <div class="box ${cls}">
+        <div class="title">${title}</div>
+        <div class="value">${value}</div>
+        <div class="detail">${detail}</div>
+        ${whyHtml}
+    </div>
 
-<div class="value">
-${value}
-</div>
+    `;
+}
 
-<div class="detail">
-${detail}
-</div>
 
-</div>
+function error(message){
 
-`;
-
+    return box("BŁĄD", "Nie można obliczyć", message, "bad");
 }
 
 
 /* =====================================================
-BŁĄD
+KOPIOWANIE WYNIKU
 ===================================================== */
 
-function error(message){
+let lastResultText = "";
 
-return box(
-"BŁĄD",
-"Nie można obliczyć",
-message,
-"bad"
-);
+function copyResults(){
 
+    if(!lastResultText){
+        return;
+    }
+
+    const btn =
+        document.getElementById("copyBtn");
+
+    function showCopied(){
+        if(btn){
+            btn.textContent = "Skopiowano ✓";
+            setTimeout(() => { btn.textContent = "Kopiuj wynik"; }, 1800);
+        }
+    }
+
+    if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(lastResultText)
+            .then(showCopied)
+            .catch(() => { if(btn){ btn.textContent = "Błąd kopiowania"; } });
+    }
+    else{
+        const ta = document.createElement("textarea");
+        ta.value = lastResultText;
+        document.body.appendChild(ta);
+        ta.select();
+        try{
+            document.execCommand("copy");
+            showCopied();
+        }catch(e){
+            if(btn){ btn.textContent = "Błąd kopiowania"; }
+        }
+        document.body.removeChild(ta);
+    }
 }
 
 
@@ -1139,166 +1325,158 @@ OBLICZENIE
 
 function calc(){
 
-const mode=
-document.getElementById("mode").value;
+    const mode =
+        document.getElementById("mode").value;
 
-const A=
-num(
-document.getElementById("a").value
-);
+    const A =
+        num(document.getElementById("a").value);
 
-const B=
-num(
-document.getElementById("b").value
-);
+    const B =
+        num(document.getElementById("b").value);
 
 
-if(
-!Number.isFinite(A) ||
-!Number.isFinite(B) ||
-A<=0 ||
-B<=0
-){
+    if(
+        !Number.isFinite(A) ||
+        !Number.isFinite(B) ||
+        A<=0 ||
+        B<=0
+    ){
+        document.getElementById("res").innerHTML =
+            error("Wszystkie wartości muszą być większe od zera.");
 
-document.getElementById(
-"res"
-).innerHTML=
-error(
-"Wszystkie wartości muszą być większe od zera."
-);
-
-return;
-
-}
+        lastResultText = "";
+        return;
+    }
 
 
-let U;
-let I;
-let R;
-let P;
+    let U, I, R, P;
+    let givenLabel = { U:false, I:false, R:false };
 
 
-/* PRAWO OHMA */
+    if(mode==="U"){
+        I=A; R=B; U=I*R;
+        givenLabel = { U:false, I:true, R:true };
+    }
 
-if(mode==="U"){
+    if(mode==="I"){
+        U=A; R=B; I=U/R;
+        givenLabel = { U:true, I:false, R:true };
+    }
 
-I=A;
-R=B;
-U=I*R;
+    if(mode==="R"){
+        U=A; I=B; R=U/I;
+        givenLabel = { U:true, I:true, R:false };
+    }
 
-}
+    if(mode==="P"){
+        U=A; I=B; R=U/I;
+        givenLabel = { U:true, I:true, R:false };
+    }
 
-
-if(mode==="I"){
-
-U=A;
-R=B;
-I=U/R;
-
-}
-
-
-if(mode==="R"){
-
-U=A;
-I=B;
-R=U/I;
-
-}
+    P = U*I;
 
 
-if(mode==="P"){
+    let html = "";
+    let textLines = [];
 
-U=A;
-I=B;
-P=U*I;
-R=U/I;
-
-}
-
-
-/* MOC ZAWSZE */
-
-P=
-U*I;
+    textLines.push("Kalkulator Ohma — LeMaCh");
+    textLines.push("");
+    textLines.push(`Tryb obliczenia: ${mode}`);
+    textLines.push("");
 
 
-/* =====================================================
-WYNIKI — ZAWSZE CZTERY
-===================================================== */
+    const HIGH_POWER_W = 100;
 
-let html="";
+    if(P > HIGH_POWER_W){
 
+        html += box(
+            "OSTRZEŻENIE",
+            `P = ${fmt(P)} W`,
+            `Obliczona moc jest bardzo wysoka (powyżej ${HIGH_POWER_W} W).`,
+            "warn",
+            `Elementy pracujące przy takiej mocy silnie się nagrzewają i wymagają odpowiedniego chłodzenia oraz obudowy dostosowanej do prądu i napięcia. Sprawdź parametry maksymalne swoich komponentów przed podłączeniem.`
+        );
 
-html+=
-
-box(
-"NAPIĘCIE U",
-`${fmt(U)} V`,
-`
-${
-mode==="U"
-? "Wartość obliczona."
-: "U = I × R"
-}
-<br>
-${fmt(U)} V = ${fmt(U*1000)} mV
-`
-);
+        textLines.push(`⚠ OSTRZEŻENIE: bardzo wysoka moc (${fmt(P)} W) — sprawdź chłodzenie i parametry maksymalne komponentów.`);
+        textLines.push("");
+    }
 
 
-html+=
-
-box(
-"PRĄD I",
-`${fmt(I)} A`,
-`
-${
-mode==="I"
-? "Wartość obliczona."
-: "I = U / R"
-}
-<br>
-${fmt(I)} A = ${fmt(I*1000)} mA
-`
-);
-
-
-html+=
-
-box(
-"REZYSTANCJA R",
-`${fmt(R)} Ω`,
-`
-${
-mode==="R"
-? "Wartość obliczona."
-: "R = U / I"
-}
-<br>
-${fmt(R)} Ω = ${fmt(R/1000)} kΩ
-`
-);
+    html += box(
+        "NAPIĘCIE U",
+        `${fmt(U)} V`,
+        `
+        ${
+            mode==="U"
+            ? `U = I × R = ${fmt(I)} A × ${fmt(R)} Ω = ${fmt(U)} V`
+            : "Wartość podana."
+        }
+        `,
+        "good",
+        mode==="U"
+            ? `Napięcie to bezpośredni wynik prawa Ohma dla podanego prądu i rezystancji.`
+            : `Ta wartość została podana jako dana wejściowa do obliczeń.`
+    );
 
 
-html+=
+    html += box(
+        "PRĄD I",
+        `${fmt(I)} A`,
+        `
+        ${
+            mode==="I"
+            ? `I = U / R = ${fmt(U)} V / ${fmt(R)} Ω = ${fmt(I)} A`
+            : "Wartość podana."
+        }
+        `,
+        "good",
+        mode==="I"
+            ? `Prąd wynika z prawa Ohma: przy stałym napięciu, większa rezystancja daje mniejszy prąd.`
+            : `Ta wartość została podana jako dana wejściowa do obliczeń.`
+    );
 
-box(
-"MOC P",
-`${fmt(P)} W`,
-`
-P = U × I
-<br>
-${fmt(P)} W = ${fmt(P*1000)} mW
-`
-);
+
+    html += box(
+        "REZYSTANCJA R",
+        `${fmt(R)} Ω`,
+        `
+        ${
+            mode==="R" || mode==="P"
+            ? `R = U / I = ${fmt(U)} V / ${fmt(I)} A = ${fmt(R)} Ω`
+            : "Wartość podana."
+        }
+        `,
+        "good",
+        (mode==="R" || mode==="P")
+            ? `Rezystancja obliczona z prawa Ohma na podstawie podanego napięcia i prądu.`
+            : `Ta wartość została podana jako dana wejściowa do obliczeń.`
+    );
 
 
-document.getElementById(
-"res"
-).innerHTML=
-html;
+    html += box(
+        "MOC P",
+        `${fmt(P)} W`,
+        `
+        P = U × I = ${fmt(U)} V × ${fmt(I)} A = ${fmt(P)} W
+        `,
+        "good",
+        `Moc jest obliczana zawsze, niezależnie od wybranego trybu — to energia zamieniana w jednostce czasu (najczęściej na ciepło w rezystorze).`
+    );
 
+
+    html =
+        `<button type="button" id="copyBtn" class="copybtn" onclick="copyResults()">Kopiuj wynik</button>` +
+        html;
+
+    document.getElementById("res").innerHTML = html;
+
+
+    textLines.push(`Napięcie U: ${fmt(U)} V`);
+    textLines.push(`Prąd I: ${fmt(I)} A`);
+    textLines.push(`Rezystancja R: ${fmt(R)} Ω`);
+    textLines.push(`Moc P: ${fmt(P)} W`);
+
+    lastResultText = textLines.join("\n");
 }
 
 
