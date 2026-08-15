@@ -1618,6 +1618,10 @@ function calcDIV(){
         `Suma P1+P2 = ${fmt(Ptotal)} W to cała moc pobierana ze źródła — sprawdzenie: Uwe × I = ${fmt(Uwe*I)} W.`
     );
 
+    html =
+        `<button type="button" id="copyBtn" class="copybtn" onclick="copyResults()">Kopiuj wynik</button>` +
+        html;
+
     document.getElementById("res").innerHTML = html;
 
     lastResultText =
@@ -1747,6 +1751,10 @@ function calcSER(){
         "good"
     );
 
+    html =
+        `<button type="button" id="copyBtn" class="copybtn" onclick="copyResults()">Kopiuj wynik</button>` +
+        html;
+
     document.getElementById("res").innerHTML = html;
 
     lastResultText =
@@ -1820,6 +1828,10 @@ function calcCOMBO(){
         "good"
     );
 
+    html =
+        `<button type="button" id="copyBtn" class="copybtn" onclick="copyResults()">Kopiuj wynik</button>` +
+        html;
+
     document.getElementById("res").innerHTML = html;
 
     lastResultText =
@@ -1890,6 +1902,10 @@ function calcColorToValue(){
         "good"
     );
 
+    html =
+        `<button type="button" id="copyBtn" class="copybtn" onclick="copyResults()">Kopiuj wynik</button>` +
+        html;
+
     document.getElementById("res").innerHTML = html;
 
     lastResultText =
@@ -1936,6 +1952,10 @@ function calcColorToColor(){
         `Szukaj rezystora z dokładnie takim układem pasków w sklepie lub w swoim zestawie.`,
         colorHtml
     );
+
+    html =
+        `<button type="button" id="copyBtn" class="copybtn" onclick="copyResults()">Kopiuj wynik</button>` +
+        html;
 
     document.getElementById("res").innerHTML = html;
 
