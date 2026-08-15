@@ -391,29 +391,81 @@ button:hover{
 
 /* ================================================================ */
 
-.formula{
-    margin-top:20px;
-    padding:18px;
-    border-radius:13px;
-    background:#f5f7fb;
-    border:1px solid var(--border);
-    color:#34415d;
-    font-family:Consolas,Monaco,monospace;
-    line-height:1.8;
+/* ============ NOWE: karty wzorów (zamiast bloku monospace) ============ */
+
+.formula-heading{
+    margin:20px 0 10px;
+    color:var(--navy);
+    font-size:16px;
+    font-weight:800;
 }
 
-.legend{
+.formula-list{
+    display:grid;
+    gap:10px;
+}
+
+.formula-item{
+    padding:12px 14px;
+    border:1px solid var(--border);
+    border-radius:11px;
+    background:#f5f7fb;
+}
+
+.formula-eq{
+    font-family:Consolas,Monaco,monospace;
+    color:var(--navy);
+    font-weight:800;
+    font-size:15px;
+}
+
+.formula-desc{
+    margin-top:4px;
+    color:#536078;
+    font-size:13px;
+    line-height:1.5;
+}
+
+/* ============ NOWE: zwijane sekcje (legenda, ściąga) ============ */
+
+details.collapsible{
     margin-top:20px;
-    padding:18px;
     border:1px solid var(--border);
     border-radius:13px;
     background:#f8fafc;
+    padding:0;
+    overflow:hidden;
 }
 
-.legend h3{
-    margin:0 0 10px;
+details.collapsible summary{
+    cursor:pointer;
+    list-style:none;
+    padding:16px 18px;
     color:var(--navy);
+    font-weight:800;
     font-size:16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+details.collapsible summary::-webkit-details-marker{
+    display:none;
+}
+
+details.collapsible summary::after{
+    content:"▾";
+    font-size:14px;
+    color:var(--muted);
+    transition:transform .15s;
+}
+
+details.collapsible[open] summary::after{
+    transform:rotate(180deg);
+}
+
+details.collapsible .collapsible-body{
+    padding:0 18px 18px;
 }
 
 .legend h4{
@@ -437,6 +489,27 @@ button:hover{
 
 .legend th{
     color:var(--muted);
+}
+
+/* ============ NOWE: ściąga (repetytorium ogólne) ============ */
+
+.cheatsheet h4{
+    margin:16px 0 8px;
+    color:var(--navy);
+    font-size:14px;
+}
+
+.cheatsheet ul{
+    margin:0;
+    padding-left:18px;
+    color:#34415d;
+    font-size:14px;
+    line-height:1.7;
+}
+
+.cheatsheet .formula-eq{
+    display:block;
+    margin:4px 0 10px;
 }
 
 .footer{
@@ -851,33 +924,41 @@ OBLICZ
 PODSTAWOWE WZORY
 ===================================================== -->
 
-<div class="formula">
+<div class="formula-heading">
+Wzory używane w kalkulatorze
+</div>
 
-<strong>Wzory używane w kalkulatorze</strong>
+<div class="formula-list">
 
-<br>
+<div class="formula-item">
+<div class="formula-eq">R = (VS − VFc) / IF</div>
+<div class="formula-desc">Rezystancja idealna — wartość, przy której popłynie dokładnie zadany prąd IF.</div>
+</div>
 
-R = (VS − VFc) / IF
+<div class="formula-item">
+<div class="formula-eq">IF = (VS − VFc) / R</div>
+<div class="formula-desc">Rzeczywisty prąd LED dla wybranego, dostępnego w sklepie rezystora.</div>
+</div>
 
-<br>
+<div class="formula-item">
+<div class="formula-eq">VFc = n × VF</div>
+<div class="formula-desc">Łączne napięcie na diodach połączonych szeregowo (n = liczba diod).</div>
+</div>
 
-IF = (VS − VFc) / R
+<div class="formula-item">
+<div class="formula-eq">VR = VS − VFc</div>
+<div class="formula-desc">Napięcie, jakie musi "wziąć na siebie" rezystor.</div>
+</div>
 
-<br>
+<div class="formula-item">
+<div class="formula-eq">P = I² × R</div>
+<div class="formula-desc">Moc wydzielana na rezystorze w postaci ciepła.</div>
+</div>
 
-VFc = n × VF &nbsp;(n = liczba diod w szeregu)
-
-<br>
-
-VR = VS − VFc
-
-<br>
-
-P = I² × R
-
-<br>
-
-Pz = P × 2
+<div class="formula-item">
+<div class="formula-eq">Pz = P × 2</div>
+<div class="formula-desc">Zalecana moc znamionowa rezystora — z dwukrotnym zapasem bezpieczeństwa.</div>
+</div>
 
 </div>
 
@@ -886,11 +967,9 @@ Pz = P × 2
 STAŁA LEGENDA
 ===================================================== -->
 
-<div class="legend">
-
-<h3>
-Stała legenda jednostek elektrycznych
-</h3>
+<details class="collapsible">
+<summary>Stała legenda jednostek elektrycznych</summary>
+<div class="collapsible-body legend">
 
 
 <h4>Napięcie — U</h4>
@@ -1152,6 +1231,56 @@ Stała legenda jednostek elektrycznych
 </table>
 
 </div>
+</details>
+
+
+<!-- =====================================================
+ŚCIĄGA — REPETYTORIUM OGÓLNE ELEKTRONIKI
+===================================================== -->
+
+<details class="collapsible">
+<summary>Ściąga — repetytorium elektroniki</summary>
+<div class="collapsible-body cheatsheet">
+
+<h4>1. Podstawowe wielkości</h4>
+<ul>
+<li><b>U</b> — napięcie [V]; różnica potencjałów.</li>
+<li><b>I</b> — prąd [A]; przepływ ładunku elektrycznego.</li>
+<li><b>R</b> — rezystancja [Ω]; przeciwstawianie się przepływowi prądu.</li>
+<li><b>P</b> — moc [W]; szybkość wydzielania lub zużywania energii.</li>
+</ul>
+
+<h4>2. Najważniejsze wzory ogólne</h4>
+<div class="formula-eq">Prawo Ohma: U = I × R;&nbsp; I = U / R;&nbsp; R = U / I</div>
+<div class="formula-eq">Moc: P = U × I = I² × R = U² / R</div>
+<div class="formula-eq">Dzielnik napięcia: Uwy = Uwe × R2 / (R1 + R2)</div>
+<div class="formula-eq">Prąd dzielnika: I = Uwe / (R1 + R2)</div>
+<div class="hint">Dzielnik napięcia nie jest używany w tym kalkulatorze (LED) — to wzór pomocniczy, przyda się w Kalkulatorze Ohma / wspólnym.</div>
+
+<h4>3. Zasady do zapamiętania</h4>
+<ul>
+<li>Przy tym samym napięciu: większa rezystancja → mniejszy prąd.</li>
+<li>W połączeniu szeregowym przez wszystkie elementy płynie ten sam prąd.</li>
+<li>W szeregu napięcie zasilania jest sumą spadków napięcia na elementach.</li>
+<li>W dzielniku napięcia większy rezystor ma większy spadek napięcia.</li>
+</ul>
+
+<h4>4. Multimetr — podstawy</h4>
+<ul>
+<li>Pomiar napięcia DC: czarna sonda → COM, czerwona → V/Ω; napięcie mierzymy równolegle do elementu.</li>
+<li>Rezystancję mierzymy WYŁĄCZNIE przy odłączonym zasilaniu badanego obwodu.</li>
+<li>Prąd mierzymy szeregowo (multimetr "w torze" prądu) — inaczej niż napięcie.</li>
+</ul>
+
+<h4>5. Pytania kontrolne — sprawdź się</h4>
+<ul>
+<li>Co dzieje się z prądem, gdy zwiększamy R przy tym samym U?</li>
+<li>W obwodzie: zasilanie → R1 → punkt pomiarowy → R2 → masa — który rezystor jest w liczniku wzoru dzielnika napięcia?</li>
+<li>Dlaczego pomiar multimetrem może się nieznacznie różnić od obliczenia teoretycznego?</li>
+</ul>
+
+</div>
+</details>
 
 
 <div class="footer">
