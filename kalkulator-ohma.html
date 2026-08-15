@@ -409,11 +409,12 @@ details.collapsible .collapsible-body{
 .legend td:last-child{
     text-align:right;
     font-variant-numeric:tabular-nums;
-    font-family:Consolas,Monaco,monospace;
+    padding-right:14px;
+    color:#3d4a63;
 }
 
 .legend tr:nth-child(even){
-    background:#eef2f8;
+    background:#f4f6fa;
 }
 
 .cheatsheet h4{
@@ -580,6 +581,7 @@ id="a"
 type="text"
 inputmode="decimal"
 oninput="update(1)"
+onkeydown="if(event.key==='Enter'){calc();}"
 >
 
 <div
@@ -606,6 +608,7 @@ id="b"
 type="text"
 inputmode="decimal"
 oninput="update(2)"
+onkeydown="if(event.key==='Enter'){calc();}"
 >
 
 <div
@@ -627,10 +630,16 @@ Wpisz wartość.
 OBLICZ
 </button>
 
+<button type="button" class="copybtn" onclick="clearForm()" style="margin-top:8px;">
+Wyczyść pola
+</button>
+
 
 <div
 id="res"
 class="results"
+aria-live="polite"
+aria-atomic="true"
 ></div>
 
 
@@ -997,6 +1006,11 @@ Energia — E
 
 </div>
 </details>
+
+
+<div class="intro" style="margin-top:20px;">
+Dobierasz rezystor do diody LED? Skorzystaj z <a href="kalkulator-rezystora-led.html" style="color:var(--navy);font-weight:700;">Kalkulatora rezystora LED</a>.
+</div>
 
 
 <div class="footer">
@@ -1488,14 +1502,102 @@ function calc(){
     textLines.push(`Moc P: ${fmt(P)} W`);
 
     lastResultText = textLines.join("\n");
+
+
+    saveState();
 }
 
 
 /* =====================================================
-START
+NOWE: ZAPAMIĘTYWANIE OSTATNICH WARTOŚCI (localStorage)
+To realna strona na GitHub Pages, nie artefakt w oknie
+czatu — localStorage jest tu bezpieczny i przydatny.
+===================================================== */
+
+const LS_KEY = "lemach_ohm_state";
+
+function saveState(){
+
+    try{
+        const state = {
+            mode: document.getElementById("mode").value,
+            a: document.getElementById("a").value,
+            b: document.getElementById("b").value
+        };
+        localStorage.setItem(LS_KEY, JSON.stringify(state));
+    }catch(e){
+        /* localStorage niedostępny (np. tryb prywatny) — pomijamy bez błędu */
+    }
+}
+
+
+function restoreState(){
+
+    let state = null;
+
+    try{
+        const raw = localStorage.getItem(LS_KEY);
+        if(raw){
+            state = JSON.parse(raw);
+        }
+    }catch(e){
+        state = null;
+    }
+
+    if(!state){
+        return false;
+    }
+
+    document.getElementById("mode").value = state.mode || "U";
+    setMode();
+
+    document.getElementById("a").value = state.a || "";
+    document.getElementById("b").value = state.b || "";
+
+    update(1);
+    update(2);
+
+    return true;
+}
+
+
+/* =====================================================
+NOWE: WYCZYŚĆ POLA
+===================================================== */
+
+function clearForm(){
+
+    document.getElementById("mode").value = "U";
+    setMode();
+
+    document.getElementById("a").value = "";
+    document.getElementById("b").value = "";
+    document.getElementById("res").innerHTML = "";
+
+    lastResultText = "";
+
+    try{
+        localStorage.removeItem(LS_KEY);
+    }catch(e){}
+}
+
+
+/* =====================================================
+START — PRZYWRÓCENIE OSTATNICH WARTOŚCI (LUB DOMYŚLNY
+TRYB U Z PUSTYMI POLAMI, GDY BRAK ZAPISANEGO STANU)
 ===================================================== */
 
 setMode();
+
+const hadSavedState = restoreState();
+
+if(
+    hadSavedState &&
+    document.getElementById("a").value &&
+    document.getElementById("b").value
+){
+    calc();
+}
 
 </script>
 
