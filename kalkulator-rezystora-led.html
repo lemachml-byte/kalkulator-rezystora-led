@@ -77,8 +77,27 @@ h1{
 .subtitle{
     text-align:center;
     color:var(--muted);
-    margin:8px 0 26px;
+    margin:8px 0 20px;
 }
+
+/* ============ NOWE: wprowadzenie "po co rezystor" ============ */
+
+.intro{
+    margin:0 0 26px;
+    padding:16px 18px;
+    border-radius:13px;
+    background:#eef2fb;
+    border-left:4px solid var(--navy);
+    color:#2f3c58;
+    font-size:14.5px;
+    line-height:1.6;
+}
+
+.intro b{
+    color:var(--navy);
+}
+
+/* ================================================================ */
 
 .section{
     margin-top:20px;
@@ -125,8 +144,6 @@ label{
     margin-bottom:7px;
     font-weight:750;
 }
-
-/* ============ NOWE: wiersz etykiety + przycisk "?" ============ */
 
 .label-row{
     display:flex;
@@ -177,7 +194,12 @@ label{
     display:none;
 }
 
-/* ================================================================ */
+.hint{
+    margin-top:7px;
+    color:var(--muted);
+    font-size:12.5px;
+    line-height:1.5;
+}
 
 input,
 select{
@@ -229,6 +251,20 @@ button:hover{
     background:var(--navy2);
 }
 
+.copybtn{
+    background:#fff;
+    color:var(--navy);
+    border:1px solid var(--navy);
+    min-height:44px;
+    font-size:14px;
+    margin-top:4px;
+}
+
+.copybtn:hover{
+    background:#eef2fb;
+    color:var(--navy);
+}
+
 .results{
     margin-top:22px;
     display:grid;
@@ -275,8 +311,6 @@ button:hover{
     line-height:1.55;
 }
 
-/* ============ NOWE: blok "dlaczego" w karcie wyniku ============ */
-
 .why{
     margin-top:10px;
     padding-top:10px;
@@ -288,6 +322,71 @@ button:hover{
 
 .why b{
     color:var(--navy);
+}
+
+/* ============ NOWE: kod kolorów rezystora ============ */
+
+.resistor-visual{
+    display:flex;
+    align-items:center;
+    margin:14px 0 10px;
+}
+
+.resistor-lead{
+    flex:0 0 26px;
+    height:3px;
+    background:#9aa2b1;
+}
+
+.resistor-body{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    gap:5px;
+    background:#ecdfc0;
+    border:1px solid #cbb98c;
+    border-radius:10px;
+    padding:9px 14px;
+}
+
+.colorband{
+    width:11px;
+    height:30px;
+    border-radius:2px;
+    border:1px solid rgba(0,0,0,.2);
+}
+
+.colorcode-caption{
+    color:#536078;
+    font-size:13px;
+    line-height:1.55;
+}
+
+.colorcode-caption b{
+    color:var(--navy);
+}
+
+/* ============ NOWE: tabela sąsiednich wartości ============ */
+
+.neighbor-row{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:8px 0;
+    border-bottom:1px dashed var(--border);
+    font-size:14px;
+}
+
+.neighbor-row:last-child{
+    border-bottom:0;
+}
+
+.neighbor-row .tag{
+    font-size:11px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+    color:var(--muted);
 }
 
 /* ================================================================ */
@@ -409,6 +508,15 @@ Dobór rezystora ograniczającego prąd LED
 
 
 <!-- =====================================================
+WPROWADZENIE
+===================================================== -->
+
+<div class="intro">
+<b>Po co w ogóle rezystor?</b> Dioda LED sama nie ogranicza prądu, który przez nią płynie — podłączona bezpośrednio do zasilania niemal na pewno się uszkodzi (zbyt duży prąd = przegrzanie i przepalenie złącza). Rezystor podłączony szeregowo ogranicza ten prąd do bezpiecznej wartości. Ten kalkulator pomaga dobrać jego rezystancję i moc.
+</div>
+
+
+<!-- =====================================================
 1. ZASILANIE
 ===================================================== -->
 
@@ -522,7 +630,7 @@ Napięcie przewodzenia VF [V]
 </div>
 
 <div id="tip-vf" class="tip hidden">
-VF (forward voltage) to spadek napięcia na samej diodzie LED, gdy płynie przez nią prąd w kierunku przewodzenia. To nie jest napięcie zasilania — to "strata" napięcia na diodzie. Wartość podaje producent w karcie katalogowej.
+VF (forward voltage) to spadek napięcia na samej diodzie LED, gdy płynie przez nią prąd w kierunku przewodzenia. To nie jest napięcie zasilania — to "strata" napięcia na diodzie, dla JEDNEJ diody. Wartość podaje producent w karcie katalogowej.
 </div>
 
 <input
@@ -551,7 +659,7 @@ Prąd LED IF [mA]
 </div>
 
 <div id="tip-if" class="tip hidden">
-IF (forward current) to prąd, jaki ma płynąć przez LED w normalnej pracy. Typowo dla małych diod 3–5 mm: 10–20 mA. Przekroczenie maksymalnego IF z karty katalogowej może trwale uszkodzić diodę.
+IF (forward current) to prąd, jaki ma płynąć przez LED w normalnej pracy. Typowo dla małych diod 3–5 mm: 10–20 mA. Przekroczenie maksymalnego IF z karty katalogowej może trwale uszkodzić diodę. Kalkulator ostrzeże Cię, jeśli wpiszesz wartość znacznie wyższą niż typowa.
 </div>
 
 <input
@@ -565,6 +673,36 @@ oninput="updateCurrent()"
 
 <div id="imc" class="converter">
 Wpisz wartość.
+</div>
+
+</div>
+
+
+<div class="full">
+
+<div class="label-row">
+<label for="ledcount">
+Liczba diod LED w szeregu
+</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-ledcount')" aria-label="Wyjaśnienie: LED w szeregu">?</button>
+</div>
+
+<div id="tip-ledcount" class="tip hidden">
+Jeśli łączysz kilka IDENTYCZNYCH diod LED jedna za drugą (szeregowo), przez wszystkie płynie ten sam prąd, a ich napięcia VF się sumują — kalkulator doda je automatycznie. Zostaw 1, jeśli masz pojedynczą diodę.
+<br><br>
+<b>Uwaga:</b> nie łącz kilku LED równolegle pod jeden wspólny rezystor — mogą się nierówno obciążać prądem i jedna z nich przejmie większość prądu. To pole dotyczy wyłącznie połączenia szeregowego.
+</div>
+
+<input
+id="ledcount"
+type="text"
+inputmode="numeric"
+placeholder="1"
+value="1"
+>
+
+<div class="hint">
+Domyślnie 1 (pojedyncza dioda). Zmień tylko, jeśli łączysz kilka diod szeregowo.
 </div>
 
 </div>
@@ -602,7 +740,7 @@ Tolerancja
 </div>
 
 <div id="tip-tol" class="tip hidden">
-Tolerancja to dopuszczalne odchylenie rzeczywistej rezystancji rezystora od wartości nominalnej. Rezystor 150 Ω ±5% może w praktyce mieć od 142,5 Ω do 157,5 Ω — to wpływa na rzeczywisty prąd płynący przez LED.
+Tolerancja to dopuszczalne odchylenie rzeczywistej rezystancji rezystora od wartości nominalnej. Rezystor 150 Ω ±5% może w praktyce mieć od 142,5 Ω do 157,5 Ω — to wpływa na rzeczywisty prąd płynący przez LED. Tolerancja odpowiada też ostatniemu paskowi w kodzie kolorów.
 </div>
 
 <select id="tol">
@@ -674,7 +812,7 @@ Szereg rezystorów
 </div>
 
 <div id="tip-series" class="tip hidden">
-E12 / E24 / E96 to znormalizowane zestawy wartości rezystorów dostępnych w sklepach (norma IEC 60063). E12 ma najmniej wartości (skok co ok. 10%), E96 najwięcej (skok co ok. 1%) — im gęstszy szereg, tym dokładniej można dobrać rezystor do wartości idealnej.
+E12 / E24 / E96 to znormalizowane zestawy wartości rezystorów dostępnych w sklepach (norma IEC 60063). E12 ma najmniej wartości (skok co ok. 10%), E96 najwięcej (skok co ok. 1%) — im gęstszy szereg, tym dokładniej można dobrać rezystor do wartości idealnej. E12/E24 kodowane są 4 paskami, E96 zwykle 5 paskami.
 </div>
 
 <select id="series">
@@ -719,15 +857,19 @@ PODSTAWOWE WZORY
 
 <br>
 
-R = (VS − VF) / IF
+R = (VS − VFc) / IF
 
 <br>
 
-IF = (VS − VF) / R
+IF = (VS − VFc) / R
 
 <br>
 
-VR = VS − VF
+VFc = n × VF &nbsp;(n = liczba diod w szeregu)
+
+<br>
+
+VR = VS − VFc
 
 <br>
 
@@ -1052,22 +1194,58 @@ function num(value){
 
 /* =====================================================
 FORMATOWANIE
+NOWE: max 4 cyfry znaczące, notacja zwykła (bez naukowej),
+przecinek jako separator dziesiętny (standard PL, ustalony
+2026-08-14 dla wszystkich kalkulatorów LeMaCh)
 ===================================================== */
 
-function fmt(value, digits=10){
+function fmt(value, sig=4){
 
     if(!Number.isFinite(value)){
         return "—";
     }
 
-    return Number(
-        value.toFixed(digits)
-    ).toString();
+    if(value === 0){
+        return "0";
+    }
+
+    const negative =
+        value < 0;
+
+    const abs =
+        Math.abs(value);
+
+    const exponent =
+        Math.floor(
+            Math.log10(abs)
+        );
+
+    const decimals =
+        Math.max(
+            0,
+            Math.min(20, sig - 1 - exponent)
+        );
+
+    let s =
+        abs.toFixed(decimals);
+
+    if(s.indexOf(".") !== -1){
+        s =
+            s
+            .replace(/0+$/,"")
+            .replace(/\.$/,"");
+    }
+
+    if(negative){
+        s = "-" + s;
+    }
+
+    return s.replace(".", ",");
 }
 
 
 /* =====================================================
-NOWE: PRZEŁĄCZANIE PODPOWIEDZI (TOOLTIP)
+PRZEŁĄCZANIE PODPOWIEDZI (TOOLTIP)
 ===================================================== */
 
 function toggleTip(id){
@@ -1105,15 +1283,6 @@ function voltageConversion(value){
 
     }
 
-    if(abs < 1){
-
-        return `
-        <strong>${fmt(value)} V</strong>
-        = ${fmt(value * 1000)} mV
-        `;
-
-    }
-
     if(abs < 1000){
 
         return `
@@ -1133,7 +1302,6 @@ function voltageConversion(value){
 /* =====================================================
 PRZELICZANIE PRĄDU
 WEJŚCIE JEST W mA
-WEWNĘTRZNIE ZAWSZE A
 ===================================================== */
 
 function currentConversionFromMA(valueMA){
@@ -1174,15 +1342,6 @@ function resistanceConversion(value){
 
     }
 
-    if(abs < 1){
-
-        return `
-        <strong>${fmt(value)} Ω</strong>
-        = ${fmt(value * 1000)} mΩ
-        `;
-
-    }
-
     if(abs < 1000){
 
         return `
@@ -1205,95 +1364,6 @@ function resistanceConversion(value){
     <strong>${fmt(value)} Ω</strong>
     = ${fmt(value / 1000000)} MΩ
     `;
-}
-
-
-/* =====================================================
-PRZELICZANIE MOCY
-===================================================== */
-
-function powerConversion(value){
-
-    if(!Number.isFinite(value)){
-        return "";
-    }
-
-    const abs =
-        Math.abs(value);
-
-    if(abs < 0.001){
-
-        return `
-        ${fmt(value)} W
-        = ${fmt(value * 1000000)} µW
-        `;
-
-    }
-
-    if(abs < 1){
-
-        return `
-        ${fmt(value)} W
-        = ${fmt(value * 1000)} mW
-        `;
-
-    }
-
-    if(abs < 1000){
-
-        return `
-        ${fmt(value)} W
-        = ${fmt(value * 1000)} mW
-        `;
-
-    }
-
-    return `
-    ${fmt(value)} W
-    = ${fmt(value / 1000)} kW
-    `;
-}
-
-
-/* =====================================================
-AKTUALIZACJA NAPIĘCIA
-===================================================== */
-
-function updateVoltage(inputId, outputId){
-
-    const value =
-        num(
-            document.getElementById(
-                inputId
-            ).value
-        );
-
-    document.getElementById(
-        outputId
-    ).innerHTML =
-        voltageConversion(value);
-}
-
-
-/* =====================================================
-AKTUALIZACJA PRĄDU
-===================================================== */
-
-function updateCurrent(){
-
-    const valueMA =
-        num(
-            document.getElementById(
-                "im"
-            ).value
-        );
-
-    document.getElementById(
-        "imc"
-    ).innerHTML =
-        currentConversionFromMA(
-            valueMA
-        );
 }
 
 
@@ -1325,50 +1395,57 @@ function setLed(){
 
 
 /* =====================================================
+AKTUALIZACJA NAPIĘCIA / PRĄDU (PODPIĘTE POD ONINPUT)
+===================================================== */
+
+function updateVoltage(inputId, outputId){
+
+    const value =
+        num(
+            document.getElementById(
+                inputId
+            ).value
+        );
+
+    document.getElementById(
+        outputId
+    ).innerHTML =
+        voltageConversion(value);
+}
+
+
+function updateCurrent(){
+
+    const valueMA =
+        num(
+            document.getElementById(
+                "im"
+            ).value
+        );
+
+    document.getElementById(
+        "imc"
+    ).innerHTML =
+        currentConversionFromMA(
+            valueMA
+        );
+}
+
+
+/* =====================================================
 SZEREGI REZYSTORÓW
 ===================================================== */
 
 const E12 = [
-    1.0,
-    1.2,
-    1.5,
-    1.8,
-    2.2,
-    2.7,
-    3.3,
-    3.9,
-    4.7,
-    5.6,
-    6.8,
-    8.2
+    1.0, 1.2, 1.5, 1.8, 2.2, 2.7,
+    3.3, 3.9, 4.7, 5.6, 6.8, 8.2
 ];
 
 
 const E24 = [
-    1.0,
-    1.1,
-    1.2,
-    1.3,
-    1.5,
-    1.6,
-    1.8,
-    2.0,
-    2.2,
-    2.4,
-    2.7,
-    3.0,
-    3.3,
-    3.6,
-    3.9,
-    4.3,
-    4.7,
-    5.1,
-    5.6,
-    6.2,
-    6.8,
-    7.5,
-    8.2,
-    9.1
+    1.0, 1.1, 1.2, 1.3, 1.5, 1.6, 1.8, 2.0,
+    2.2, 2.4, 2.7, 3.0, 3.3, 3.6, 3.9, 4.3,
+    4.7, 5.1, 5.6, 6.2, 6.8, 7.5, 8.2, 9.1
 ];
 
 
@@ -1388,6 +1465,20 @@ const E96 = [
 ];
 
 
+function seriesValues(series){
+
+    if(series === "E12"){
+        return E12;
+    }
+
+    if(series === "E96"){
+        return E96;
+    }
+
+    return E24;
+}
+
+
 /* =====================================================
 DOBÓR PIERWSZEJ WARTOŚCI STANDARDOWEJ >= IDEALNEJ
 ===================================================== */
@@ -1401,24 +1492,13 @@ function standardResistor(value, series){
         return NaN;
     }
 
-    let baseValues;
-
-    if(series === "E12"){
-        baseValues = E12;
-    }
-    else if(series === "E96"){
-        baseValues = E96;
-    }
-    else{
-        baseValues = E24;
-    }
-
+    const baseValues =
+        seriesValues(series);
 
     const exponent =
         Math.floor(
             Math.log10(value)
         );
-
 
     for(
         const base
@@ -1440,7 +1520,6 @@ function standardResistor(value, series){
         }
     }
 
-
     return (
         baseValues[0] *
         Math.pow(
@@ -1452,8 +1531,194 @@ function standardResistor(value, series){
 
 
 /* =====================================================
+NOWE: SĄSIEDNIE WARTOŚCI STANDARDOWE (NIŻSZA I WYŻSZA)
+===================================================== */
+
+function standardResistorNeighbors(value, series){
+
+    if(
+        !Number.isFinite(value) ||
+        value <= 0
+    ){
+        return { lower: NaN, upper: NaN };
+    }
+
+    const baseValues =
+        seriesValues(series);
+
+    const exponent =
+        Math.floor(
+            Math.log10(value)
+        );
+
+    let candidates = [];
+
+    for(
+        let e = exponent - 1;
+        e <= exponent + 1;
+        e++
+    ){
+        baseValues.forEach(
+            b => candidates.push(
+                b * Math.pow(10, e)
+            )
+        );
+    }
+
+    candidates.sort(
+        (a, b) => a - b
+    );
+
+    const upper =
+        candidates.find(
+            c => c >= value
+        );
+
+    const lowerCandidates =
+        candidates.filter(
+            c => c < value
+        );
+
+    const lower =
+        lowerCandidates.length
+        ? lowerCandidates[lowerCandidates.length - 1]
+        : candidates[0];
+
+    return { lower, upper };
+}
+
+
+/* =====================================================
+NOWE: KOD KOLORÓW REZYSTORA
+===================================================== */
+
+const COLOR_MAP = {
+    "-2": { hex:"#C0C0C0", name:"srebrny"   },
+    "-1": { hex:"#D4AF37", name:"złoty"     },
+    "0":  { hex:"#1a1a1a", name:"czarny"    },
+    "1":  { hex:"#8B4513", name:"brązowy"   },
+    "2":  { hex:"#DC2626", name:"czerwony"  },
+    "3":  { hex:"#EA580C", name:"pomarańczowy" },
+    "4":  { hex:"#EAB308", name:"żółty"     },
+    "5":  { hex:"#16803C", name:"zielony"   },
+    "6":  { hex:"#2563EB", name:"niebieski" },
+    "7":  { hex:"#7C3AED", name:"fioletowy" },
+    "8":  { hex:"#6B7280", name:"szary"     },
+    "9":  { hex:"#F5F5F5", name:"biały"     }
+};
+
+const TOLERANCE_COLOR = {
+    "1":  { hex:"#8B4513", name:"brązowy" },
+    "5":  { hex:"#D4AF37", name:"złoty"   },
+    "10": { hex:"#C0C0C0", name:"srebrny" }
+};
+
+
+function resistorColorCode(value, series, tolerancePercent){
+
+    if(
+        !Number.isFinite(value) ||
+        value <= 0
+    ){
+        return null;
+    }
+
+    const numDigits =
+        series === "E96" ? 3 : 2;
+
+    const exponent =
+        Math.floor(
+            Math.log10(value)
+        );
+
+    const seg =
+        value / Math.pow(10, exponent);
+
+    const scale =
+        Math.pow(10, numDigits - 1);
+
+    let digitsValue =
+        Math.round(seg * scale);
+
+    let mExp =
+        exponent - (numDigits - 1);
+
+    /* korekta na wypadek zaokrąglenia w górę poza zakres, np 999.6 -> 1000 */
+    if(digitsValue >= scale * 10){
+        digitsValue = Math.round(digitsValue / 10);
+        mExp += 1;
+    }
+
+    const digitsStr =
+        String(digitsValue).padStart(numDigits, "0");
+
+    const digitBands =
+        digitsStr
+        .split("")
+        .map(
+            d => ({
+                hex: (COLOR_MAP[d] || {}).hex || "#999",
+                name: (COLOR_MAP[d] || {}).name || "?",
+                digit: d
+            })
+        );
+
+    const multBand =
+        COLOR_MAP[String(mExp)] || { hex:"#999", name:"?" };
+
+    const tolBand =
+        TOLERANCE_COLOR[String(tolerancePercent)] || { hex:"#999", name:"?" };
+
+    return {
+        digitBands,
+        multBand: { ...multBand, exp: mExp },
+        tolBand
+    };
+}
+
+
+function renderColorCode(code, tolerancePercent){
+
+    if(!code){
+        return "";
+    }
+
+    const allBands =
+        [
+            ...code.digitBands,
+            code.multBand,
+            code.tolBand
+        ];
+
+    const bandsHtml =
+        allBands
+        .map(
+            b => `<div class="colorband" style="background:${b.hex}" title="${b.name}"></div>`
+        )
+        .join("");
+
+    const namesList =
+        [
+            ...code.digitBands.map(b => b.name),
+            `${code.multBand.name} (mnożnik ×${fmt(Math.pow(10, code.multBand.exp))})`,
+            `${code.tolBand.name} (±${tolerancePercent}%)`
+        ];
+
+    return `
+    <div class="resistor-visual">
+        <div class="resistor-lead"></div>
+        <div class="resistor-body">${bandsHtml}</div>
+        <div class="resistor-lead"></div>
+    </div>
+    <div class="colorcode-caption">
+        <b>Kolejność pasków:</b> ${namesList.join(" — ")}
+    </div>
+    `;
+}
+
+
+/* =====================================================
 KARTA WYNIKU
-NOWE: opcjonalny piąty argument "why" — blok "dlaczego"
 ===================================================== */
 
 function resultBox(
@@ -1461,7 +1726,8 @@ function resultBox(
     value,
     detail,
     type="good",
-    why=""
+    why="",
+    extraHtml=""
 ){
 
     const whyHtml =
@@ -1485,11 +1751,67 @@ function resultBox(
             ${detail}
         </div>
 
+        ${extraHtml}
+
         ${whyHtml}
 
     </div>
 
     `;
+}
+
+
+/* =====================================================
+NOWE: KOPIOWANIE WYNIKU DO SCHOWKA
+===================================================== */
+
+let lastResultText = "";
+
+function copyResults(){
+
+    if(!lastResultText){
+        return;
+    }
+
+    const btn =
+        document.getElementById("copyBtn");
+
+    function showCopied(){
+        if(btn){
+            const original = "Kopiuj wynik";
+            btn.textContent = "Skopiowano ✓";
+            setTimeout(
+                () => { btn.textContent = original; },
+                1800
+            );
+        }
+    }
+
+    if(
+        navigator.clipboard &&
+        navigator.clipboard.writeText
+    ){
+        navigator.clipboard
+            .writeText(lastResultText)
+            .then(showCopied)
+            .catch(() => {
+                if(btn){ btn.textContent = "Błąd kopiowania"; }
+            });
+    }
+    else{
+        /* awaryjnie, dla starszych przeglądarek */
+        const ta = document.createElement("textarea");
+        ta.value = lastResultText;
+        document.body.appendChild(ta);
+        ta.select();
+        try{
+            document.execCommand("copy");
+            showCopied();
+        }catch(e){
+            if(btn){ btn.textContent = "Błąd kopiowania"; }
+        }
+        document.body.removeChild(ta);
+    }
 }
 
 
@@ -1500,57 +1822,41 @@ OBLICZENIA
 function calc(){
 
     const VS =
-        num(
-            document.getElementById(
-                "vs"
-            ).value
-        );
-
+        num(document.getElementById("vs").value);
 
     const VF =
-        num(
-            document.getElementById(
-                "vf"
-            ).value
-        );
-
+        num(document.getElementById("vf").value);
 
     const IFmA =
-        num(
-            document.getElementById(
-                "im"
-            ).value
-        );
-
+        num(document.getElementById("im").value);
 
     const tolerance =
-        num(
-            document.getElementById(
-                "tol"
-            ).value
-        );
-
+        num(document.getElementById("tol").value);
 
     const ratedPower =
-        num(
-            document.getElementById(
-                "rated"
-            ).value
-        );
-
+        num(document.getElementById("rated").value);
 
     const series =
-        document.getElementById(
-            "series"
-        ).value;
+        document.getElementById("series").value;
+
+    let ledCount =
+        Math.round(
+            num(document.getElementById("ledcount").value)
+        );
+
+    if(
+        !Number.isFinite(ledCount) ||
+        ledCount < 1
+    ){
+        ledCount = 1;
+    }
 
 
-    /* IF podany jest w mA */
     const IF =
         IFmA / 1000;
 
 
-    /* Walidacja */
+    /* Walidacja podstawowa */
 
     if(
         !Number.isFinite(VS) ||
@@ -1561,9 +1867,7 @@ function calc(){
         IF <= 0
     ){
 
-        document.getElementById(
-            "res"
-        ).innerHTML =
+        document.getElementById("res").innerHTML =
             resultBox(
                 "BŁĄD",
                 "Nie można obliczyć",
@@ -1571,133 +1875,152 @@ function calc(){
                 "bad"
             );
 
+        lastResultText = "";
         return;
     }
 
 
-    if(VS <= VF){
+    const VFc =
+        VF * ledCount;
 
-        document.getElementById(
-            "res"
-        ).innerHTML =
+
+    if(VS <= VFc){
+
+        document.getElementById("res").innerHTML =
             resultBox(
                 "BŁĄD",
-                "VS musi być większe od VF",
+                "VS musi być większe od sumy napięć diod",
                 `
                 Napięcie zasilania VS = ${fmt(VS)} V
                 <br>
-                Napięcie LED VF = ${fmt(VF)} V
+                Napięcie diod razem VFc = ${fmt(VF)} V × ${ledCount} = ${fmt(VFc)} V
                 `,
                 "bad"
             );
 
+        lastResultText = "";
         return;
     }
 
 
-    /* =================================================
-    REZYSTOR IDEALNY
-    ================================================= */
+    /* Rezystor idealny / praktyczny */
 
     const voltageOnResistor =
-        VS - VF;
-
+        VS - VFc;
 
     const Rideal =
-        voltageOnResistor /
-        IF;
-
-
-    /* =================================================
-    REZYSTOR PRAKTYCZNY
-    ================================================= */
+        voltageOnResistor / IF;
 
     const Rprakt =
-        standardResistor(
-            Rideal,
-            series
-        );
+        standardResistor(Rideal, series);
+
+    const neighbors =
+        standardResistorNeighbors(Rideal, series);
 
 
-    /* =================================================
-    RZECZYWISTY PRĄD
-    ================================================= */
+    /* Rzeczywisty prąd i moc */
 
     const actualCurrentA =
-        voltageOnResistor /
-        Rprakt;
-
+        voltageOnResistor / Rprakt;
 
     const actualCurrentMA =
-        actualCurrentA *
-        1000;
-
-
-    /* =================================================
-    MOC REZYSTORA
-    ================================================= */
+        actualCurrentA * 1000;
 
     const resistorPower =
-        actualCurrentA *
-        actualCurrentA *
-        Rprakt;
-
-
-    /* =================================================
-    WYMAGANA MOC — ZAPAS 2×
-    ================================================= */
+        actualCurrentA * actualCurrentA * Rprakt;
 
     const requiredPower =
-        resistorPower *
-        2;
+        resistorPower * 2;
 
 
-    /* =================================================
-    TOLERANCJA
-    ================================================= */
+    /* Tolerancja */
 
     const toleranceFraction =
         tolerance / 100;
 
-
     const Rmin =
-        Rprakt *
-        (1 - toleranceFraction);
-
+        Rprakt * (1 - toleranceFraction);
 
     const Rmax =
-        Rprakt *
-        (1 + toleranceFraction);
-
-
-    const Imax =
-        voltageOnResistor /
-        Rmin;
-
+        Rprakt * (1 + toleranceFraction);
 
     const Imin =
-        voltageOnResistor /
-        Rmax;
+        voltageOnResistor / Rmax;
 
+    const Imax =
+        voltageOnResistor / Rmin;
 
     const IminMA =
         Imin * 1000;
-
 
     const ImaxMA =
         Imax * 1000;
 
 
-    /* =================================================
-    DOBÓR MOCY
-    ================================================= */
-
     const powerOK =
-        ratedPower >=
-        requiredPower;
+        ratedPower >= requiredPower;
 
 
     let html = "";
+    let textLines = [];
+
+    textLines.push("Kalkulator rezystora LED — LeMaCh");
+    textLines.push("");
+    textLines.push(`VS (napięcie zasilania): ${fmt(VS)} V`);
+    textLines.push(`VF (jedna dioda): ${fmt(VF)} V`);
+
+    if(ledCount > 1){
+        textLines.push(`Liczba diod w szeregu: ${ledCount}`);
+        textLines.push(`VFc (razem): ${fmt(VFc)} V`);
+    }
+
+    textLines.push(`IF (prąd LED): ${fmt(IFmA)} mA`);
+    textLines.push(`Tolerancja: ±${fmt(tolerance)}%`);
+    textLines.push(`Szereg: ${series}`);
+    textLines.push("");
+
+
+    /* =================================================
+    0. OSTRZEŻENIE BEZPIECZEŃSTWA — ZBYT WYSOKI PRĄD
+    ================================================= */
+
+    const SAFE_MAX_IF_MA = 30;
+
+    if(IFmA > SAFE_MAX_IF_MA){
+
+        html += resultBox(
+            "OSTRZEŻENIE BEZPIECZEŃSTWA",
+            `IF = ${fmt(IFmA)} mA`,
+            `
+            Podany prąd jest wyższy niż typowy bezpieczny zakres dla standardowych diod LED 3–5 mm (zwykle 10–20 mA, maks. ok. ${SAFE_MAX_IF_MA} mA w zależności od modelu).
+            `,
+            "warn",
+            `Zanim podłączysz obwód, sprawdź w karcie katalogowej (datasheet) swojej konkretnej diody maksymalny dopuszczalny prąd IF(max). Przekroczenie go skraca żywotność diody lub od razu ją uszkadza.`
+        );
+
+        textLines.push(`⚠ OSTRZEŻENIE: prąd ${fmt(IFmA)} mA przekracza typowy bezpieczny zakres (do ${SAFE_MAX_IF_MA} mA) — sprawdź kartę katalogową diody.`);
+        textLines.push("");
+    }
+
+
+    /* =================================================
+    0b. VFc — TYLKO GDY WIĘCEJ NIŻ 1 DIODA
+    ================================================= */
+
+    if(ledCount > 1){
+
+        html += resultBox(
+            "ŁĄCZNE NAPIĘCIE NA DIODACH (VFc)",
+            `${fmt(VFc)} V`,
+            `
+            VFc = n × VF
+            <br>
+            VFc = ${ledCount} × ${fmt(VF)} V = ${fmt(VFc)} V
+            `,
+            "good",
+            `Diody połączone szeregowo mają wspólny prąd, ale ich napięcia VF się sumują — dlatego do dalszych obliczeń używamy VFc zamiast pojedynczego VF.`
+        );
+    }
 
 
     /* =================================================
@@ -1708,11 +2031,9 @@ function calc(){
         "REZYSTOR IDEALNY",
         `${fmt(Rideal)} Ω`,
         `
-        R = (VS − VF) / IF
+        R = (VS − VFc) / IF
         <br>
-        R = (${fmt(VS)} V − ${fmt(VF)} V) / ${fmt(IF)} A = ${fmt(Rideal)} Ω
-        <br>
-        ${fmt(Rideal)} Ω = ${fmt(Rideal / 1000)} kΩ
+        R = (${fmt(VS)} V − ${fmt(VFc)} V) / ${fmt(IF)} A = ${fmt(Rideal)} Ω
         `,
         "good",
         `To rezystancja, przy której popłynie dokładnie zadany prąd IF. W sprzedaży zwykle nie kupisz takiej dokładnej wartości — dlatego w kolejnym kroku dobieramy najbliższy rezystor standardowy.`
@@ -1720,20 +2041,60 @@ function calc(){
 
 
     /* =================================================
-    2. REZYSTOR PRAKTYCZNY
+    2. REZYSTOR PRAKTYCZNY + KOD KOLORÓW
     ================================================= */
+
+    const colorCode =
+        resistorColorCode(Rprakt, series, tolerance);
+
+    const colorHtml =
+        renderColorCode(colorCode, tolerance);
 
     html += resultBox(
         `REZYSTOR PRAKTYCZNY — ${series}`,
         `${fmt(Rprakt)} Ω`,
         `
         Pierwsza standardowa wartość ${series} ≥ wartości idealnej.
-        <br>
-        ${fmt(Rprakt)} Ω = ${fmt(Rprakt / 1000)} kΩ
         `,
         "good",
-        `Zaokrąglamy w górę (nie w dół), bo mniejszy rezystor niż idealny oznaczałby większy prąd przez LED niż zaplanowany IF — a to skraca żywotność diody lub ją uszkadza. Trochę mniejszy prąd jest bezpieczny, większy — nie.`
+        `Zaokrąglamy w górę (nie w dół), bo mniejszy rezystor niż idealny oznaczałby większy prąd przez LED niż zaplanowany IF — a to skraca żywotność diody lub ją uszkadza. Trochę mniejszy prąd jest bezpieczny, większy — nie.`,
+        colorHtml
     );
+
+
+    /* =================================================
+    2b. SĄSIEDNIE WARTOŚCI STANDARDOWE
+    ================================================= */
+
+    if(
+        Number.isFinite(neighbors.lower) &&
+        Number.isFinite(neighbors.upper) &&
+        neighbors.lower !== neighbors.upper
+    ){
+
+        const lowerCurrentMA =
+            (voltageOnResistor / neighbors.lower) * 1000;
+
+        const upperCurrentMA =
+            (voltageOnResistor / neighbors.upper) * 1000;
+
+        html += resultBox(
+            "SĄSIEDNIE WARTOŚCI STANDARDOWE",
+            `${fmt(neighbors.lower)} Ω — ${fmt(neighbors.upper)} Ω`,
+            `
+            <div class="neighbor-row">
+                <div><span class="tag">Niższa</span><br>${fmt(neighbors.lower)} Ω</div>
+                <div>prąd ok. ${fmt(lowerCurrentMA)} mA<br><span class="tag">wyższy niż IF</span></div>
+            </div>
+            <div class="neighbor-row">
+                <div><span class="tag">Wyższa (użyta powyżej)</span><br>${fmt(neighbors.upper)} Ω</div>
+                <div>prąd ok. ${fmt(upperCurrentMA)} mA<br><span class="tag">bezpieczniejsza</span></div>
+            </div>
+            `,
+            "good",
+            `Rezystor o niższej wartości da prąd WYŻSZY niż zaplanowany IF (mocniej obciąża diodę). Rezystor o wyższej wartości (użyty w obliczeniach powyżej) daje prąd nieco NIŻSZY niż zaplanowany — to bezpieczniejszy kierunek zaokrąglenia.`
+        );
+    }
 
 
     /* =================================================
@@ -1744,11 +2105,9 @@ function calc(){
         "RZECZYWISTY PRĄD LED",
         `${fmt(actualCurrentMA)} mA`,
         `
-        IF = (VS − VF) / R
+        IF = (VS − VFc) / R
         <br>
-        IF = (${fmt(VS)} V − ${fmt(VF)} V) / ${fmt(Rprakt)} Ω = ${fmt(actualCurrentA)} A
-        <br>
-        ${fmt(actualCurrentA)} A = ${fmt(actualCurrentMA)} mA
+        IF = (${fmt(VS)} V − ${fmt(VFc)} V) / ${fmt(Rprakt)} Ω = ${fmt(actualCurrentA)} A = ${fmt(actualCurrentMA)} mA
         `,
         "good",
         `Bo użyliśmy rezystora praktycznego (${fmt(Rprakt)} Ω), a nie idealnego, rzeczywisty prąd nieznacznie różni się od zadanego IF = ${fmt(IFmA)} mA.`
@@ -1763,14 +2122,12 @@ function calc(){
         "NAPIĘCIE NA REZYSTORZE",
         `${fmt(voltageOnResistor)} V`,
         `
-        VR = VS − VF
+        VR = VS − VFc
         <br>
-        VR = ${fmt(VS)} V − ${fmt(VF)} V = ${fmt(voltageOnResistor)} V
-        <br>
-        ${fmt(voltageOnResistor)} V = ${fmt(voltageOnResistor * 1000)} mV
+        VR = ${fmt(VS)} V − ${fmt(VFc)} V = ${fmt(voltageOnResistor)} V
         `,
         "good",
-        `Napięcie zasilania rozkłada się na LED (VF) i rezystor (VR). Suma VF + VR zawsze musi dać VS.`
+        `Napięcie zasilania rozkłada się na diody (VFc) i rezystor (VR). Suma VFc + VR zawsze musi dać VS.`
     );
 
 
@@ -1785,8 +2142,6 @@ function calc(){
         P = I² × R
         <br>
         P = (${fmt(actualCurrentA)} A)² × ${fmt(Rprakt)} Ω = ${fmt(resistorPower)} W
-        <br>
-        ${fmt(resistorPower)} W = ${fmt(resistorPower * 1000)} mW
         `,
         "good",
         `Rezystor zamienia tę moc na ciepło. Im więcej prądu przez niego płynie, tym mocniej się grzeje (moc rośnie z kwadratem prądu).`
@@ -1803,9 +2158,7 @@ function calc(){
         `
         Moc znamionowa: ${fmt(ratedPower)} W.
         <br>
-        Wymagana moc przy zapasie 2×:
-        Pz = P × 2 = ${fmt(resistorPower)} W × 2 = ${fmt(requiredPower)} W
-        = ${fmt(requiredPower * 1000)} mW
+        Wymagana moc przy zapasie 2×: Pz = P × 2 = ${fmt(requiredPower)} W
         `,
         powerOK ? "good" : "warn",
         powerOK
@@ -1824,36 +2177,45 @@ function calc(){
         `
         Rezystor ${fmt(Rprakt)} Ω ±${fmt(tolerance)}% może w praktyce mieć od ${fmt(Rmin)} Ω do ${fmt(Rmax)} Ω.
         <br>
-        Prąd LED może wynosić około
-        ${fmt(IminMA)} — ${fmt(ImaxMA)} mA.
+        Prąd LED może wynosić około ${fmt(IminMA)} — ${fmt(ImaxMA)} mA.
         `,
         "good",
         `Tolerancja to realna niepewność produkcyjna rezystora, nie tylko liczba na etykiecie. Warto sprawdzić, czy skrajne wartości prądu (${fmt(IminMA)}–${fmt(ImaxMA)} mA) nadal mieszczą się w bezpiecznym zakresie dla Twojej diody z jej karty katalogowej.`
     );
 
 
-    document.getElementById(
-        "res"
-    ).innerHTML =
+    /* przycisk kopiowania na górze wyników */
+
+    html =
+        `<button type="button" id="copyBtn" class="copybtn" onclick="copyResults()">Kopiuj wynik</button>` +
         html;
+
+
+    document.getElementById("res").innerHTML = html;
+
+
+    /* tekst do kopiowania */
+
+    textLines.push(`Rezystor idealny: ${fmt(Rideal)} Ω`);
+    textLines.push(`Rezystor praktyczny (${series}): ${fmt(Rprakt)} Ω`);
+    textLines.push(`Rzeczywisty prąd LED: ${fmt(actualCurrentMA)} mA`);
+    textLines.push(`Napięcie na rezystorze: ${fmt(voltageOnResistor)} V`);
+    textLines.push(`Moc na rezystorze: ${fmt(resistorPower)} W (zalecana moc znamionowa min. ${fmt(requiredPower)} W)`);
+    textLines.push(`Moc znamionowa wybrana: ${fmt(ratedPower)} W ${powerOK ? "(OK)" : "(ZA NISKA — rozważ mocniejszy rezystor)"}`);
+    textLines.push(`Zakres z tolerancją ±${fmt(tolerance)}%: ${fmt(Rmin)}–${fmt(Rmax)} Ω, prąd ${fmt(IminMA)}–${fmt(ImaxMA)} mA`);
+
+    lastResultText =
+        textLines.join("\n");
 }
 
 
 /* =====================================================
-START — POLA POZOSTAJĄ PUSTE
+START — POLA WARTOŚCI POZOSTAJĄ PUSTE (OPRÓCZ LICZBY DIOD)
 ===================================================== */
 
-document.getElementById(
-    "vs"
-).value = "";
-
-document.getElementById(
-    "vf"
-).value = "";
-
-document.getElementById(
-    "im"
-).value = "";
+document.getElementById("vs").value = "";
+document.getElementById("vf").value = "";
+document.getElementById("im").value = "";
 
 </script>
 
