@@ -1065,98 +1065,14 @@ LeMaCh • Narzędzia obliczeniowe • Elektronika
 </main>
 
 
+<script src="common.js"></script>
 <script>
 
 
 /* =====================================================
-LICZBY
+FUNKCJE SPECYFICZNE DLA KALKULATORA (num/fmt/toggleTip/
+kod kolorów/kopiowanie wyniku są we wspólnym common.js)
 ===================================================== */
-
-function num(v){
-
-    if(
-        v===null ||
-        v===undefined ||
-        String(v).trim()===""
-    ){
-        return NaN;
-    }
-
-    return parseFloat(
-        String(v)
-        .replace(",",".")
-        .replace(/\s/g,"")
-    );
-}
-
-
-/* =====================================================
-FORMATOWANIE
-max 4 cyfry znaczące, notacja zwykła, przecinek dziesiętny
-(standard PL, ustalony 2026-08-14 dla wszystkich kalkulatorów LeMaCh)
-===================================================== */
-
-function fmt(value, sig=4){
-
-    if(!Number.isFinite(value)){
-        return "—";
-    }
-
-    if(value === 0){
-        return "0";
-    }
-
-    const negative =
-        value < 0;
-
-    const abs =
-        Math.abs(value);
-
-    const exponent =
-        Math.floor(
-            Math.log10(abs)
-        );
-
-    const decimals =
-        Math.max(
-            0,
-            Math.min(20, sig - 1 - exponent)
-        );
-
-    let s =
-        abs.toFixed(decimals);
-
-    if(s.indexOf(".") !== -1){
-        s =
-            s
-            .replace(/0+$/,"")
-            .replace(/\.$/,"");
-    }
-
-    if(negative){
-        s = "-" + s;
-    }
-
-    return s.replace(".", ",");
-}
-
-
-/* =====================================================
-TOOLTIP
-===================================================== */
-
-function toggleTip(id){
-
-    const el =
-        document.getElementById(id);
-
-    if(!el){
-        return;
-    }
-
-    el.classList.toggle("hidden");
-}
-
 
 const TIP_TEXT = {
     voltage: "U (napięcie) to różnica potencjałów elektrycznych między dwoma punktami obwodu — \"siła napędowa\" dla prądu. Jednostka: wolt [V].",
@@ -1312,75 +1228,12 @@ function update(n){
 
 
 /* =====================================================
-KARTA WYNIKU
+BŁĄD (karta wyniku "box" jest we wspólnym common.js)
 ===================================================== */
-
-function box(title, value, detail, cls="good", why=""){
-
-    const whyHtml =
-        why
-        ? `<div class="why"><b>Dlaczego:</b> ${why}</div>`
-        : "";
-
-    return `
-
-    <div class="box ${cls}">
-        <div class="title">${title}</div>
-        <div class="value">${value}</div>
-        <div class="detail">${detail}</div>
-        ${whyHtml}
-    </div>
-
-    `;
-}
-
 
 function error(message){
 
     return box("BŁĄD", "Nie można obliczyć", message, "bad");
-}
-
-
-/* =====================================================
-KOPIOWANIE WYNIKU
-===================================================== */
-
-let lastResultText = "";
-
-function copyResults(){
-
-    if(!lastResultText){
-        return;
-    }
-
-    const btn =
-        document.getElementById("copyBtn");
-
-    function showCopied(){
-        if(btn){
-            btn.textContent = "Skopiowano ✓";
-            setTimeout(() => { btn.textContent = "Kopiuj wynik"; }, 1800);
-        }
-    }
-
-    if(navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(lastResultText)
-            .then(showCopied)
-            .catch(() => { if(btn){ btn.textContent = "Błąd kopiowania"; } });
-    }
-    else{
-        const ta = document.createElement("textarea");
-        ta.value = lastResultText;
-        document.body.appendChild(ta);
-        ta.select();
-        try{
-            document.execCommand("copy");
-            showCopied();
-        }catch(e){
-            if(btn){ btn.textContent = "Błąd kopiowania"; }
-        }
-        document.body.removeChild(ta);
-    }
 }
 
 
