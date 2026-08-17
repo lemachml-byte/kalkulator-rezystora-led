@@ -654,6 +654,14 @@ Rezystancja zastępcza (szeregowo / równolegle)
 Kod kolorów rezystora
 </option>
 
+<option value="PULLUP">
+Rezystor podciągający (pull-up)
+</option>
+
+<option value="TRANS">
+Rezystor bazy tranzystora (sterowanie przekaźnikiem/silnikiem)
+</option>
+
 </select>
 
 </section>
@@ -871,6 +879,113 @@ Dane wejściowe
 </section>
 
 
+<!-- =====================================================
+2D. POLA: REZYSTOR PODCIĄGAJĄCY (PULL-UP)
+===================================================== -->
+
+<section class="section hidden" id="fields-pullup">
+
+<h2 class="section-title">
+<span class="num">2</span>
+Dane wejściowe
+</h2>
+
+<div class="grid">
+
+<div>
+<div class="label-row">
+<label for="pu-vcc">Napięcie zasilania Vcc [V]</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-pu-vcc')" aria-label="Wyjaśnienie: Vcc">?</button>
+</div>
+<div id="tip-pu-vcc" class="tip hidden">
+Napięcie logiczne układu — najczęściej 5 V (Arduino Uno) lub 3,3 V (ESP32, większość czujników I2C).
+</div>
+<input id="pu-vcc" type="text" inputmode="decimal" placeholder="np. 5" onkeydown="if(event.key==='Enter'){calc();}">
+</div>
+
+<div class="full">
+<div class="label-row">
+<label for="pu-kind">Zastosowanie</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-pu-kind')" aria-label="Wyjaśnienie: zastosowanie">?</button>
+</div>
+<div id="tip-pu-kind" class="tip hidden">
+<b>I2C</b>: magistrala wymaga rezystorów podciągających na liniach SDA i SCL — zbyt niska wartość przeciąża wyjścia urządzeń, zbyt wysoka spowalnia zbocza sygnału. <b>GPIO / przycisk</b>: proste podciąganie cyfrowego wejścia do stanu wysokiego (np. przycisk zwierający do masy).
+</div>
+<select id="pu-kind" onchange="calc()">
+<option value="I2C_100">I2C — Standard Mode (100 kHz)</option>
+<option value="I2C_400">I2C — Fast Mode (400 kHz)</option>
+<option value="I2C_1M">I2C — Fast Mode Plus (1 MHz)</option>
+<option value="GPIO">GPIO / przycisk (podciąganie cyfrowe)</option>
+</select>
+</div>
+
+<div class="full">
+<div class="label-row">
+<label for="pu-ruser">Twoja wartość R do sprawdzenia [Ω] (opcjonalnie)</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-pu-ruser')" aria-label="Wyjaśnienie: R do sprawdzenia">?</button>
+</div>
+<div id="tip-pu-ruser" class="tip hidden">
+Jeśli masz już konkretny rezystor (np. 4700 Ω), wpisz go tutaj, a kalkulator sprawdzi, czy mieści się w bezpiecznym zakresie.
+</div>
+<input id="pu-ruser" type="text" inputmode="decimal" placeholder="np. 4700" onkeydown="if(event.key==='Enter'){calc();}">
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+2E. POLA: REZYSTOR BAZY TRANZYSTORA
+===================================================== -->
+
+<section class="section hidden" id="fields-trans">
+
+<h2 class="section-title">
+<span class="num">2</span>
+Dane wejściowe
+</h2>
+
+<div class="grid">
+
+<div>
+<div class="label-row">
+<label for="tr-vcc">Napięcie sterujące Vcc [V]</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-tr-vcc')" aria-label="Wyjaśnienie: napięcie sterujące">?</button>
+</div>
+<div id="tip-tr-vcc" class="tip hidden">
+Napięcie na pinie mikrokontrolera sterującym bazą tranzystora — najczęściej 5 V (Arduino Uno) lub 3,3 V (ESP32).
+</div>
+<input id="tr-vcc" type="text" inputmode="decimal" placeholder="np. 5" onkeydown="if(event.key==='Enter'){calc();}">
+</div>
+
+<div>
+<div class="label-row">
+<label for="tr-ic">Prąd obciążenia Ic [mA]</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-tr-ic')" aria-label="Wyjaśnienie: prąd obciążenia">?</button>
+</div>
+<div id="tip-tr-ic" class="tip hidden">
+Prąd płynący przez obciążenie podłączone do kolektora — np. cewkę przekaźnika lub silnik. Znajdziesz go w karcie katalogowej przekaźnika/silnika albo zmierzysz multimetrem.
+</div>
+<input id="tr-ic" type="text" inputmode="decimal" placeholder="np. 70" onkeydown="if(event.key==='Enter'){calc();}">
+</div>
+
+<div class="full">
+<div class="label-row">
+<label for="tr-hfe">Wzmocnienie prądowe tranzystora hFE (β)</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-tr-hfe')" aria-label="Wyjaśnienie: hFE">?</button>
+</div>
+<div id="tip-tr-hfe" class="tip hidden">
+Wzmocnienie prądowe (beta) znajdziesz w karcie katalogowej tranzystora — dla popularnych tranzystorów NPN (np. BC547, 2N2222, 2N3904) typowo 100–300. Jeśli nie znasz wartości, użyj bezpiecznie niskiej, np. 100.
+</div>
+<input id="tr-hfe" type="text" inputmode="decimal" placeholder="np. 100" onkeydown="if(event.key==='Enter'){calc();}">
+</div>
+
+</div>
+
+</section>
+
+
 <button onclick="calc()">
 OBLICZ
 </button>
@@ -916,6 +1031,16 @@ Wzory używane w kalkulatorze
 <div class="formula-item">
 <div class="formula-eq">1/Rc(równolegle) = 1/R1 + 1/R2 + ... + 1/Rn</div>
 <div class="formula-desc">Rezystancja zastępcza rezystorów połączonych równolegle.</div>
+</div>
+
+<div class="formula-item">
+<div class="formula-eq">Rmin(I2C) = (Vcc − 0,4 V) / 3 mA</div>
+<div class="formula-desc">Minimalna wartość rezystora podciągającego I2C, wynikająca z maksymalnego prądu zatapiania (IOL) portów I2C.</div>
+</div>
+
+<div class="formula-item">
+<div class="formula-eq">Rb = (Vcc − 0,7 V) / Ib,&nbsp; Ib = (Ic / hFE) × 2</div>
+<div class="formula-desc">Rezystor bazy tranzystora NPN sterującego przekaźnikiem/silnikiem, z dwukrotnym marginesem nasycenia.</div>
 </div>
 
 </div>
@@ -1088,66 +1213,14 @@ LeMaCh • Narzędzia obliczeniowe • Elektronika
 </main>
 
 
+<script src="common.js"></script>
 <script>
 
 /* =====================================================
-LICZBY / FORMATOWANIE
-(standard LeMaCh: 4 cyfry znaczące, przecinek, bez notacji naukowej)
+FUNKCJE SPECYFICZNE DLA KALKULATORA (num/fmt/toggleTip/
+serie E12-E96/kod kolorów/kopiowanie wyniku są we
+wspólnym common.js)
 ===================================================== */
-
-function num(v){
-
-    if(
-        v === null ||
-        v === undefined ||
-        String(v).trim() === ""
-    ){
-        return NaN;
-    }
-
-    return parseFloat(
-        String(v)
-        .replace(",",".")
-        .replace(/\s/g,"")
-    );
-}
-
-
-function fmt(value, sig=4){
-
-    if(!Number.isFinite(value)){
-        return "—";
-    }
-
-    if(value === 0){
-        return "0";
-    }
-
-    const negative = value < 0;
-    const abs = Math.abs(value);
-    const exponent = Math.floor(Math.log10(abs));
-    const decimals = Math.max(0, Math.min(20, sig - 1 - exponent));
-
-    let s = abs.toFixed(decimals);
-
-    if(s.indexOf(".") !== -1){
-        s = s.replace(/0+$/,"").replace(/\.$/,"");
-    }
-
-    if(negative){
-        s = "-" + s;
-    }
-
-    return s.replace(".", ",");
-}
-
-
-function toggleTip(id){
-    const el = document.getElementById(id);
-    if(!el){ return; }
-    el.classList.toggle("hidden");
-}
-
 
 const TIP_TEXT = {
     voltage: "Napięcie [V] — różnica potencjałów elektrycznych między dwoma punktami obwodu.",
@@ -1156,215 +1229,6 @@ const TIP_TEXT = {
 };
 
 
-/* =====================================================
-SZEREGI REZYSTORÓW (E12/E24/E96) — jak w Kalkulatorze LED
-===================================================== */
-
-const E12 = [
-    1.0, 1.2, 1.5, 1.8, 2.2, 2.7,
-    3.3, 3.9, 4.7, 5.6, 6.8, 8.2
-];
-
-const E24 = [
-    1.0, 1.1, 1.2, 1.3, 1.5, 1.6, 1.8, 2.0,
-    2.2, 2.4, 2.7, 3.0, 3.3, 3.6, 3.9, 4.3,
-    4.7, 5.1, 5.6, 6.2, 6.8, 7.5, 8.2, 9.1
-];
-
-const E96 = [
-    1.00,1.02,1.05,1.07,1.10,1.13,1.15,1.18,
-    1.21,1.24,1.27,1.30,1.33,1.37,1.40,1.43,
-    1.47,1.50,1.54,1.58,1.62,1.65,1.69,1.74,
-    1.78,1.82,1.87,1.91,1.96,2.00,2.05,2.10,
-    2.15,2.21,2.26,2.32,2.37,2.43,2.49,2.55,
-    2.61,2.67,2.74,2.80,2.87,2.94,3.01,3.09,
-    3.16,3.24,3.32,3.40,3.48,3.57,3.65,3.74,
-    3.83,3.92,4.02,4.12,4.22,4.32,4.42,4.53,
-    4.64,4.75,4.87,4.99,5.11,5.23,5.36,5.49,
-    5.62,5.76,5.90,6.04,6.19,6.34,6.49,6.65,
-    6.81,6.98,7.15,7.32,7.50,7.68,7.87,8.06,
-    8.25,8.45,8.66,8.87,9.09,9.31,9.53,9.76
-];
-
-function seriesValues(series){
-    if(series === "E12"){ return E12; }
-    if(series === "E96"){ return E96; }
-    return E24;
-}
-
-function standardResistor(value, series){
-
-    if(!Number.isFinite(value) || value <= 0){
-        return NaN;
-    }
-
-    const baseValues = seriesValues(series);
-    const exponent = Math.floor(Math.log10(value));
-
-    for(const base of baseValues){
-        const candidate = base * Math.pow(10, exponent);
-        if(candidate >= value){
-            return candidate;
-        }
-    }
-
-    return baseValues[0] * Math.pow(10, exponent + 1);
-}
-
-function standardResistorNeighbors(value, series){
-
-    if(!Number.isFinite(value) || value <= 0){
-        return { lower: NaN, upper: NaN };
-    }
-
-    const baseValues = seriesValues(series);
-    const exponent = Math.floor(Math.log10(value));
-
-    let candidates = [];
-    for(let e = exponent - 1; e <= exponent + 1; e++){
-        baseValues.forEach(b => candidates.push(b * Math.pow(10, e)));
-    }
-    candidates.sort((a,b) => a-b);
-
-    const upper = candidates.find(c => c >= value);
-    const lowerCandidates = candidates.filter(c => c < value);
-    const lower = lowerCandidates.length
-        ? lowerCandidates[lowerCandidates.length - 1]
-        : candidates[0];
-
-    return { lower, upper };
-}
-
-
-/* =====================================================
-KOD KOLORÓW REZYSTORA (jak w Kalkulatorze LED, + wsparcie
-dla dowolnej liczby cyfr — nie tylko wg serii E)
-===================================================== */
-
-const COLOR_MAP = {
-    "-2": { hex:"#C0C0C0", name:"srebrny"   },
-    "-1": { hex:"#D4AF37", name:"złoty"     },
-    "0":  { hex:"#1a1a1a", name:"czarny"    },
-    "1":  { hex:"#8B4513", name:"brązowy"   },
-    "2":  { hex:"#DC2626", name:"czerwony"  },
-    "3":  { hex:"#EA580C", name:"pomarańczowy" },
-    "4":  { hex:"#EAB308", name:"żółty"     },
-    "5":  { hex:"#16803C", name:"zielony"   },
-    "6":  { hex:"#2563EB", name:"niebieski" },
-    "7":  { hex:"#7C3AED", name:"fioletowy" },
-    "8":  { hex:"#6B7280", name:"szary"     },
-    "9":  { hex:"#F5F5F5", name:"biały"     }
-};
-
-const TOLERANCE_COLOR = {
-    "1":  { hex:"#8B4513", name:"brązowy" },
-    "2":  { hex:"#DC2626", name:"czerwony" },
-    "5":  { hex:"#D4AF37", name:"złoty"   },
-    "10": { hex:"#C0C0C0", name:"srebrny" }
-};
-
-
-function colorCodeFromValue(value, numDigits, tolerancePercent){
-
-    if(!Number.isFinite(value) || value <= 0){
-        return null;
-    }
-
-    const exponent = Math.floor(Math.log10(value));
-    const seg = value / Math.pow(10, exponent);
-    const scale = Math.pow(10, numDigits - 1);
-
-    let digitsValue = Math.round(seg * scale);
-    let mExp = exponent - (numDigits - 1);
-
-    if(digitsValue >= scale * 10){
-        digitsValue = Math.round(digitsValue / 10);
-        mExp += 1;
-    }
-
-    const digitsStr = String(digitsValue).padStart(numDigits, "0");
-
-    const digitBands = digitsStr.split("").map(d => ({
-        hex: (COLOR_MAP[d] || {}).hex || "#999",
-        name: (COLOR_MAP[d] || {}).name || "?",
-        digit: d
-    }));
-
-    const multBand = { ...(COLOR_MAP[String(mExp)] || { hex:"#999", name:"?" }), exp: mExp };
-    const tolBand = TOLERANCE_COLOR[String(tolerancePercent)] || { hex:"#999", name:"?" };
-
-    const encodedValue = digitsValue * Math.pow(10, mExp);
-
-    return { digitBands, multBand, tolBand, encodedValue };
-}
-
-
-function valueFromColorDigits(digits, multExp){
-
-    if(!digits.length){
-        return NaN;
-    }
-
-    const digitsValue = parseInt(digits.join(""), 10);
-
-    if(!Number.isFinite(digitsValue)){
-        return NaN;
-    }
-
-    return digitsValue * Math.pow(10, multExp);
-}
-
-
-function renderColorCode(code, tolerancePercent){
-
-    if(!code){
-        return "";
-    }
-
-    const allBands = [...code.digitBands, code.multBand, code.tolBand];
-
-    const bandsHtml = allBands
-        .map(b => `<div class="colorband" style="background:${b.hex}" title="${b.name}"></div>`)
-        .join("");
-
-    const namesList = [
-        ...code.digitBands.map(b => b.name),
-        `${code.multBand.name} (mnożnik ×${fmt(Math.pow(10, code.multBand.exp))})`,
-        `${code.tolBand.name} (±${tolerancePercent}%)`
-    ];
-
-    return `
-    <div class="resistor-visual">
-        <div class="resistor-lead"></div>
-        <div class="resistor-body">${bandsHtml}</div>
-        <div class="resistor-lead"></div>
-    </div>
-    <div class="colorcode-caption">
-        <b>Kolejność pasków:</b> ${namesList.join(" — ")}
-    </div>
-    `;
-}
-
-
-/* =====================================================
-KARTA WYNIKU / BŁĄD
-===================================================== */
-
-function box(title, value, detail, cls="good", why="", extraHtml=""){
-
-    const whyHtml = why ? `<div class="why"><b>Dlaczego:</b> ${why}</div>` : "";
-
-    return `
-    <div class="box ${cls}">
-        <div class="title">${title}</div>
-        <div class="value">${value}</div>
-        <div class="detail">${detail}</div>
-        ${extraHtml}
-        ${whyHtml}
-    </div>
-    `;
-}
-
 function showError(message){
     document.getElementById("res").innerHTML = box("BŁĄD", "Nie można obliczyć", message, "bad");
     lastResultText = "";
@@ -1372,43 +1236,8 @@ function showError(message){
 
 
 /* =====================================================
-KOPIOWANIE WYNIKU
-===================================================== */
-
-let lastResultText = "";
-
-function copyResults(){
-
-    if(!lastResultText){ return; }
-
-    const btn = document.getElementById("copyBtn");
-
-    function showCopied(){
-        if(btn){
-            btn.textContent = "Skopiowano ✓";
-            setTimeout(() => { btn.textContent = "Kopiuj wynik"; }, 1800);
-        }
-    }
-
-    if(navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(lastResultText).then(showCopied).catch(() => {
-            if(btn){ btn.textContent = "Błąd kopiowania"; }
-        });
-    }
-    else{
-        const ta = document.createElement("textarea");
-        ta.value = lastResultText;
-        document.body.appendChild(ta);
-        ta.select();
-        try{ document.execCommand("copy"); showCopied(); }
-        catch(e){ if(btn){ btn.textContent = "Błąd kopiowania"; } }
-        document.body.removeChild(ta);
-    }
-}
-
-
-/* =====================================================
 USTAWIANIE TRYBU / PÓL (dla DIV i SER — pola 3-num ogólne)
+(box/copyResults/lastResultText są we wspólnym common.js)
 ===================================================== */
 
 function setField(n, label, kind, placeholder){
@@ -1438,6 +1267,8 @@ function setMode(){
     document.getElementById("fields-3num").classList.add("hidden");
     document.getElementById("fields-combo").classList.add("hidden");
     document.getElementById("fields-color").classList.add("hidden");
+    document.getElementById("fields-pullup").classList.add("hidden");
+    document.getElementById("fields-trans").classList.add("hidden");
     document.getElementById("ser-params").classList.add("hidden");
     document.getElementById("field3-wrap").classList.remove("hidden");
 
@@ -1464,6 +1295,23 @@ function setMode(){
         document.getElementById("fields-color").classList.remove("hidden");
         setColorMode();
         renderColorInputs();
+    }
+
+    if(mode === "PULLUP"){
+        document.getElementById("fields-pullup").classList.remove("hidden");
+        if(!document.getElementById("pu-vcc").value){
+            document.getElementById("pu-vcc").value = "5";
+        }
+    }
+
+    if(mode === "TRANS"){
+        document.getElementById("fields-trans").classList.remove("hidden");
+        if(!document.getElementById("tr-vcc").value){
+            document.getElementById("tr-vcc").value = "5";
+        }
+        if(!document.getElementById("tr-hfe").value){
+            document.getElementById("tr-hfe").value = "100";
+        }
     }
 }
 
@@ -1559,6 +1407,8 @@ function calc(){
     if(mode === "SER"){ calcSER(); return; }
     if(mode === "COMBO"){ calcCOMBO(); return; }
     if(mode === "COLOR"){ calcCOLOR(); return; }
+    if(mode === "PULLUP"){ calcPULLUP(); return; }
+    if(mode === "TRANS"){ calcTRANS(); return; }
 }
 
 
@@ -1970,6 +1820,228 @@ function calcColorToColor(){
 
 
 /* =====================================================
+TRYB: REZYSTOR PODCIĄGAJĄCY (PULL-UP)
+
+I2C: minimalna wartość wynika z maksymalnego prądu
+zatapiania (IOL) portów I2C — standardowo 3 mA — więc
+Rmin = (Vcc − 0,4 V) / 3 mA. Typowe wartości zalecane
+przez producentów rosną wraz z prędkością szyny (mniejszy
+rezystor = szybsze zbocza sygnału, ale większy pobór prądu).
+
+GPIO/przycisk: nie ma tu twardego wzoru — to kompromis
+między odpornością na zakłócenia (im wyższy R, tym gorzej)
+a poborem prądu w stanie aktywnym (im niższy R, tym gorzej).
+===================================================== */
+
+const PULLUP_I2C_IMAX = 0.003; /* 3 mA — maks. prąd zatapiania IOL wg specyfikacji I2C */
+
+const PULLUP_SPEED_INFO = {
+    I2C_100: { hz: "100 kHz",  typical: 4700, label: "I2C — Standard Mode (100 kHz)" },
+    I2C_400: { hz: "400 kHz",  typical: 2200, label: "I2C — Fast Mode (400 kHz)" },
+    I2C_1M:  { hz: "1 MHz",    typical: 1000, label: "I2C — Fast Mode Plus (1 MHz)" }
+};
+
+function calcPULLUP(){
+
+    const Vcc = num(document.getElementById("pu-vcc").value);
+    const kind = document.getElementById("pu-kind").value;
+    const Ruser = num(document.getElementById("pu-ruser").value);
+    const hasRuser = Number.isFinite(Ruser) && Ruser > 0;
+
+    if(!Number.isFinite(Vcc) || Vcc <= 0){
+        showError("Wpisz poprawne napięcie zasilania Vcc (większe od zera).");
+        return;
+    }
+
+    let html = "";
+    const textLines = [];
+
+    if(kind === "GPIO"){
+
+        const gpioLow = 4700;
+        const gpioHigh = 10000;
+
+        html += box(
+            "ZALECANY ZAKRES",
+            `${fmt(gpioLow)} Ω — ${fmt(gpioHigh)} Ω`,
+            `Dla podciągania cyfrowego wejścia (np. przycisk zwierający do masy) typowo stosuje się rezystor 4,7 kΩ–10 kΩ. Wewnętrzne pull-upy mikrokontrolerów (np. ATmega w Arduino Uno) mają zwykle 20–50 kΩ.`,
+            "good",
+            `Zbyt niski rezystor pobiera niepotrzebnie dużo prądu w stanie aktywnym. Zbyt wysoki (setki kΩ) sprawia, że wejście staje się podatne na zakłócenia elektromagnetyczne i może fałszywie przełączać stan.`
+        );
+
+        textLines.push(`Zastosowanie: GPIO / przycisk`);
+        textLines.push(`Vcc: ${fmt(Vcc)} V`);
+        textLines.push(`Zalecany zakres: ${fmt(gpioLow)}–${fmt(gpioHigh)} Ω`);
+
+        if(hasRuser){
+            const I = Vcc / Ruser;
+            const IuA = I * 1e6;
+            const IText = IuA >= 1000 ? `${fmt(I*1000)} mA` : `${fmt(IuA)} µA`;
+            const tooLow = Ruser < 1000;
+            const tooHigh = Ruser > 100000;
+
+            html += box(
+                "TWOJA WARTOŚĆ",
+                `${fmt(Ruser)} Ω`,
+                `Prąd płynący przez rezystor w stanie aktywnym: I = Vcc / R = ${fmt(Vcc)} V / ${fmt(Ruser)} Ω = ${IText}`,
+                tooLow || tooHigh ? "warn" : "good",
+                tooLow
+                    ? `Rezystor ${fmt(Ruser)} Ω jest niżej niż typowy zakres — pobiera więcej prądu niż to konieczne. Zwykle nie jest to szkodliwe, ale marnuje energię (istotne przy zasilaniu bateryjnym).`
+                    : tooHigh
+                        ? `Rezystor ${fmt(Ruser)} Ω jest wyżej niż typowy zakres — wejście może być bardziej podatne na zakłócenia. Rozważ wartość z zakresu 4,7–10 kΩ.`
+                        : `Wartość mieści się w typowym, bezpiecznym zakresie dla podciągania GPIO.`
+            );
+
+            textLines.push(`Twoja wartość: ${fmt(Ruser)} Ω, prąd w stanie aktywnym: ${IText}`);
+        }
+
+    } else {
+
+        const info = PULLUP_SPEED_INFO[kind] || PULLUP_SPEED_INFO.I2C_100;
+        const Rmin = (Vcc - 0.4) / PULLUP_I2C_IMAX;
+        const stdMin = standardResistor(Rmin, "E24");
+
+        html += box(
+            "MINIMALNA WARTOŚĆ Rmin",
+            `${fmt(Rmin)} Ω`,
+            `Rmin = (Vcc − 0,4 V) / 3 mA = (${fmt(Vcc)} V − 0,4 V) / 3 mA = ${fmt(Rmin)} Ω`,
+            "good",
+            `Poniżej tej wartości prąd zatapiania (IOL) na linii I2C przekroczyłby standardowy limit 3 mA portów I2C — grozi to przeciążeniem wyjścia urządzenia podczas ściągania linii do stanu niskiego.`
+        );
+
+        html += box(
+            `TYPOWA WARTOŚĆ DLA ${info.hz}`,
+            `${fmt(info.typical)} Ω`,
+            `Najbliższa dostępna z typoszeregu E24: ${fmt(standardResistor(info.typical, "E24"))} Ω`,
+            info.typical >= Rmin ? "good" : "warn",
+            `Producenci układów I2C zalecają mniejsze rezystory przy wyższych prędkościach szyny — krótszy czas narastania zbocza sygnału pozwala nadążyć za szybszym taktowaniem.`
+        );
+
+        textLines.push(`Zastosowanie: ${info.label}`);
+        textLines.push(`Vcc: ${fmt(Vcc)} V`);
+        textLines.push(`Rmin: ${fmt(Rmin)} Ω (najbliższa E24: ${fmt(stdMin)} Ω)`);
+        textLines.push(`Typowa wartość dla tej prędkości: ${fmt(info.typical)} Ω`);
+
+        if(hasRuser){
+            const IOL = (Vcc - 0.4) / Ruser;
+            const IOLmA = IOL * 1000;
+            const safe = Ruser >= Rmin;
+
+            html += box(
+                "TWOJA WARTOŚĆ",
+                `${fmt(Ruser)} Ω`,
+                `Prąd zatapiania przy tej wartości: IOL = (Vcc − 0,4 V) / R = ${fmt(IOLmA)} mA (limit: 3 mA)`,
+                safe ? "good" : "bad",
+                safe
+                    ? `${fmt(Ruser)} Ω jest bezpieczną wartością — nie przekracza limitu prądu zatapiania I2C.`
+                    : `${fmt(Ruser)} Ω jest za niskie — prąd zatapiania (${fmt(IOLmA)} mA) przekracza limit 3 mA. Użyj rezystora co najmniej ${fmt(Rmin)} Ω.`
+            );
+
+            textLines.push(`Twoja wartość: ${fmt(Ruser)} Ω, IOL: ${fmt(IOLmA)} mA ${safe ? "(OK)" : "(ZA NISKIE)"}`);
+        }
+    }
+
+    html =
+        `<button type="button" id="copyBtn" class="copybtn" onclick="copyResults()">Kopiuj wynik</button>` +
+        html;
+
+    document.getElementById("res").innerHTML = html;
+
+    lastResultText =
+        `Kalkulator wspólny — Rezystor podciągający (pull-up) — LeMaCh\n\n` +
+        textLines.join("\n");
+
+    saveState();
+}
+
+
+/* =====================================================
+TRYB: REZYSTOR BAZY TRANZYSTORA (NPN, driver przekaźnika/silnika)
+
+Ib = (Ic / hFE) × 2   — margines x2 gwarantuje pełne
+                         nasycenie tranzystora (twarde
+                         przełączenie, mniejsze straty)
+Rb = (Vcc − Vbe) / Ib  — Vbe ≈ 0,7 V dla krzemowego NPN
+===================================================== */
+
+const TRANS_VBE = 0.7;
+const TRANS_SATURATION_MARGIN = 2;
+
+function calcTRANS(){
+
+    const Vcc = num(document.getElementById("tr-vcc").value);
+    const IcMA = num(document.getElementById("tr-ic").value);
+    const hFE = num(document.getElementById("tr-hfe").value);
+
+    if(
+        !Number.isFinite(Vcc) || Vcc <= 0 ||
+        !Number.isFinite(IcMA) || IcMA <= 0 ||
+        !Number.isFinite(hFE) || hFE <= 0
+    ){
+        showError("Uzupełnij wszystkie pola wartościami większymi od zera (Vcc, prąd obciążenia, hFE).");
+        return;
+    }
+
+    if(Vcc <= TRANS_VBE){
+        showError(`Napięcie sterujące Vcc musi być większe niż napięcie Vbe (${fmt(TRANS_VBE)} V) tranzystora krzemowego.`);
+        return;
+    }
+
+    const Ic = IcMA / 1000;
+    const IbIdeal = (Ic / hFE) * TRANS_SATURATION_MARGIN;
+    const Rb = (Vcc - TRANS_VBE) / IbIdeal;
+    const RbStd = standardResistor(Rb, "E24");
+    const IbActual = (Vcc - TRANS_VBE) / RbStd;
+    const effectiveMargin = IbActual / (Ic / hFE);
+
+    let html = "";
+
+    html += box(
+        "PRĄD BAZY (Z MARGINESEM NASYCENIA ×2)",
+        `${fmt(IbIdeal * 1000)} mA`,
+        `Ib = (Ic / hFE) × 2 = (${fmt(IcMA)} mA / ${fmt(hFE)}) × 2 = ${fmt(IbIdeal * 1000)} mA`,
+        "good",
+        `Margines ×2 zapewnia, że tranzystor wejdzie w pełne nasycenie (zachowuje się jak domknięty przełącznik) nawet przy rozrzucie produkcyjnym hFE i niższej temperaturze.`
+    );
+
+    html += box(
+        "REZYSTOR BAZY Rb",
+        `${fmt(Rb)} Ω`,
+        `
+        Rb = (Vcc − Vbe) / Ib = (${fmt(Vcc)} V − ${fmt(TRANS_VBE)} V) / ${fmt(IbIdeal*1000)} mA = ${fmt(Rb)} Ω
+        <br>
+        Najbliższa dostępna z typoszeregu E24: ${fmt(RbStd)} Ω (rzeczywisty margines nasycenia przy tej wartości: ×${fmt(effectiveMargin)})
+        `,
+        "good",
+        `Wbe ≈ 0,7 V to typowa wartość dla krzemowych tranzystorów NPN (BC547, 2N2222, 2N3904 itp.) w stanie przewodzenia — z dokładnością wystarczającą dla doboru rezystora bazy.`
+    );
+
+    html += box(
+        "OCHRONA: DIODA FLYBACK",
+        "Wymagana przy cewkach",
+        `Jeśli sterujesz przekaźnikiem, silnikiem lub inną cewką, podłącz diodę (np. 1N4007) równolegle do cewki, w kierunku zaporowym względem zasilania.`,
+        "warn",
+        `Wyłączenie prądu w cewce generuje gwałtowny skok napięcia (przepięcie indukcyjne) sięgający nawet 100–200 V, który bez diody flyback może natychmiast zniszczyć tranzystor, a czasem i pin mikrokontrolera.`
+    );
+
+    html =
+        `<button type="button" id="copyBtn" class="copybtn" onclick="copyResults()">Kopiuj wynik</button>` +
+        html;
+
+    document.getElementById("res").innerHTML = html;
+
+    lastResultText =
+        `Kalkulator wspólny — Rezystor bazy tranzystora — LeMaCh\n\n` +
+        `Vcc: ${fmt(Vcc)} V, Ic: ${fmt(IcMA)} mA, hFE: ${fmt(hFE)}\n` +
+        `Prąd bazy (z marginesem ×2): ${fmt(IbIdeal*1000)} mA\n` +
+        `Rezystor bazy: ${fmt(Rb)} Ω (najbliższy E24: ${fmt(RbStd)} Ω)\n` +
+        `Pamiętaj o diodzie flyback przy sterowaniu cewką/przekaźnikiem/silnikiem.`;
+
+    saveState();
+}
+
+
+/* =====================================================
 ZAPAMIĘTYWANIE STANU (localStorage) — realna strona,
 nie artefakt czatu, więc localStorage jest tu bezpieczny.
 ===================================================== */
@@ -2000,6 +2072,18 @@ function saveState(){
             state.rvalue = document.getElementById("rvalue").value;
             state.rvalueBands = document.getElementById("rvalue-bands").value;
             state.rvalueTol = document.getElementById("rvalue-tol").value;
+        }
+
+        if(mode === "PULLUP"){
+            state.puVcc = document.getElementById("pu-vcc").value;
+            state.puKind = document.getElementById("pu-kind").value;
+            state.puRuser = document.getElementById("pu-ruser").value;
+        }
+
+        if(mode === "TRANS"){
+            state.trVcc = document.getElementById("tr-vcc").value;
+            state.trIc = document.getElementById("tr-ic").value;
+            state.trHfe = document.getElementById("tr-hfe").value;
         }
 
         localStorage.setItem(LS_KEY, JSON.stringify(state));
@@ -2049,6 +2133,18 @@ function restoreState(){
         if(state.rvalueTol){ document.getElementById("rvalue-tol").value = state.rvalueTol; }
     }
 
+    if(state.mode === "PULLUP"){
+        if(state.puVcc){ document.getElementById("pu-vcc").value = state.puVcc; }
+        if(state.puKind){ document.getElementById("pu-kind").value = state.puKind; }
+        document.getElementById("pu-ruser").value = state.puRuser || "";
+    }
+
+    if(state.mode === "TRANS"){
+        if(state.trVcc){ document.getElementById("tr-vcc").value = state.trVcc; }
+        document.getElementById("tr-ic").value = state.trIc || "";
+        if(state.trHfe){ document.getElementById("tr-hfe").value = state.trHfe; }
+    }
+
     return true;
 }
 
@@ -2064,6 +2160,11 @@ function clearForm(){
     document.getElementById("c").value = "";
     document.getElementById("combo-list").value = "";
     document.getElementById("rvalue").value = "";
+    document.getElementById("pu-vcc").value = "";
+    document.getElementById("pu-ruser").value = "";
+    document.getElementById("tr-vcc").value = "";
+    document.getElementById("tr-ic").value = "";
+    document.getElementById("tr-hfe").value = "";
     document.getElementById("res").innerHTML = "";
 
     lastResultText = "";
