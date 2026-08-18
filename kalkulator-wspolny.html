@@ -5,6 +5,8 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Dziesięć kalkulatorów elektronicznych w jednym: dzielnik napięcia, kod kolorów i SMD, rezystor podciągający i bazy tranzystora, generator NE555, żywotność baterii, ścieżka PCB.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 
 <title>Kalkulator wspólny — LeMaCh</title>
 
@@ -927,6 +929,8 @@ STAŁA LEGENDA
 <li>Przykłady: 1000 Ω = 1 kΩ;&nbsp; 0,001 A = 1 mA;&nbsp; 1 000 000 Ω = 1 MΩ;&nbsp; 20 mA = 0,02 A.</li>
 <li>Przed obliczeniami sprowadź wszystkie wielkości do jednostek podstawowych (V, A, Ω, W) — pomylony przedrostek to jedna z najczęstszych przyczyn błędnych wyników.</li>
 </ul>
+
+<div id="cheatsheet-extra"></div>
 
 </div>
 </details>
@@ -2424,6 +2428,8 @@ renderColorInputs();
 setMode();
 
 const hadSavedState = restoreState();
+
+initCheatsheetExtra();
 
 </script>
 

@@ -5,6 +5,8 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Dobierz rezystor ograniczający prąd diody LED — napięcie zasilania, napięcie i prąd diody, moc znamionowa, kod kolorów. Darmowy kalkulator LeMaCh.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 
 <title>Kalkulator rezystora LED — LeMaCh</title>
 
@@ -801,6 +803,8 @@ STAŁA LEGENDA
 <li>Przed obliczeniami sprowadź wszystkie wielkości do jednostek podstawowych (V, A, Ω, W) — pomylony przedrostek to jedna z najczęstszych przyczyn błędnych wyników.</li>
 </ul>
 
+<div id="cheatsheet-extra"></div>
+
 </div>
 </details>
 
@@ -1563,6 +1567,8 @@ const hadSavedState = restoreState();
 if(hadSavedState){
     calc();
 }
+
+initCheatsheetExtra();
 
 </script>
 
