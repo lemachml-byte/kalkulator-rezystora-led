@@ -513,20 +513,25 @@ details.collapsible .collapsible-body{
     font-size:14px;
 }
 
-.legend table{
+.legend table,
+.cheatsheet table{
     border-collapse:collapse;
     width:100%;
+    margin:4px 0 10px;
 }
 
 .legend th,
-.legend td{
+.legend td,
+.cheatsheet th,
+.cheatsheet td{
     text-align:left;
     padding:6px 8px;
     border-bottom:1px solid var(--border);
     font-size:14px;
 }
 
-.legend th{
+.legend th,
+.cheatsheet th{
     color:var(--muted);
 }
 
@@ -546,7 +551,9 @@ details.collapsible .collapsible-body{
 }
 
 .legend th:last-child,
-.legend td:last-child{
+.legend td:last-child,
+.cheatsheet th:last-child,
+.cheatsheet td:last-child{
     text-align:right;
     font-variant-numeric:tabular-nums;
     padding-right:14px;
@@ -554,7 +561,8 @@ details.collapsible .collapsible-body{
     font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
 }
 
-.legend tr:nth-child(even){
+.legend tr:nth-child(even),
+.cheatsheet tr:nth-child(even){
     background:#ece5d5;
 }
 
