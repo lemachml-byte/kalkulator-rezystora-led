@@ -1,0 +1,618 @@
+/* =====================================================
+LeMaCh — WSPÓLNE STYLE DLA KALKULATORÓW
+(Kalkulator 01 — Rezystor LED, 02 — Prawo Ohma, 03 — Wspólny)
+
+System wizualny "Synteza": ciepłe, papierowe tło robocze,
+miedziany akcent (zamiast generycznego niebieskiego) i
+zielone, monospace'owe odczyty liczbowe — jak na wyświetlaczu
+multimetru. Każda zmiana palety/układu trafia tutaj, zamiast
+do trzech osobnych bloków <style>.
+===================================================== */
+
+:root{
+    /* --- marka / UI chrome (nagłówki, przyciski, linki) --- */
+    --navy:#8a5622;
+    --navy2:#6f4419;
+
+    /* --- powierzchnie --- */
+    --bg:#f6f3ee;
+    --surface:#ffffff;
+    --panel:#faf8f3;
+    --tint:#f1ece1;
+    --border:#e2d9c4;
+
+    /* --- tekst --- */
+    --text:#211d17;
+    --text-soft:#4a4030;
+    --muted:#7a7266;
+
+    /* --- dane / odczyty liczbowe (wartości wyników, wzory) --- */
+    --data:#1f6e57;
+
+    /* --- status --- */
+    --green:#1f6e57;
+    --green-tint:#e9f4ef;
+    --orange:#b9761f;
+    --orange-tint:#faf1e1;
+    --red:#a3392c;
+    --red-tint:#fbeae7;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+
+main{
+    max-width:980px;
+    margin:auto;
+    padding:24px 14px 55px;
+}
+
+.card{
+    background:var(--surface);
+    border-radius:22px;
+    padding:30px;
+    box-shadow:0 10px 35px rgba(33,29,23,.08);
+}
+
+.back{
+    display:inline-block;
+    margin-bottom:20px;
+    padding:9px 14px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    color:var(--navy);
+    text-decoration:none;
+    font-weight:700;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:16px;
+}
+
+.logo img{
+    width:190px;
+    max-width:70%;
+}
+
+h1{
+    margin:0;
+    text-align:center;
+    color:var(--navy);
+    font-size:30px;
+    font-family:"Iowan Old Style","Charter",Georgia,ui-serif,serif;
+}
+
+.subtitle{
+    text-align:center;
+    color:var(--muted);
+    margin:8px 0 20px;
+}
+
+/* ============ wprowadzenie "po co rezystor" ============ */
+
+.intro{
+    margin:0 0 26px;
+    padding:16px 18px;
+    border-radius:13px;
+    background:var(--tint);
+    border-left:4px solid var(--navy);
+    color:var(--text-soft);
+    font-size:14.5px;
+    line-height:1.6;
+}
+
+.intro b{
+    color:var(--navy);
+}
+
+/* ================================================================ */
+
+.section{
+    margin-top:20px;
+    padding:20px;
+    border:1px solid var(--border);
+    border-radius:15px;
+    background:var(--panel);
+}
+
+.section-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:0 0 16px;
+    color:var(--navy);
+    font-size:17px;
+}
+
+.num{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:27px;
+    height:27px;
+    border-radius:50%;
+    background:var(--navy);
+    color:#fff;
+    font-size:13px;
+    font-weight:800;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.grid3{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:18px;
+}
+
+.full{
+    grid-column:1 / -1;
+}
+
+label{
+    display:block;
+    margin-bottom:7px;
+    font-weight:750;
+}
+
+.label-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:7px;
+}
+
+.label-row label{
+    margin-bottom:0;
+}
+
+.qbtn{
+    flex:0 0 auto;
+    width:23px;
+    height:23px;
+    min-height:0;
+    margin:0;
+    padding:0;
+    border-radius:50%;
+    border:1px solid var(--navy);
+    background:#fff;
+    color:var(--navy);
+    font-weight:800;
+    font-size:13px;
+    line-height:1;
+    cursor:pointer;
+}
+
+.qbtn:hover{
+    background:var(--navy);
+    color:#fff;
+}
+
+.tip{
+    margin:0 0 10px;
+    padding:10px 12px;
+    border-radius:8px;
+    background:var(--tint);
+    border-left:3px solid var(--navy);
+    color:var(--text-soft);
+    font-size:13px;
+    line-height:1.55;
+}
+
+.tip.hidden{
+    display:none;
+}
+
+.hint{
+    margin-top:7px;
+    color:var(--muted);
+    font-size:12.5px;
+    line-height:1.5;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    min-height:48px;
+    padding:11px 13px;
+    border:1px solid #d8cdb4;
+    border-radius:10px;
+    background:#fff;
+    color:var(--text);
+    font-size:16px;
+    font-family:inherit;
+}
+
+textarea{
+    min-height:70px;
+    resize:vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    outline:3px solid rgba(138,86,34,.16);
+    border-color:var(--navy);
+}
+
+.converter{
+    margin-top:7px;
+    padding:7px 10px;
+    border-radius:8px;
+    background:var(--tint);
+    color:var(--text-soft);
+    font-size:13px;
+    line-height:1.45;
+}
+
+.converter strong{
+    color:var(--navy);
+}
+
+button{
+    width:100%;
+    min-height:54px;
+    margin-top:20px;
+    padding:14px 18px;
+    border:0;
+    border-radius:11px;
+    background:var(--navy);
+    color:#fff;
+    font-size:17px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+button:hover{
+    background:var(--navy2);
+}
+
+.copybtn{
+    background:#fff;
+    color:var(--navy);
+    border:1px solid var(--navy);
+    min-height:44px;
+    font-size:14px;
+    margin-top:8px;
+}
+
+.copybtn:hover{
+    background:var(--tint);
+    color:var(--navy);
+}
+
+.hidden{
+    display:none !important;
+}
+
+.results{
+    margin-top:22px;
+    display:grid;
+    gap:12px;
+}
+
+.box{
+    padding:17px;
+    border:1px solid var(--border);
+    border-radius:14px;
+    background:#fff;
+    border-left:5px solid var(--green);
+}
+
+.bad{
+    border-left-color:var(--red);
+    background:var(--red-tint);
+}
+
+.warn{
+    border-left-color:var(--orange);
+    background:var(--orange-tint);
+}
+
+.title{
+    color:var(--muted);
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+}
+
+.value{
+    margin-top:4px;
+    color:var(--data);
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-variant-numeric:tabular-nums;
+    font-size:28px;
+    font-weight:700;
+}
+
+.detail{
+    margin-top:7px;
+    color:var(--text-soft);
+    font-size:14px;
+    line-height:1.55;
+    font-variant-numeric:tabular-nums;
+}
+
+.why{
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px dashed var(--border);
+    color:var(--text-soft);
+    font-size:13px;
+    line-height:1.55;
+}
+
+.why b{
+    color:var(--navy);
+}
+
+/* ============ kod kolorów rezystora ============ */
+
+.resistor-visual{
+    display:flex;
+    align-items:center;
+    margin:14px 0 10px;
+}
+
+.resistor-lead{
+    flex:0 0 26px;
+    height:3px;
+    background:#9aa2b1;
+}
+
+.resistor-body{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    gap:5px;
+    background:#ecdfc0;
+    border:1px solid #cbb98c;
+    border-radius:10px;
+    padding:9px 14px;
+}
+
+.colorband{
+    width:11px;
+    height:30px;
+    border-radius:2px;
+    border:1px solid rgba(0,0,0,.2);
+}
+
+.colorcode-caption{
+    color:var(--text-soft);
+    font-size:13px;
+    line-height:1.55;
+}
+
+.colorcode-caption b{
+    color:var(--navy);
+}
+
+/* ============ tabela sąsiednich wartości ============ */
+
+.neighbor-row{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:8px 0;
+    border-bottom:1px dashed var(--border);
+    font-size:14px;
+}
+
+.neighbor-row:last-child{
+    border-bottom:0;
+}
+
+.neighbor-row .tag{
+    font-size:11px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+    color:var(--muted);
+}
+
+/* ================================================================ */
+
+/* ============ karty wzorów ============ */
+
+.formula-heading{
+    margin:20px 0 10px;
+    color:var(--navy);
+    font-size:16px;
+    font-weight:800;
+}
+
+.formula-list{
+    display:grid;
+    gap:10px;
+}
+
+.formula-item{
+    padding:12px 14px;
+    border:1px solid var(--border);
+    border-radius:11px;
+    background:var(--tint);
+}
+
+.formula-eq{
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    color:var(--data);
+    font-weight:700;
+    font-size:15px;
+    font-variant-numeric:tabular-nums;
+}
+
+.formula-desc{
+    margin-top:4px;
+    color:var(--text-soft);
+    font-size:13px;
+    line-height:1.5;
+}
+
+/* ============ zwijane sekcje (legenda, ściąga) ============ */
+
+details.collapsible{
+    margin-top:20px;
+    border:1px solid var(--border);
+    border-radius:13px;
+    background:var(--tint);
+    padding:0;
+    overflow:hidden;
+}
+
+details.collapsible summary{
+    cursor:pointer;
+    list-style:none;
+    padding:16px 18px;
+    color:var(--navy);
+    font-weight:800;
+    font-size:16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+details.collapsible summary::-webkit-details-marker{
+    display:none;
+}
+
+details.collapsible summary::after{
+    content:"▾";
+    font-size:14px;
+    color:var(--muted);
+    transition:transform .15s;
+}
+
+details.collapsible[open] summary::after{
+    transform:rotate(180deg);
+}
+
+details.collapsible .collapsible-body{
+    padding:0 18px 18px;
+}
+
+.legend h4{
+    margin:18px 0 8px;
+    color:var(--navy);
+    font-size:14px;
+}
+
+.legend table{
+    border-collapse:collapse;
+    width:100%;
+}
+
+.legend th,
+.legend td{
+    text-align:left;
+    padding:6px 8px;
+    border-bottom:1px solid var(--border);
+    font-size:14px;
+}
+
+.legend th{
+    color:var(--muted);
+}
+
+.legend th:nth-child(1),
+.legend td:nth-child(1){
+    width:15%;
+}
+
+.legend th:nth-child(2),
+.legend td:nth-child(2){
+    width:45%;
+}
+
+.legend th:nth-child(3),
+.legend td:nth-child(3){
+    width:40%;
+}
+
+.legend th:last-child,
+.legend td:last-child{
+    text-align:right;
+    font-variant-numeric:tabular-nums;
+    padding-right:14px;
+    color:var(--text-soft);
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+
+.legend tr:nth-child(even){
+    background:#ece5d5;
+}
+
+/* ============ ściąga (repetytorium ogólne) ============ */
+
+.cheatsheet h4{
+    margin:16px 0 8px;
+    color:var(--navy);
+    font-size:14px;
+}
+
+.cheatsheet ul{
+    margin:0;
+    padding-left:18px;
+    color:var(--text-soft);
+    font-size:14px;
+    line-height:1.7;
+}
+
+.cheatsheet .formula-eq{
+    display:block;
+    margin:4px 0 10px;
+}
+
+.footer{
+    margin-top:26px;
+    padding-top:16px;
+    border-top:1px solid var(--border);
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+}
+
+@media(max-width:680px){
+
+    main{
+        padding:12px 9px 35px;
+    }
+
+    .card{
+        padding:19px 14px;
+    }
+
+    .grid,
+    .grid3{
+        grid-template-columns:1fr;
+    }
+
+    .full{
+        grid-column:auto;
+    }
+
+    h1{
+        font-size:25px;
+    }
+
+    .logo img{
+        width:165px;
+    }
+
+}

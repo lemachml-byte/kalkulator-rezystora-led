@@ -13,16 +13,17 @@
 }
 
 :root {
-    --navy: #27376d;
-    --navy-dark: #1f2d5a;
-    --blue-light: #eef2fb;
-    --blue-border: #dce4f4;
-    --border: #d8e0eb;
-    --text: #172033;
-    --muted: #68748a;
-    --green: #16803c;
+    --navy: #8a5622;
+    --navy-dark: #6f4419;
+    --blue-light: #f1ece1;
+    --blue-border: #e6dcc4;
+    --border: #e2d9c4;
+    --text: #211d17;
+    --text-soft: #4a4030;
+    --muted: #7a7266;
+    --green: #1f6e57;
     --white: #ffffff;
-    --page: #f3f4f6;
+    --page: #f6f3ee;
 }
 
 body {
@@ -119,7 +120,7 @@ h1 {
     min-height: 220px;
     padding: 28px;
 
-    background: #f8fafc;
+    background: var(--blue-light);
     border: 1px solid var(--border);
     border-radius: 18px;
 
@@ -135,7 +136,7 @@ h1 {
 .calculator-card:hover {
     transform: translateY(-3px);
 
-    border-color: #b8c3dc;
+    border-color: #cdb37c;
 
     box-shadow:
         0 12px 28px rgba(0,0,0,0.09);
@@ -198,38 +199,37 @@ h1 {
 }
 
 /* =========================
-   TRZECI KALKULATOR
+   TRZECI KALKULATOR (najbogatszy zestaw narzędzi —
+   pełnoprawna karta na całą szerokość, nie placeholder)
 ========================= */
 
-.future {
+.featured {
     grid-column: 1 / -1;
 
     min-height: 190px;
 
     background: var(--blue-light);
-    border: 2px dashed #b9c6df;
-
-    cursor: pointer;
+    border: 1px solid var(--blue-border);
 }
 
-.future:hover {
+.featured:hover {
     transform: translateY(-3px);
 
-    border-color: #9eafd0;
+    border-color: #cdb37c;
 
     box-shadow:
         0 12px 28px rgba(0,0,0,0.09);
 }
 
-.future .number {
+.featured .number {
     color: var(--navy);
 }
 
-.future h2 {
+.featured h2 {
     color: var(--navy);
 }
 
-.future .open {
+.featured .open {
     color: var(--navy);
 }
 
@@ -241,13 +241,13 @@ h1 {
     margin-top: 30px;
     padding: 22px;
 
-    background: #f8fafc;
+    background: var(--blue-light);
     border: 1px solid var(--border);
     border-left: 5px solid var(--navy);
 
     border-radius: 14px;
 
-    color: #34415d;
+    color: var(--text-soft);
 
     font-size: 14px;
     line-height: 1.6;
@@ -269,7 +269,7 @@ h1 {
 
     text-align: center;
 
-    color: #94a3b8;
+    color: var(--muted);
 
     font-size: 13px;
 }
@@ -311,7 +311,7 @@ h1 {
         padding: 23px;
     }
 
-    .future {
+    .featured {
         grid-column: auto;
     }
 
@@ -424,7 +424,7 @@ h1 {
         <!-- KALKULATOR 03 -->
 
         <a
-            class="calculator-card future"
+            class="calculator-card featured"
             href="kalkulator-wspolny.html"
         >
 
@@ -438,15 +438,14 @@ h1 {
 
             <p>
 
-                Połączone narzędzie do
-                kompleksowych obliczeń
-                elektrycznych.
-
-                <br><br>
-
-                Kalkulator łączy zależności
-                pomiędzy napięciem, prądem,
-                rezystancją i mocą.
+                Dziesięć narzędzi w jednym miejscu:
+                dzielnik napięcia, rezystor ograniczający,
+                rezystancja zastępcza, kod kolorów —
+                oraz zestaw pod projekty Arduino:
+                rezystor podciągający (pull-up), rezystor
+                bazy tranzystora, przelicznik kodu SMD,
+                żywotność baterii, generator NE555
+                i szerokość ścieżki PCB.
 
             </p>
 
@@ -480,7 +479,10 @@ h1 {
         Każdy kalkulator działa niezależnie.
         Kalkulator wspólny pozwala natomiast
         wykorzystać zależności pomiędzy napięciem,
-        prądem, rezystancją i mocą.
+        prądem, rezystancją i mocą — a dodatkowo
+        zawiera zestaw narzędzi przydatnych
+        w projektach na Arduino i innych
+        mikrokontrolerach.
 
     </div>
 
