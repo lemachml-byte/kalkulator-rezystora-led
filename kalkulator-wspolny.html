@@ -8,578 +8,7 @@
 
 <title>Kalkulator wspólny — LeMaCh</title>
 
-<style>
-
-:root{
-    --navy:#27376d;
-    --navy2:#1f2d5a;
-    --bg:#f3f4f6;
-    --border:#d8e0eb;
-    --text:#172033;
-    --muted:#68748a;
-    --green:#16803c;
-    --red:#b42318;
-    --orange:#b77900;
-}
-
-*{
-    box-sizing:border-box;
-}
-
-body{
-    margin:0;
-    background:var(--bg);
-    color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-}
-
-main{
-    max-width:980px;
-    margin:auto;
-    padding:24px 14px 55px;
-}
-
-.card{
-    background:#fff;
-    border-radius:22px;
-    padding:30px;
-    box-shadow:0 10px 35px rgba(0,0,0,.08);
-}
-
-.back{
-    display:inline-block;
-    margin-bottom:20px;
-    padding:9px 14px;
-    border:1px solid var(--border);
-    border-radius:9px;
-    color:var(--navy);
-    text-decoration:none;
-    font-weight:700;
-}
-
-.logo{
-    text-align:center;
-    margin-bottom:16px;
-}
-
-.logo img{
-    width:190px;
-    max-width:70%;
-}
-
-h1{
-    margin:0;
-    text-align:center;
-    color:var(--navy);
-    font-size:30px;
-}
-
-.subtitle{
-    text-align:center;
-    color:var(--muted);
-    margin:8px 0 20px;
-}
-
-.intro{
-    margin:0 0 26px;
-    padding:16px 18px;
-    border-radius:13px;
-    background:#eef2fb;
-    border-left:4px solid var(--navy);
-    color:#2f3c58;
-    font-size:14.5px;
-    line-height:1.6;
-}
-
-.intro b{
-    color:var(--navy);
-}
-
-.section{
-    margin-top:20px;
-    padding:20px;
-    border:1px solid var(--border);
-    border-radius:15px;
-    background:#fbfcfe;
-}
-
-.section-title{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin:0 0 16px;
-    color:var(--navy);
-    font-size:17px;
-}
-
-.num{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    width:27px;
-    height:27px;
-    border-radius:50%;
-    background:var(--navy);
-    color:#fff;
-    font-size:13px;
-    font-weight:800;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:18px;
-}
-
-.grid3{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:18px;
-}
-
-.full{
-    grid-column:1 / -1;
-}
-
-label{
-    display:block;
-    margin-bottom:7px;
-    font-weight:750;
-}
-
-.label-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:8px;
-    margin-bottom:7px;
-}
-
-.label-row label{
-    margin-bottom:0;
-}
-
-.qbtn{
-    flex:0 0 auto;
-    width:23px;
-    height:23px;
-    min-height:0;
-    margin:0;
-    padding:0;
-    border-radius:50%;
-    border:1px solid var(--navy);
-    background:#fff;
-    color:var(--navy);
-    font-weight:800;
-    font-size:13px;
-    line-height:1;
-    cursor:pointer;
-}
-
-.qbtn:hover{
-    background:var(--navy);
-    color:#fff;
-}
-
-.tip{
-    margin:0 0 10px;
-    padding:10px 12px;
-    border-radius:8px;
-    background:#eef2fb;
-    border-left:3px solid var(--navy);
-    color:#34415d;
-    font-size:13px;
-    line-height:1.55;
-}
-
-.tip.hidden{
-    display:none;
-}
-
-.hint{
-    margin-top:7px;
-    color:var(--muted);
-    font-size:12.5px;
-    line-height:1.5;
-}
-
-input,
-select,
-textarea{
-    width:100%;
-    min-height:48px;
-    padding:11px 13px;
-    border:1px solid #cbd3e1;
-    border-radius:10px;
-    background:#fff;
-    color:var(--text);
-    font-size:16px;
-    font-family:inherit;
-}
-
-textarea{
-    min-height:70px;
-    resize:vertical;
-}
-
-input:focus,
-select:focus,
-textarea:focus{
-    outline:3px solid rgba(39,55,109,.14);
-    border-color:var(--navy);
-}
-
-.converter{
-    margin-top:7px;
-    padding:7px 10px;
-    border-radius:8px;
-    background:#f1f4f9;
-    color:#536078;
-    font-size:13px;
-    line-height:1.45;
-}
-
-.converter strong{
-    color:var(--navy);
-}
-
-button{
-    width:100%;
-    min-height:54px;
-    margin-top:20px;
-    padding:14px 18px;
-    border:0;
-    border-radius:11px;
-    background:var(--navy);
-    color:#fff;
-    font-size:17px;
-    font-weight:800;
-    cursor:pointer;
-}
-
-button:hover{
-    background:var(--navy2);
-}
-
-.copybtn{
-    background:#fff;
-    color:var(--navy);
-    border:1px solid var(--navy);
-    min-height:44px;
-    font-size:14px;
-    margin-top:8px;
-}
-
-.copybtn:hover{
-    background:#eef2fb;
-    color:var(--navy);
-}
-
-.hidden{
-    display:none !important;
-}
-
-.results{
-    margin-top:22px;
-    display:grid;
-    gap:12px;
-}
-
-.box{
-    padding:17px;
-    border:1px solid var(--border);
-    border-radius:14px;
-    background:#fff;
-    border-left:5px solid var(--green);
-}
-
-.bad{
-    border-left-color:var(--red);
-    background:#fff4f4;
-}
-
-.warn{
-    border-left-color:var(--orange);
-    background:#fff8e8;
-}
-
-.title{
-    color:var(--muted);
-    font-size:12px;
-    font-weight:800;
-    letter-spacing:.04em;
-    text-transform:uppercase;
-}
-
-.value{
-    margin-top:4px;
-    color:var(--navy);
-    font-size:28px;
-    font-weight:850;
-}
-
-.detail{
-    margin-top:7px;
-    color:#536078;
-    font-size:14px;
-    line-height:1.55;
-}
-
-.why{
-    margin-top:10px;
-    padding-top:10px;
-    border-top:1px dashed var(--border);
-    color:#3d4a63;
-    font-size:13px;
-    line-height:1.55;
-}
-
-.why b{
-    color:var(--navy);
-}
-
-.resistor-visual{
-    display:flex;
-    align-items:center;
-    margin:14px 0 10px;
-}
-
-.resistor-lead{
-    flex:0 0 26px;
-    height:3px;
-    background:#9aa2b1;
-}
-
-.resistor-body{
-    flex:0 0 auto;
-    display:flex;
-    align-items:center;
-    gap:5px;
-    background:#ecdfc0;
-    border:1px solid #cbb98c;
-    border-radius:10px;
-    padding:9px 14px;
-}
-
-.colorband{
-    width:11px;
-    height:30px;
-    border-radius:2px;
-    border:1px solid rgba(0,0,0,.2);
-}
-
-.colorcode-caption{
-    color:#536078;
-    font-size:13px;
-    line-height:1.55;
-}
-
-.colorcode-caption b{
-    color:var(--navy);
-}
-
-.neighbor-row{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    padding:8px 0;
-    border-bottom:1px dashed var(--border);
-    font-size:14px;
-}
-
-.neighbor-row:last-child{
-    border-bottom:0;
-}
-
-.neighbor-row .tag{
-    font-size:11px;
-    font-weight:800;
-    text-transform:uppercase;
-    letter-spacing:.03em;
-    color:var(--muted);
-}
-
-.formula-heading{
-    margin:20px 0 10px;
-    color:var(--navy);
-    font-size:16px;
-    font-weight:800;
-}
-
-.formula-list{
-    display:grid;
-    gap:10px;
-}
-
-.formula-item{
-    padding:12px 14px;
-    border:1px solid var(--border);
-    border-radius:11px;
-    background:#f5f7fb;
-}
-
-.formula-eq{
-    font-family:Consolas,Monaco,monospace;
-    color:var(--navy);
-    font-weight:800;
-    font-size:15px;
-}
-
-.formula-desc{
-    margin-top:4px;
-    color:#536078;
-    font-size:13px;
-    line-height:1.5;
-}
-
-details.collapsible{
-    margin-top:20px;
-    border:1px solid var(--border);
-    border-radius:13px;
-    background:#f8fafc;
-    padding:0;
-    overflow:hidden;
-}
-
-details.collapsible summary{
-    cursor:pointer;
-    list-style:none;
-    padding:16px 18px;
-    color:var(--navy);
-    font-weight:800;
-    font-size:16px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-}
-
-details.collapsible summary::-webkit-details-marker{
-    display:none;
-}
-
-details.collapsible summary::after{
-    content:"▾";
-    font-size:14px;
-    color:var(--muted);
-    transition:transform .15s;
-}
-
-details.collapsible[open] summary::after{
-    transform:rotate(180deg);
-}
-
-details.collapsible .collapsible-body{
-    padding:0 18px 18px;
-}
-
-.legend h4{
-    margin:18px 0 8px;
-    color:var(--navy);
-    font-size:14px;
-}
-
-.legend table{
-    border-collapse:collapse;
-    width:100%;
-}
-
-.legend th,
-.legend td{
-    text-align:left;
-    padding:6px 8px;
-    border-bottom:1px solid var(--border);
-    font-size:14px;
-}
-
-.legend th{
-    color:var(--muted);
-}
-
-.legend th:nth-child(1),
-.legend td:nth-child(1){
-    width:15%;
-}
-
-.legend th:nth-child(2),
-.legend td:nth-child(2){
-    width:45%;
-}
-
-.legend th:nth-child(3),
-.legend td:nth-child(3){
-    width:40%;
-}
-
-.legend th:last-child,
-.legend td:last-child{
-    text-align:right;
-    font-variant-numeric:tabular-nums;
-    padding-right:14px;
-    color:#3d4a63;
-}
-
-.legend tr:nth-child(even){
-    background:#f4f6fa;
-}
-
-.cheatsheet h4{
-    margin:16px 0 8px;
-    color:var(--navy);
-    font-size:14px;
-}
-
-.cheatsheet ul{
-    margin:0;
-    padding-left:18px;
-    color:#34415d;
-    font-size:14px;
-    line-height:1.7;
-}
-
-.cheatsheet .formula-eq{
-    display:block;
-    margin:4px 0 10px;
-}
-
-.footer{
-    margin-top:26px;
-    padding-top:16px;
-    border-top:1px solid var(--border);
-    text-align:center;
-    color:#8791a3;
-    font-size:12px;
-}
-
-@media(max-width:680px){
-
-    main{
-        padding:12px 9px 35px;
-    }
-
-    .card{
-        padding:19px 14px;
-    }
-
-    .grid,
-    .grid3{
-        grid-template-columns:1fr;
-    }
-
-    .full{
-        grid-column:auto;
-    }
-
-    h1{
-        font-size:25px;
-    }
-
-    .logo img{
-        width:165px;
-    }
-
-}
-
-</style>
+<link rel="stylesheet" href="common.css">
 
 </head>
 
@@ -606,12 +35,12 @@ Kalkulator wspólny
 </h1>
 
 <p class="subtitle">
-Dzielnik napięcia, rezystor ograniczający, rezystancja zastępcza, kod kolorów
+Dzielnik napięcia, rezystor ograniczający, kod kolorów, pull-up, tranzystor, SMD, bateria, NE555, ścieżka PCB
 </p>
 
 
 <div class="intro">
-<b>Po co ten kalkulator?</b> Cztery narzędzia, których nie ma osobno w Kalkulatorze LED ani Ohma: dzielnik napięcia, dobór rezystora ograniczającego prąd dla dowolnego odbiornika (nie tylko LED), rezystancja zastępcza kilku rezystorów oraz dwukierunkowy dekoder kodu kolorów.
+<b>Po co ten kalkulator?</b> Dziesięć narzędzi, których nie ma osobno w Kalkulatorze LED ani Ohma: dzielnik napięcia, dobór rezystora ograniczającego prąd dla dowolnego odbiornika (nie tylko LED), rezystancja zastępcza kilku rezystorów, dwukierunkowy dekoder kodu kolorów, rezystor podciągający, rezystor bazy tranzystora, przelicznik kodu SMD, żywotność baterii, generator NE555 oraz szerokość ścieżki PCB.
 </div>
 
 
@@ -633,7 +62,13 @@ Co chcesz obliczyć?
 <b>Dzielnik napięcia</b> — jak rozkłada się napięcie na dwóch rezystorach w szeregu.<br>
 <b>Rezystor ograniczający</b> — dobór rezystora dla dowolnego odbiornika o znanym napięciu i prądzie (silnik, przekaźnik, czujnik, dioda...).<br>
 <b>Rezystancja zastępcza</b> — ile wyjdzie z kilku rezystorów połączonych razem.<br>
-<b>Kod kolorów</b> — odczytaj wartość z pasków na rezystorze albo znajdź paski dla swojej wartości.
+<b>Kod kolorów</b> — odczytaj wartość z pasków na rezystorze albo znajdź paski dla swojej wartości.<br>
+<b>Rezystor podciągający</b> — dobór pull-up dla magistrali I2C albo GPIO/przycisku.<br>
+<b>Rezystor bazy tranzystora</b> — sterowanie przekaźnikiem lub silnikiem z Arduino.<br>
+<b>Przelicznik kodu SMD</b> — nadruk na rezystorze SMD ↔ wartość w omach.<br>
+<b>Żywotność baterii</b> — szacowany czas działania układu na baterii.<br>
+<b>Generator NE555</b> — częstotliwość i wypełnienie układu astabilnego.<br>
+<b>Szerokość ścieżki PCB</b> — minimalna szerokość ścieżki dla zadanego prądu.
 </div>
 
 <select id="mode" onchange="setMode()">
@@ -660,6 +95,22 @@ Rezystor podciągający (pull-up)
 
 <option value="TRANS">
 Rezystor bazy tranzystora (sterowanie przekaźnikiem/silnikiem)
+</option>
+
+<option value="SMD">
+Przelicznik kodu SMD rezystorów
+</option>
+
+<option value="BATTERY">
+Żywotność baterii
+</option>
+
+<option value="NE555">
+Generator NE555 (astabilny)
+</option>
+
+<option value="TRACE">
+Szerokość ścieżki PCB
 </option>
 
 </select>
@@ -986,6 +437,249 @@ Wzmocnienie prądowe (beta) znajdziesz w karcie katalogowej tranzystora — dla 
 </section>
 
 
+<!-- =====================================================
+2F. POLA: PRZELICZNIK KODU SMD REZYSTORÓW
+===================================================== -->
+
+<section class="section hidden" id="fields-smd">
+
+<h2 class="section-title">
+<span class="num">2</span>
+Dane wejściowe
+</h2>
+
+<div class="label-row">
+<label for="smd-mode">Kierunek</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-smd-mode')" aria-label="Wyjaśnienie: kierunek przelicznika SMD">?</button>
+</div>
+
+<div id="tip-smd-mode" class="tip hidden">
+<b>Kod → wartość</b>: masz rezystor SMD z nadrukiem (np. 103, 4R7, 01A), a kalkulator poda jego wartość.<br>
+<b>Wartość → kod</b>: znasz wartość rezystancji, a kalkulator wygeneruje nadruk do wyszukania na taśmie/w pudełku.
+</div>
+
+<select id="smd-mode" onchange="setSmdMode()">
+<option value="TOVALUE">Kod → wartość</option>
+<option value="TOCODE">Wartość → kod</option>
+</select>
+
+<div id="smd-tovalue" style="margin-top:18px;">
+
+<div class="label-row">
+<label for="smd-code">Nadruk na rezystorze SMD</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-smd-code')" aria-label="Wyjaśnienie: format nadruku SMD">?</button>
+</div>
+
+<div id="tip-smd-code" class="tip hidden">
+Obsługiwane formaty: <b>3-cyfrowy</b> (np. 103 = 10 × 10³ Ω = 10 kΩ), <b>4-cyfrowy</b> (np. 1002 = 100 × 10² Ω = 10 kΩ, dokładniejszy), <b>notacja R</b> dla wartości poniżej 10 Ω (np. 4R7 = 4,7 Ω, R47 = 0,47 Ω) oraz <b>EIA-96</b> — 2 cyfry + litera mnożnika (np. 01A = 100 Ω).
+</div>
+
+<input id="smd-code" type="text" placeholder="np. 103, 4R7, 01A" onkeydown="if(event.key==='Enter'){calc();}">
+
+</div>
+
+<div id="smd-tocode" class="hidden" style="margin-top:18px;">
+
+<div class="grid">
+
+<div>
+<label for="smd-value">Rezystancja [Ω]</label>
+<input id="smd-value" type="text" inputmode="decimal" placeholder="np. 4700" onkeydown="if(event.key==='Enter'){calc();}">
+</div>
+
+<div>
+<label for="smd-format">Format kodu</label>
+<select id="smd-format">
+<option value="3">3-cyfrowy (E24)</option>
+<option value="4">4-cyfrowy (E96)</option>
+<option value="EIA96">EIA-96 (1%)</option>
+</select>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+2G. POLA: ŻYWOTNOŚĆ BATERII
+===================================================== -->
+
+<section class="section hidden" id="fields-battery">
+
+<h2 class="section-title">
+<span class="num">2</span>
+Dane wejściowe
+</h2>
+
+<div class="grid">
+
+<div>
+<div class="label-row">
+<label for="bat-capacity">Pojemność baterii [mAh]</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-bat-capacity')" aria-label="Wyjaśnienie: pojemność baterii">?</button>
+</div>
+<div id="tip-bat-capacity" class="tip hidden">
+Znajdziesz na obudowie baterii/akumulatora lub w karcie katalogowej powerbanku/modułu zasilania. Popularne przykłady: 18650 ≈ 2500–3500 mAh, AA (alkaliczna) ≈ 2000–2500 mAh, mały LiPo do ESP32 ≈ 500–2000 mAh.
+</div>
+<input id="bat-capacity" type="text" inputmode="decimal" placeholder="np. 2000" onkeydown="if(event.key==='Enter'){calc();}">
+</div>
+
+<div>
+<div class="label-row">
+<label for="bat-current">Średni pobór prądu [mA]</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-bat-current')" aria-label="Wyjaśnienie: pobór prądu">?</button>
+</div>
+<div id="tip-bat-current" class="tip hidden">
+Średni prąd pobierany przez cały układ (mikrokontroler + czujniki + Wi-Fi itd.), nie tylko szczytowy. Jeśli układ często „śpi” (deep sleep) i budzi się okresowo, policz średnią ważoną czasem — albo zmierz multimetrem w trybie uśredniania.
+</div>
+<input id="bat-current" type="text" inputmode="decimal" placeholder="np. 80" onkeydown="if(event.key==='Enter'){calc();}">
+</div>
+
+<div class="full">
+<div class="label-row">
+<label for="bat-derate">Margines bezpieczeństwa</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-bat-derate')" aria-label="Wyjaśnienie: margines bezpieczeństwa">?</button>
+</div>
+<div id="tip-bat-derate" class="tip hidden">
+Realna pojemność baterii jest zwykle niższa niż nominalna (starzenie, temperatura, spadek napięcia pod obciążeniem, sprawność przetwornicy). Zapas 20–30% daje bardziej realistyczny szacunek niż liczenie z nominalnej pojemności wprost.
+</div>
+<select id="bat-derate">
+<option value="0">Brak (optymistyczne, teoretyczne maksimum)</option>
+<option value="15">15%</option>
+<option value="30" selected>30% (zalecane, realistyczne)</option>
+<option value="50">50% (ostrożne, praca w trudnych warunkach)</option>
+</select>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+2H. POLA: GENERATOR NE555 (ASTABILNY)
+===================================================== -->
+
+<section class="section hidden" id="fields-ne555">
+
+<h2 class="section-title">
+<span class="num">2</span>
+Dane wejściowe
+</h2>
+
+<div class="grid">
+
+<div>
+<div class="label-row">
+<label for="ne-r1">Rezystor R1 [kΩ]</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-ne-r1')" aria-label="Wyjaśnienie: R1">?</button>
+</div>
+<div id="tip-ne-r1" class="tip hidden">
+R1 łączy zasilanie Vcc z połączonymi razem nóżkami 7 (rozładowanie) i 8. Wpływa na czas stanu wysokiego.
+</div>
+<input id="ne-r1" type="text" inputmode="decimal" placeholder="np. 1" onkeydown="if(event.key==='Enter'){calc();}">
+</div>
+
+<div>
+<div class="label-row">
+<label for="ne-r2">Rezystor R2 [kΩ]</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-ne-r2')" aria-label="Wyjaśnienie: R2">?</button>
+</div>
+<div id="tip-ne-r2" class="tip hidden">
+R2 łączy nóżkę 7 z nóżkami 2 i 6. Wpływa zarówno na czas stanu wysokiego, jak i niskiego.
+</div>
+<input id="ne-r2" type="text" inputmode="decimal" placeholder="np. 10" onkeydown="if(event.key==='Enter'){calc();}">
+</div>
+
+<div class="full">
+<div class="label-row">
+<label for="ne-c">Kondensator C [µF]</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-ne-c')" aria-label="Wyjaśnienie: kondensator C">?</button>
+</div>
+<div id="tip-ne-c" class="tip hidden">
+Kondensator czasowy między nóżką 2/6 a masą. Razem z R1 i R2 wyznacza częstotliwość generowanego przebiegu prostokątnego.
+</div>
+<input id="ne-c" type="text" inputmode="decimal" placeholder="np. 10" onkeydown="if(event.key==='Enter'){calc();}">
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+2I. POLA: SZEROKOŚĆ ŚCIEŻKI PCB
+===================================================== -->
+
+<section class="section hidden" id="fields-trace">
+
+<h2 class="section-title">
+<span class="num">2</span>
+Dane wejściowe
+</h2>
+
+<div class="grid">
+
+<div>
+<div class="label-row">
+<label for="tc-current">Prąd w ścieżce [A]</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-tc-current')" aria-label="Wyjaśnienie: prąd w ścieżce">?</button>
+</div>
+<div id="tip-tc-current" class="tip hidden">
+Maksymalny prąd, jaki ta ścieżka będzie musiała przewodzić w normalnej pracy.
+</div>
+<input id="tc-current" type="text" inputmode="decimal" placeholder="np. 1.5" onkeydown="if(event.key==='Enter'){calc();}">
+</div>
+
+<div>
+<div class="label-row">
+<label for="tc-rise">Dopuszczalny wzrost temperatury [°C]</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-tc-rise')" aria-label="Wyjaśnienie: wzrost temperatury">?</button>
+</div>
+<div id="tip-tc-rise" class="tip hidden">
+O ile ścieżka może się nagrzać ponad temperaturę otoczenia. Typowo przyjmuje się 10°C (bezpiecznie) do 20°C (bardziej agresywnie, mniej miejsca).
+</div>
+<input id="tc-rise" type="text" inputmode="decimal" placeholder="np. 10" onkeydown="if(event.key==='Enter'){calc();}">
+</div>
+
+<div>
+<div class="label-row">
+<label for="tc-thickness">Grubość miedzi</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-tc-thickness')" aria-label="Wyjaśnienie: grubość miedzi">?</button>
+</div>
+<div id="tip-tc-thickness" class="tip hidden">
+Standardowa grubość miedzi na warstwie PCB dla hobbystycznych projektów to 1 oz (35 µm). 2 oz (70 µm) stosuje się przy większych prądach.
+</div>
+<select id="tc-thickness">
+<option value="0.5">0,5 oz (17,5 µm)</option>
+<option value="1" selected>1 oz (35 µm)</option>
+<option value="2">2 oz (70 µm)</option>
+<option value="3">3 oz (105 µm)</option>
+</select>
+</div>
+
+<div>
+<div class="label-row">
+<label for="tc-layer">Warstwa ścieżki</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-tc-layer')" aria-label="Wyjaśnienie: warstwa ścieżki">?</button>
+</div>
+<div id="tip-tc-layer" class="tip hidden">
+Ścieżki na zewnętrznej warstwie (top/bottom) chłodzą się lepiej niż ścieżki wewnętrzne (między warstwami) — te drugie wymagają większej szerokości dla tego samego prądu.
+</div>
+<select id="tc-layer">
+<option value="external" selected>Zewnętrzna (top/bottom)</option>
+<option value="internal">Wewnętrzna</option>
+</select>
+</div>
+
+</div>
+
+</section>
+
+
 <button onclick="calc()">
 OBLICZ
 </button>
@@ -1041,6 +735,26 @@ Wzory używane w kalkulatorze
 <div class="formula-item">
 <div class="formula-eq">Rb = (Vcc − 0,7 V) / Ib,&nbsp; Ib = (Ic / hFE) × 2</div>
 <div class="formula-desc">Rezystor bazy tranzystora NPN sterującego przekaźnikiem/silnikiem, z dwukrotnym marginesem nasycenia.</div>
+</div>
+
+<div class="formula-item">
+<div class="formula-eq">Kod SMD: [cyfry][wykładnik] — np. 103 = 10 × 10³ Ω</div>
+<div class="formula-desc">Ostatnia cyfra nadruku SMD to wykładnik mnożnika, pozostałe to cyfry znaczące wartości.</div>
+</div>
+
+<div class="formula-item">
+<div class="formula-eq">t = Cefektywna / I,&nbsp; Cefektywna = Cnominalna × (1 − margines)</div>
+<div class="formula-desc">Szacowany czas działania na baterii, z uwzględnieniem marginesu bezpieczeństwa na straty.</div>
+</div>
+
+<div class="formula-item">
+<div class="formula-eq">f = 1,44 / ((R1 + 2×R2) × C)</div>
+<div class="formula-desc">Częstotliwość generatora astabilnego NE555.</div>
+</div>
+
+<div class="formula-item">
+<div class="formula-eq">A = (I / (k × ΔT<sup>0,44</sup>))<sup>1/0,725</sup></div>
+<div class="formula-desc">Minimalne pole przekroju ścieżki PCB wg IPC-2221 dla zadanego prądu i dopuszczalnego wzrostu temperatury.</div>
 </div>
 
 </div>
@@ -1115,6 +829,28 @@ STAŁA LEGENDA
 <tr><td>kJ</td><td>kilodżul</td><td>1 000 J</td></tr>
 <tr><td>Wh</td><td>watogodzina</td><td>3 600 J</td></tr>
 <tr><td>kWh</td><td>kilowatogodzina</td><td>3 600 000 J</td></tr>
+</table>
+
+<h4>Pojemność elektryczna (kondensator) — C</h4>
+<table>
+<tr><th>Symbol</th><th>Nazwa</th><th>Wartość</th></tr>
+<tr><td>pF</td><td>pikofarad</td><td>0,000000000001 F</td></tr>
+<tr><td>nF</td><td>nanofarad</td><td>0,000000001 F</td></tr>
+<tr><td>µF</td><td>mikrofarad</td><td>0,000001 F</td></tr>
+<tr><td>F</td><td>farad</td><td>1 F</td></tr>
+</table>
+
+<h4>Pojemność baterii — Ah</h4>
+<table>
+<tr><th>Symbol</th><th>Nazwa</th><th>Wartość</th></tr>
+<tr><td>mAh</td><td>miliamperogodzina</td><td>0,001 Ah</td></tr>
+<tr><td>Ah</td><td>amperogodzina</td><td>1 Ah = prąd 1 A płynący przez 1 h</td></tr>
+</table>
+
+<h4>Wzmocnienie prądowe tranzystora — hFE</h4>
+<table>
+<tr><th>Symbol</th><th>Nazwa</th><th>Wartość</th></tr>
+<tr><td>hFE (β)</td><td>wzmocnienie prądowe (beta)</td><td>wielkość bezwymiarowa — Ic / Ib, typowo 100–300</td></tr>
 </table>
 
 </div>
@@ -1269,6 +1005,10 @@ function setMode(){
     document.getElementById("fields-color").classList.add("hidden");
     document.getElementById("fields-pullup").classList.add("hidden");
     document.getElementById("fields-trans").classList.add("hidden");
+    document.getElementById("fields-smd").classList.add("hidden");
+    document.getElementById("fields-battery").classList.add("hidden");
+    document.getElementById("fields-ne555").classList.add("hidden");
+    document.getElementById("fields-trace").classList.add("hidden");
     document.getElementById("ser-params").classList.add("hidden");
     document.getElementById("field3-wrap").classList.remove("hidden");
 
@@ -1313,6 +1053,38 @@ function setMode(){
             document.getElementById("tr-hfe").value = "100";
         }
     }
+
+    if(mode === "SMD"){
+        document.getElementById("fields-smd").classList.remove("hidden");
+        setSmdMode();
+    }
+
+    if(mode === "BATTERY"){
+        document.getElementById("fields-battery").classList.remove("hidden");
+    }
+
+    if(mode === "NE555"){
+        document.getElementById("fields-ne555").classList.remove("hidden");
+    }
+
+    if(mode === "TRACE"){
+        document.getElementById("fields-trace").classList.remove("hidden");
+        if(!document.getElementById("tc-rise").value){
+            document.getElementById("tc-rise").value = "10";
+        }
+    }
+}
+
+
+function setSmdMode(){
+
+    const sm = document.getElementById("smd-mode").value;
+
+    document.getElementById("smd-tovalue").classList.toggle("hidden", sm !== "TOVALUE");
+    document.getElementById("smd-tocode").classList.toggle("hidden", sm !== "TOCODE");
+
+    document.getElementById("res").innerHTML = "";
+    lastResultText = "";
 }
 
 
@@ -1409,6 +1181,10 @@ function calc(){
     if(mode === "COLOR"){ calcCOLOR(); return; }
     if(mode === "PULLUP"){ calcPULLUP(); return; }
     if(mode === "TRANS"){ calcTRANS(); return; }
+    if(mode === "SMD"){ calcSMD(); return; }
+    if(mode === "BATTERY"){ calcBATTERY(); return; }
+    if(mode === "NE555"){ calcNE555(); return; }
+    if(mode === "TRACE"){ calcTRACE(); return; }
 }
 
 
@@ -2042,6 +1818,409 @@ function calcTRANS(){
 
 
 /* =====================================================
+TRYB: PRZELICZNIK KODU SMD REZYSTORÓW
+
+Obsługiwane formaty:
+- notacja R (np. 4R7 = 4,7 Ω) — dla wartości < 10 Ω
+- kod 3-cyfrowy (np. 103 = 10 × 10³ Ω) — 2 cyfry znaczące
+- kod 4-cyfrowy (np. 1002 = 100 × 10² Ω) — 3 cyfry znaczące
+- EIA-96 (np. 01A = 100 Ω) — 2 cyfry (indeks w tabeli E96) + litera mnożnika
+===================================================== */
+
+const SMD_MULT = {
+    Z:0.001,
+    Y:0.01, R:0.01,
+    X:0.1, S:0.1,
+    A:1,
+    B:10, H:10,
+    C:100,
+    D:1000,
+    E:10000,
+    F:100000
+};
+
+const EIA96_LETTER_BY_EXP = {
+    "-3":"Z", "-2":"Y", "-1":"X", "0":"A",
+    "1":"B", "2":"C", "3":"D", "4":"E", "5":"F"
+};
+
+function decodeSmdCode(raw){
+
+    const code = (raw || "").trim().toUpperCase();
+
+    if(!code){ return null; }
+
+    /* notacja R: np. 4R7, R47, 0R47 */
+    if(/^\d*R\d+$/.test(code)){
+        const parts = code.split("R");
+        const value = parseFloat((parts[0] || "0") + "." + parts[1]);
+        return { value, kind:"Notacja R (bezpośredni zapis, dla wartości poniżej 10 Ω)" };
+    }
+
+    /* EIA-96: 2 cyfry (indeks w tabeli E96) + litera mnożnika */
+    if(/^\d{2}[A-Z]$/.test(code)){
+        const idx = parseInt(code.slice(0,2), 10);
+        const letter = code[2];
+        const mult = SMD_MULT[letter];
+        if(idx>=1 && idx<=96 && mult!==undefined){
+            const base = E96[idx-1];
+            return { value: base*mult, kind:`EIA-96 (baza ${fmt(base)} z tabeli E96, mnożnik ${letter} = ×${fmt(mult)})` };
+        }
+        return null;
+    }
+
+    /* kod 3- lub 4-cyfrowy: ostatnia cyfra to wykładnik mnożnika */
+    if(/^\d{3,4}$/.test(code)){
+        const digits = code.slice(0,-1);
+        const exp = parseInt(code.slice(-1), 10);
+        const value = parseInt(digits,10) * Math.pow(10, exp);
+        const kind = code.length===3
+            ? "Kod 3-cyfrowy (2 cyfry znaczące + wykładnik mnożnika)"
+            : "Kod 4-cyfrowy (3 cyfry znaczące + wykładnik mnożnika, dokładniejszy)";
+        return { value, kind };
+    }
+
+    return null;
+}
+
+function formatRNotation(value, numDigits){
+
+    let s = value.toPrecision(numDigits);
+
+    if(s.indexOf(".")===-1){ s = s + "."; }
+
+    const parts = s.split(".");
+    const ip = parts[0];
+    const fp = (parts[1] || "").padEnd(Math.max(0, numDigits - ip.length), "0");
+
+    return `${ip}R${fp}`;
+}
+
+function encodeSmdDigits(value, numDigits){
+
+    if(!Number.isFinite(value) || value<=0){ return null; }
+
+    if(value < 10){
+        return { code: formatRNotation(value, numDigits), encodedValue: value };
+    }
+
+    const code = colorCodeFromValue(value, numDigits, "5");
+    if(!code){ return null; }
+
+    const mExp = code.multBand.exp;
+    if(mExp < 0 || mExp > 9){ return null; }
+
+    const digitsStr = code.digitBands.map(b => b.digit).join("");
+    return { code: digitsStr + String(mExp), encodedValue: code.encodedValue };
+}
+
+function encodeEIA96(value){
+
+    if(!Number.isFinite(value) || value<=0){ return null; }
+
+    const exponent = Math.floor(Math.log10(value));
+    const seg = value / Math.pow(10, exponent);
+
+    let bestIdx = 0, bestDiff = Infinity;
+    E96.forEach((v,i) => {
+        const diff = Math.abs(v-seg);
+        if(diff < bestDiff){ bestDiff = diff; bestIdx = i; }
+    });
+
+    const letter = EIA96_LETTER_BY_EXP[String(exponent)];
+    if(!letter){ return null; }
+
+    const encodedValue = E96[bestIdx] * Math.pow(10, exponent);
+    const code = String(bestIdx+1).padStart(2,"0") + letter;
+
+    return { code, encodedValue };
+}
+
+function calcSMD(){
+    const sm = document.getElementById("smd-mode").value;
+    if(sm === "TOVALUE"){ calcSmdToValue(); return; }
+    if(sm === "TOCODE"){ calcSmdToCode(); return; }
+}
+
+function calcSmdToValue(){
+
+    const raw = document.getElementById("smd-code").value;
+    const decoded = decodeSmdCode(raw);
+
+    if(!decoded){
+        showError("Nie rozpoznano formatu kodu SMD. Obsługiwane: 3-cyfrowy (np. 103), 4-cyfrowy (np. 1002), notacja R (np. 4R7) oraz EIA-96 (np. 01A).");
+        return;
+    }
+
+    let html = "";
+
+    html += box(
+        "ODCZYTANA WARTOŚĆ",
+        `${fmt(decoded.value)} Ω`,
+        `Format: ${decoded.kind}`,
+        "good",
+        `Sprawdź w karcie katalogowej, czy Twój rezystor faktycznie używa tego formatu kodowania — przy bardzo małych obudowach (0201, 01005) producenci czasem w ogóle pomijają nadruk.`
+    );
+
+    html =
+        `<button type="button" id="copyBtn" class="copybtn" onclick="copyResults()">Kopiuj wynik</button>` +
+        html;
+
+    document.getElementById("res").innerHTML = html;
+
+    lastResultText =
+        `Kalkulator wspólny — Przelicznik kodu SMD (Kod→wartość) — LeMaCh\n\n` +
+        `Nadruk: ${raw.trim().toUpperCase()}\n` +
+        `Format: ${decoded.kind}\n` +
+        `Wartość: ${fmt(decoded.value)} Ω`;
+
+    saveState();
+}
+
+function calcSmdToCode(){
+
+    const value = num(document.getElementById("smd-value").value);
+    const format = document.getElementById("smd-format").value;
+
+    if(!Number.isFinite(value) || value<=0){
+        showError("Wpisz poprawną wartość rezystancji (większą od zera).");
+        return;
+    }
+
+    const result = format==="EIA96"
+        ? encodeEIA96(value)
+        : encodeSmdDigits(value, format==="3" ? 2 : 3);
+
+    if(!result){
+        showError("Nie udało się zakodować tej wartości w wybranym formacie — spróbuj innego formatu (np. inny zakres wykładnika dla EIA-96, albo kod 4-cyfrowy zamiast 3-cyfrowego).");
+        return;
+    }
+
+    const roundingNote = Math.abs(result.encodedValue-value) > 1e-9
+        ? `Wartość zaokrąglona do najbliższej dostępnej w tym formacie: ${fmt(result.encodedValue)} Ω (wpisana: ${fmt(value)} Ω).`
+        : `Dokładne odwzorowanie wpisanej wartości.`;
+
+    let html = "";
+
+    html += box(
+        "NADRUK NA REZYSTORZE",
+        result.code,
+        roundingNote,
+        "good",
+        `Szukaj rezystora z dokładnie takim nadrukiem — orientacja nadruku na taśmie bywa różna, więc czytaj cyfry niezależnie od obrotu komponentu.`
+    );
+
+    html =
+        `<button type="button" id="copyBtn" class="copybtn" onclick="copyResults()">Kopiuj wynik</button>` +
+        html;
+
+    document.getElementById("res").innerHTML = html;
+
+    const formatLabel = format==="EIA96" ? "EIA-96" : (format + "-cyfrowy");
+
+    lastResultText =
+        `Kalkulator wspólny — Przelicznik kodu SMD (Wartość→kod) — LeMaCh\n\n` +
+        `Wpisana wartość: ${fmt(value)} Ω\n` +
+        `Nadruk (${formatLabel}): ${result.code}\n` +
+        `Zakodowana wartość: ${fmt(result.encodedValue)} Ω`;
+
+    saveState();
+}
+
+
+/* =====================================================
+TRYB: ŻYWOTNOŚĆ BATERII
+===================================================== */
+
+function calcBATTERY(){
+
+    const capacity = num(document.getElementById("bat-capacity").value);
+    const current = num(document.getElementById("bat-current").value);
+    const derate = num(document.getElementById("bat-derate").value);
+
+    if(
+        !Number.isFinite(capacity) || capacity<=0 ||
+        !Number.isFinite(current) || current<=0
+    ){
+        showError("Wpisz poprawną pojemność baterii i średni pobór prądu (większe od zera).");
+        return;
+    }
+
+    const effectiveCapacity = capacity * (1 - derate/100);
+    const hours = effectiveCapacity / current;
+    const days = hours / 24;
+
+    const hoursText = hours < 1 ? `${fmt(hours*60)} min` : `${fmt(hours)} h`;
+    const daysText = days >= 1 ? ` (≈ ${fmt(days)} dni)` : "";
+
+    let html = "";
+
+    html += box(
+        "SZACOWANY CZAS DZIAŁANIA",
+        `${hoursText}${daysText}`,
+        `
+        Efektywna pojemność: ${fmt(capacity)} mAh × (1 − ${fmt(derate)}%) = ${fmt(effectiveCapacity)} mAh
+        <br>
+        Czas = ${fmt(effectiveCapacity)} mAh / ${fmt(current)} mA = ${fmt(hours)} h
+        `,
+        "good",
+        derate===0
+            ? `To teoretyczne maksimum liczone wprost z nominalnej pojemności, bez marginesu — w praktyce realny czas będzie krótszy (starzenie ogniwa, spadek napięcia, sprawność przetwornicy). Rozważ margines 15–30% dla realistycznej oceny.`
+            : `Margines ${fmt(derate)}% uwzględnia typowe straty: starzenie ogniwa, spadek napięcia pod obciążeniem i sprawność przetwornicy zasilającej. Rzeczywisty czas w Twoim projekcie zależy też od tego, jak często układ „śpi” (deep sleep) między pomiarami.`
+    );
+
+    html =
+        `<button type="button" id="copyBtn" class="copybtn" onclick="copyResults()">Kopiuj wynik</button>` +
+        html;
+
+    document.getElementById("res").innerHTML = html;
+
+    lastResultText =
+        `Kalkulator wspólny — Żywotność baterii — LeMaCh\n\n` +
+        `Pojemność: ${fmt(capacity)} mAh, pobór: ${fmt(current)} mA, margines: ${fmt(derate)}%\n` +
+        `Efektywna pojemność: ${fmt(effectiveCapacity)} mAh\n` +
+        `Szacowany czas działania: ${hoursText}${daysText}`;
+
+    saveState();
+}
+
+
+/* =====================================================
+TRYB: GENERATOR NE555 (KONFIGURACJA ASTABILNA)
+
+f = 1,44 / ((R1 + 2×R2) × C)
+Stan wysoki: 0,693 × (R1+R2) × C — ładowanie przez R1 i R2
+Stan niski: 0,693 × R2 × C — rozładowanie tylko przez R2
+===================================================== */
+
+function calcNE555(){
+
+    const R1k = num(document.getElementById("ne-r1").value);
+    const R2k = num(document.getElementById("ne-r2").value);
+    const CuF = num(document.getElementById("ne-c").value);
+
+    if(
+        !Number.isFinite(R1k) || R1k<=0 ||
+        !Number.isFinite(R2k) || R2k<=0 ||
+        !Number.isFinite(CuF) || CuF<=0
+    ){
+        showError("Uzupełnij R1, R2 i C wartościami większymi od zera.");
+        return;
+    }
+
+    const R1 = R1k * 1000;
+    const R2 = R2k * 1000;
+    const C = CuF * 1e-6;
+
+    const f = 1.44 / ((R1 + 2*R2) * C);
+    const T = 1 / f;
+    const Thigh = 0.693 * (R1+R2) * C;
+    const Tlow = 0.693 * R2 * C;
+    const duty = (Thigh/T) * 100;
+
+    const freqText = f>=1000 ? `${fmt(f/1000)} kHz` : `${fmt(f)} Hz`;
+    const fmtTime = s => s<0.001 ? `${fmt(s*1e6)} µs` : s<1 ? `${fmt(s*1000)} ms` : `${fmt(s)} s`;
+    const periodText = fmtTime(T);
+    const thighText = fmtTime(Thigh);
+    const tlowText = fmtTime(Tlow);
+
+    let html = "";
+
+    html += box(
+        "CZĘSTOTLIWOŚĆ",
+        freqText,
+        `f = 1,44 / ((R1 + 2×R2) × C) = 1,44 / ((${fmt(R1)} Ω + 2×${fmt(R2)} Ω) × ${fmt(C)} F) = ${fmt(f)} Hz`,
+        "good"
+    );
+
+    html += box(
+        "OKRES I WYPEŁNIENIE",
+        `${fmt(duty)} %`,
+        `
+        Okres T = 1/f = ${periodText}
+        <br>
+        Stan wysoki: ${thighText}, stan niski: ${tlowText}
+        `,
+        "good",
+        `Klasyczny układ astabilny NE555 fizycznie nie schodzi z wypełnieniem poniżej 50% — kondensator zawsze ładuje się przez R1+R2, a rozładowuje tylko przez R2, więc stan wysoki jest zawsze co najmniej tak długi jak niski. Wypełnienie poniżej 50% wymaga diody równolegle do R2.`
+    );
+
+    html =
+        `<button type="button" id="copyBtn" class="copybtn" onclick="copyResults()">Kopiuj wynik</button>` +
+        html;
+
+    document.getElementById("res").innerHTML = html;
+
+    lastResultText =
+        `Kalkulator wspólny — Generator NE555 (astabilny) — LeMaCh\n\n` +
+        `R1: ${fmt(R1k)} kΩ, R2: ${fmt(R2k)} kΩ, C: ${fmt(CuF)} µF\n` +
+        `Częstotliwość: ${freqText}\n` +
+        `Okres: ${periodText} (stan wysoki: ${thighText}, stan niski: ${tlowText})\n` +
+        `Wypełnienie: ${fmt(duty)} %`;
+
+    saveState();
+}
+
+
+/* =====================================================
+TRYB: SZEROKOŚĆ ŚCIEŻKI PCB (wg IPC-2221)
+
+A [mils²] = (I / (k × ΔT^0,44))^(1/0,725)
+k = 0,048 dla ścieżki zewnętrznej, 0,024 dla wewnętrznej
+===================================================== */
+
+function calcTRACE(){
+
+    const current = num(document.getElementById("tc-current").value);
+    const rise = num(document.getElementById("tc-rise").value);
+    const thicknessOz = num(document.getElementById("tc-thickness").value);
+    const layer = document.getElementById("tc-layer").value;
+
+    if(
+        !Number.isFinite(current) || current<=0 ||
+        !Number.isFinite(rise) || rise<=0
+    ){
+        showError("Wpisz poprawny prąd w ścieżce i dopuszczalny wzrost temperatury (większe od zera).");
+        return;
+    }
+
+    const k = layer==="internal" ? 0.024 : 0.048;
+    const areaMils2 = Math.pow(current / (k * Math.pow(rise, 0.44)), 1/0.725);
+
+    const thicknessMils = thicknessOz * 1.378;
+    const widthMils = areaMils2 / thicknessMils;
+    const widthMm = widthMils * 0.0254;
+
+    let html = "";
+
+    html += box(
+        "MINIMALNA SZEROKOŚĆ ŚCIEŻKI",
+        `${fmt(widthMm)} mm`,
+        `
+        Pole przekroju: A = (I / (k × ΔT^0,44))^(1/0,725) = ${fmt(areaMils2)} mils²
+        <br>
+        Szerokość = A / grubość miedzi (${fmt(thicknessMils)} mils) = ${fmt(widthMils)} mils = ${fmt(widthMm)} mm
+        `,
+        "good",
+        `Wzór wg normy IPC-2221 dla projektowania PCB. k = ${k} dla ścieżki ${layer==="internal"?"wewnętrznej":"zewnętrznej"} — ścieżki wewnętrzne odprowadzają ciepło gorzej niż zewnętrzne, więc przy tym samym prądzie wymagają większej szerokości.`
+    );
+
+    html =
+        `<button type="button" id="copyBtn" class="copybtn" onclick="copyResults()">Kopiuj wynik</button>` +
+        html;
+
+    document.getElementById("res").innerHTML = html;
+
+    lastResultText =
+        `Kalkulator wspólny — Szerokość ścieżki PCB — LeMaCh\n\n` +
+        `Prąd: ${fmt(current)} A, wzrost temp.: ${fmt(rise)} °C, miedź: ${fmt(thicknessOz)} oz, warstwa: ${layer==="internal"?"wewnętrzna":"zewnętrzna"}\n` +
+        `Minimalna szerokość: ${fmt(widthMm)} mm (${fmt(widthMils)} mils)`;
+
+    saveState();
+}
+
+
+/* =====================================================
 ZAPAMIĘTYWANIE STANU (localStorage) — realna strona,
 nie artefakt czatu, więc localStorage jest tu bezpieczny.
 ===================================================== */
@@ -2084,6 +2263,32 @@ function saveState(){
             state.trVcc = document.getElementById("tr-vcc").value;
             state.trIc = document.getElementById("tr-ic").value;
             state.trHfe = document.getElementById("tr-hfe").value;
+        }
+
+        if(mode === "SMD"){
+            state.smdMode = document.getElementById("smd-mode").value;
+            state.smdCode = document.getElementById("smd-code").value;
+            state.smdValue = document.getElementById("smd-value").value;
+            state.smdFormat = document.getElementById("smd-format").value;
+        }
+
+        if(mode === "BATTERY"){
+            state.batCapacity = document.getElementById("bat-capacity").value;
+            state.batCurrent = document.getElementById("bat-current").value;
+            state.batDerate = document.getElementById("bat-derate").value;
+        }
+
+        if(mode === "NE555"){
+            state.neR1 = document.getElementById("ne-r1").value;
+            state.neR2 = document.getElementById("ne-r2").value;
+            state.neC = document.getElementById("ne-c").value;
+        }
+
+        if(mode === "TRACE"){
+            state.tcCurrent = document.getElementById("tc-current").value;
+            state.tcRise = document.getElementById("tc-rise").value;
+            state.tcThickness = document.getElementById("tc-thickness").value;
+            state.tcLayer = document.getElementById("tc-layer").value;
         }
 
         localStorage.setItem(LS_KEY, JSON.stringify(state));
@@ -2145,6 +2350,33 @@ function restoreState(){
         if(state.trHfe){ document.getElementById("tr-hfe").value = state.trHfe; }
     }
 
+    if(state.mode === "SMD"){
+        if(state.smdMode){ document.getElementById("smd-mode").value = state.smdMode; }
+        setSmdMode();
+        document.getElementById("smd-code").value = state.smdCode || "";
+        document.getElementById("smd-value").value = state.smdValue || "";
+        if(state.smdFormat){ document.getElementById("smd-format").value = state.smdFormat; }
+    }
+
+    if(state.mode === "BATTERY"){
+        document.getElementById("bat-capacity").value = state.batCapacity || "";
+        document.getElementById("bat-current").value = state.batCurrent || "";
+        if(state.batDerate){ document.getElementById("bat-derate").value = state.batDerate; }
+    }
+
+    if(state.mode === "NE555"){
+        document.getElementById("ne-r1").value = state.neR1 || "";
+        document.getElementById("ne-r2").value = state.neR2 || "";
+        document.getElementById("ne-c").value = state.neC || "";
+    }
+
+    if(state.mode === "TRACE"){
+        document.getElementById("tc-current").value = state.tcCurrent || "";
+        if(state.tcRise){ document.getElementById("tc-rise").value = state.tcRise; }
+        if(state.tcThickness){ document.getElementById("tc-thickness").value = state.tcThickness; }
+        if(state.tcLayer){ document.getElementById("tc-layer").value = state.tcLayer; }
+    }
+
     return true;
 }
 
@@ -2165,6 +2397,15 @@ function clearForm(){
     document.getElementById("tr-vcc").value = "";
     document.getElementById("tr-ic").value = "";
     document.getElementById("tr-hfe").value = "";
+    document.getElementById("smd-code").value = "";
+    document.getElementById("smd-value").value = "";
+    document.getElementById("bat-capacity").value = "";
+    document.getElementById("bat-current").value = "";
+    document.getElementById("ne-r1").value = "";
+    document.getElementById("ne-r2").value = "";
+    document.getElementById("ne-c").value = "";
+    document.getElementById("tc-current").value = "";
+    document.getElementById("tc-rise").value = "";
     document.getElementById("res").innerHTML = "";
 
     lastResultText = "";
