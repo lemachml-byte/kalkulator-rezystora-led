@@ -375,3 +375,53 @@ function copyResults(){
         document.body.removeChild(ta);
     }
 }
+
+
+/* =====================================================
+DODATEK DO ŚCIĄGI — KODY KONDENSATORÓW I SZEREGI E
+
+Wspólny dla wszystkich trzech kalkulatorów (wstrzykiwany
+przez initCheatsheetExtra() do elementu #cheatsheet-extra),
+żeby dopisać coś tutaj wystarczyło zrobić to raz.
+===================================================== */
+
+const CHEATSHEET_EXTRA_HTML = `
+<h4>6. Kody kondensatorów (SMD, ceramiczne)</h4>
+<ul>
+<li>Trzycyfrowy nadruk na małym kondensatorze ceramicznym czyta się tak samo jak kod SMD rezystora: dwie pierwsze cyfry to liczba znacząca, trzecia to liczba dopisywanych zer — wynik wychodzi w pikofaradach (pF).</li>
+<li>Przykład: <b>104</b> = 10 i cztery zera = 100 000 pF = 100 nF = 0,1 µF. Podobnie <b>223</b> = 22 i trzy zera = 22 000 pF = 22 nF.</li>
+</ul>
+<table>
+<tr><th>Kod</th><th>Wartość</th></tr>
+<tr><td>101</td><td>100 pF</td></tr>
+<tr><td>221</td><td>220 pF</td></tr>
+<tr><td>102</td><td>1 nF</td></tr>
+<tr><td>103</td><td>10 nF</td></tr>
+<tr><td>223</td><td>22 nF</td></tr>
+<tr><td>104</td><td>100 nF (0,1 µF)</td></tr>
+<tr><td>474</td><td>470 nF</td></tr>
+<tr><td>105</td><td>1 µF</td></tr>
+</table>
+<div class="hint">Litera po kodzie oznacza tolerancję: J = ±5%, K = ±10%, M = ±20%. Wartość w µF wpisujesz bezpośrednio w polu C kalkulatora NE555 — ten kod przydaje się, gdy masz kondensator w ręku i chcesz sprawdzić, czym właściwie jest.</div>
+
+<h4>7. Szeregi wartości E — dlaczego rezystory mają „dziwne” wartości</h4>
+<ul>
+<li>Wartości rezystorów (i kondensatorów) nie są dowolne — pochodzą z szeregów E, w których kolejne wartości w dekadzie są rozmieszczone logarytmicznie, a nie równomiernie.</li>
+<li>Dzięki temu zakresy tolerancji sąsiednich wartości „zazębiają się” i pokrywają całą dekadę bez dziur ani zbędnego nakładania.</li>
+<li>Im gęstszy szereg (więcej wartości w dekadzie), tym mniejsza dopuszczalna tolerancja rezystora.</li>
+</ul>
+<table>
+<tr><th>Szereg</th><th>Tolerancja</th><th>Przykładowe wartości w dekadzie</th></tr>
+<tr><td>E6</td><td>±20%</td><td>10, 15, 22, 33, 47, 68</td></tr>
+<tr><td>E12</td><td>±10%</td><td>10, 12, 15, 18, 22, 27, 33, 39, 47, 56, 68, 82</td></tr>
+<tr><td>E24</td><td>±5%</td><td>10, 11, 12, 13, 15, 16, 18, 20, 22, 24, 27, 30, 33...</td></tr>
+</table>
+<div class="hint">To dokładnie te same szeregi (E12/E24/E96), które wybierasz w polu „Szereg rezystorów” w Kalkulatorze LED i Kalkulatorze wspólnym — E96 to szereg precyzyjny (±1%), używany m.in. w kodach EIA-96 w przeliczniku SMD. Stąd właśnie biorą się wartości typu 4,7 kΩ zamiast równego 5 kΩ.</div>
+`;
+
+function initCheatsheetExtra(){
+    const el = document.getElementById("cheatsheet-extra");
+    if(el){
+        el.innerHTML = CHEATSHEET_EXTRA_HTML;
+    }
+}
