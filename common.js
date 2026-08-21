@@ -81,6 +81,26 @@ function fmt(value, sig=4){
 }
 
 
+/* formatowanie rezystancji z automatycznym doborem Ω/kΩ/MΩ */
+
+function fmtOhm(ohms){
+
+    if(!Number.isFinite(ohms)){
+        return "—";
+    }
+
+    if(Math.abs(ohms) >= 1e6){
+        return `${fmt(ohms/1e6)} MΩ`;
+    }
+
+    if(Math.abs(ohms) >= 1e3){
+        return `${fmt(ohms/1e3)} kΩ`;
+    }
+
+    return `${fmt(ohms)} Ω`;
+}
+
+
 /* =====================================================
 PRZEŁĄCZANIE PODPOWIEDZI (TOOLTIP)
 ===================================================== */
