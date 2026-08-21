@@ -514,7 +514,8 @@ details.collapsible .collapsible-body{
 }
 
 .legend table,
-.cheatsheet table{
+.cheatsheet table,
+.result-table{
     border-collapse:collapse;
     width:100%;
     margin:4px 0 10px;
@@ -523,16 +524,35 @@ details.collapsible .collapsible-body{
 .legend th,
 .legend td,
 .cheatsheet th,
-.cheatsheet td{
+.cheatsheet td,
+.result-table th,
+.result-table td{
     text-align:left;
     padding:6px 8px;
     border-bottom:1px solid var(--border);
-    font-size:14px;
+    font-size:13.5px;
 }
 
 .legend th,
-.cheatsheet th{
+.cheatsheet th,
+.result-table th{
     color:var(--muted);
+}
+
+.result-table td:not(:first-child){
+    text-align:right;
+    font-variant-numeric:tabular-nums;
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    color:var(--text-soft);
+}
+
+.result-table tr.winner td{
+    color:var(--text);
+    font-weight:700;
+}
+
+.result-table-wrap{
+    overflow-x:auto;
 }
 
 .legend th:nth-child(1),
@@ -562,8 +582,13 @@ details.collapsible .collapsible-body{
 }
 
 .legend tr:nth-child(even),
-.cheatsheet tr:nth-child(even){
+.cheatsheet tr:nth-child(even),
+.result-table tr:nth-child(even){
     background:#ece5d5;
+}
+
+.result-table tr.winner:nth-child(even){
+    background:#e4d9b8;
 }
 
 /* ============ ściąga (repetytorium ogólne) ============ */

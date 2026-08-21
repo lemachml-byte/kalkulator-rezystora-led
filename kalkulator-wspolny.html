@@ -115,6 +115,10 @@ Generator NE555 (astabilny)
 Szerokość ścieżki PCB
 </option>
 
+<option value="LDR">
+Dobór rezystora dla LDR (fotorezystor)
+</option>
+
 </select>
 
 </section>
@@ -682,6 +686,83 @@ Standardowa grubość miedzi na warstwie PCB dla hobbystycznych projektów to 1 
 </section>
 
 
+<!-- =====================================================
+2J. POLA: DOBÓR REZYSTORA DLA LDR
+===================================================== -->
+
+<section class="section hidden" id="fields-ldr">
+
+<h2 class="section-title">
+<span class="num">2</span>
+Dane wejściowe
+</h2>
+
+<div class="grid">
+
+<div>
+<div class="label-row">
+<label for="ldr-uz">Napięcie zasilania Uz [V]</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-ldr-uz')" aria-label="Wyjaśnienie: napięcie zasilania">?</button>
+</div>
+<div id="tip-ldr-uz" class="tip hidden">
+Napięcie zasilające dzielnik LDR + rezystor.
+</div>
+<input id="ldr-uz" type="text" inputmode="decimal" placeholder="np. 4.55" onkeydown="if(event.key==='Enter'){calc();}">
+</div>
+
+<div>
+<div class="label-row">
+<label for="ldr-th">Próg przełączania Uth [V]</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-ldr-th')" aria-label="Wyjaśnienie: próg przełączania">?</button>
+</div>
+<div id="tip-ldr-th" class="tip hidden">
+Napięcie, powyżej którego przyjmujemy, że tranzystor się załącza. Domyślnie 0,65 V — to wartość <b>modelowa/projektowa</b>, nie uniwersalna stała każdego tranzystora. Rzeczywisty próg zależy od typu tranzystora, prądu bazy, temperatury i punktu pracy — zmień tę wartość, jeśli masz dokładniejsze dane z karty katalogowej swojego tranzystora.
+</div>
+<input id="ldr-th" type="text" inputmode="decimal" placeholder="0.65" value="0.65" onkeydown="if(event.key==='Enter'){calc();}">
+</div>
+
+<div>
+<div class="label-row">
+<label for="ldr-light">LDR w świetle [kΩ]</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-ldr-light')" aria-label="Wyjaśnienie: LDR w świetle">?</button>
+</div>
+<div id="tip-ldr-light" class="tip hidden">
+Rezystancja fotorezystora przy pełnym oświetleniu — im jaśniej, tym niższa wartość. Zmierz multimetrem albo sprawdź w karcie katalogowej.
+</div>
+<input id="ldr-light" type="text" inputmode="decimal" placeholder="np. 4.65" onkeydown="if(event.key==='Enter'){calc();}">
+</div>
+
+<div>
+<div class="label-row">
+<label for="ldr-dark">LDR w ciemności [kΩ]</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-ldr-dark')" aria-label="Wyjaśnienie: LDR w ciemności">?</button>
+</div>
+<div id="tip-ldr-dark" class="tip hidden">
+Rezystancja fotorezystora bez oświetlenia — zwykle setki kΩ do kilku MΩ.
+</div>
+<input id="ldr-dark" type="text" inputmode="decimal" placeholder="np. 441" onkeydown="if(event.key==='Enter'){calc();}">
+</div>
+
+<div class="full">
+<div class="label-row">
+<label for="ldr-topo">Konfiguracja dzielnika</label>
+<button type="button" class="qbtn" onclick="toggleTip('tip-ldr-topo')" aria-label="Wyjaśnienie: konfiguracja dzielnika">?</button>
+</div>
+<div id="tip-ldr-topo" class="tip hidden">
+<b>A — rezystor na górze</b> (+V → R → wyjście → LDR → masa): w świetle wyjście jest NISKIE (tranzystor OFF), w ciemności WYSOKIE (tranzystor ON). Typowy wybór do „włącz LED po zmroku”.<br>
+<b>B — LDR na górze</b> (+V → LDR → wyjście → R → masa): logika odwrotna — w świetle wyjście WYSOKIE (ON), w ciemności NISKIE (OFF). Wybierz, gdy chcesz reakcję na jasność, nie na ciemność.
+</div>
+<select id="ldr-topo">
+<option value="A" selected>A — rezystor na górze (jasno→OFF, ciemno→ON)</option>
+<option value="B">B — LDR na górze (jasno→ON, ciemno→OFF)</option>
+</select>
+</div>
+
+</div>
+
+</section>
+
+
 <button onclick="calc()">
 OBLICZ
 </button>
@@ -757,6 +838,11 @@ Wzory używane w kalkulatorze
 <div class="formula-item">
 <div class="formula-eq">A = (I / (k × ΔT<sup>0,44</sup>))<sup>1/0,725</sup></div>
 <div class="formula-desc">Minimalne pole przekroju ścieżki PCB wg IPC-2221 dla zadanego prądu i dopuszczalnego wzrostu temperatury.</div>
+</div>
+
+<div class="formula-item">
+<div class="formula-eq">Uout = Uz × Rdolny / (Rgórny + Rdolny)</div>
+<div class="formula-desc">Napięcie wyjściowe dzielnika LDR + rezystor — kolejność Rgórny/Rdolny zależy od wybranej konfiguracji.</div>
 </div>
 
 </div>
@@ -1013,6 +1099,7 @@ function setMode(){
     document.getElementById("fields-battery").classList.add("hidden");
     document.getElementById("fields-ne555").classList.add("hidden");
     document.getElementById("fields-trace").classList.add("hidden");
+    document.getElementById("fields-ldr").classList.add("hidden");
     document.getElementById("ser-params").classList.add("hidden");
     document.getElementById("field3-wrap").classList.remove("hidden");
 
@@ -1075,6 +1162,13 @@ function setMode(){
         document.getElementById("fields-trace").classList.remove("hidden");
         if(!document.getElementById("tc-rise").value){
             document.getElementById("tc-rise").value = "10";
+        }
+    }
+
+    if(mode === "LDR"){
+        document.getElementById("fields-ldr").classList.remove("hidden");
+        if(!document.getElementById("ldr-th").value){
+            document.getElementById("ldr-th").value = "0.65";
         }
     }
 }
@@ -1189,6 +1283,7 @@ function calc(){
     if(mode === "BATTERY"){ calcBATTERY(); return; }
     if(mode === "NE555"){ calcNE555(); return; }
     if(mode === "TRACE"){ calcTRACE(); return; }
+    if(mode === "LDR"){ calcLDR(); return; }
 }
 
 
@@ -2225,6 +2320,266 @@ function calcTRACE(){
 
 
 /* =====================================================
+TRYB: DOBÓR REZYSTORA DLA LDR (FOTOREZYSTOR)
+
+Dzielnik napięcia: Uout = Uz × Rdolny / (Rgórny + Rdolny)
+
+Konfiguracja A — R na górze, LDR na dole:
+  w świetle (LDR małe) Uout NISKIE, w ciemności (LDR duże) Uout WYSOKIE
+  chcemy: Uout(światło) < Uth  ORAZ  Uout(ciemność) > Uth
+
+Konfiguracja B — LDR na górze, R na dole (logika odwrotna):
+  chcemy: Uout(światło) > Uth  ORAZ  Uout(ciemność) < Uth
+
+Przeszukujemy szereg E24 (100 Ω – ok. 9,1 MΩ). Spośród wartości
+spełniających oba warunki wybieramy tę, która maksymalizuje
+MNIEJSZY z dwóch marginesów względem progu — najbardziej odporną
+na tolerancję LDR i rezystora, a nie tylko pierwszą, która
+"ledwo przechodzi".
+
+Model zakłada pomijalny prąd bazy tranzystora (dzielnik
+nieobciążony) i stały próg Uth — to uproszczenie projektowe,
+nie dokładny model konkretnego tranzystora.
+===================================================== */
+
+function ldrDividerOutput(Uz, Rtop, Rbottom){
+    return Uz * Rbottom / (Rtop + Rbottom);
+}
+
+function calcLDR(){
+
+    const Uz = num(document.getElementById("ldr-uz").value);
+    const Uth = num(document.getElementById("ldr-th").value);
+    const RlightK = num(document.getElementById("ldr-light").value);
+    const RdarkK = num(document.getElementById("ldr-dark").value);
+    const topo = document.getElementById("ldr-topo").value;
+
+    if(
+        !Number.isFinite(Uz) || Uz<=0 ||
+        !Number.isFinite(Uth) || Uth<=0 ||
+        !Number.isFinite(RlightK) || RlightK<=0 ||
+        !Number.isFinite(RdarkK) || RdarkK<=0
+    ){
+        showError("Uzupełnij Uz, próg Uth oraz obie rezystancje LDR wartościami większymi od zera.");
+        return;
+    }
+
+    if(Uth >= Uz){
+        showError("Próg Uth musi być mniejszy od napięcia zasilania Uz — inaczej żadna wartość rezystora nie pozwoli go przekroczyć.");
+        return;
+    }
+
+    const Rlight = RlightK * 1000;
+    const Rdark = RdarkK * 1000;
+    const backwardsWarning = Rlight >= Rdark;
+
+    function outputs(R){
+        if(topo === "A"){
+            return {
+                light: ldrDividerOutput(Uz, R, Rlight),
+                dark: ldrDividerOutput(Uz, R, Rdark)
+            };
+        }
+        return {
+            light: ldrDividerOutput(Uz, Rlight, R),
+            dark: ldrDividerOutput(Uz, Rdark, R)
+        };
+    }
+
+    function passes(o){
+        if(topo === "A"){
+            return o.light < Uth && o.dark > Uth;
+        }
+        return o.light > Uth && o.dark < Uth;
+    }
+
+    function margins(o){
+        if(topo === "A"){
+            return { marginLight: Uth - o.light, marginDark: o.dark - Uth };
+        }
+        return { marginLight: o.light - Uth, marginDark: Uth - o.dark };
+    }
+
+    /* przeszukanie szeregu E24 w zakresie 100 Ω – ok. 9,1 MΩ */
+    const candidates = [];
+    for(let exp=2; exp<=6; exp++){
+        E24.forEach(base => {
+            candidates.push(Math.round(base * Math.pow(10, exp) * 100) / 100);
+        });
+    }
+    candidates.sort((a,b) => a-b);
+
+    const evaluated = candidates.map(R => {
+        const o = outputs(R);
+        const m = margins(o);
+        return {
+            R,
+            light: o.light,
+            dark: o.dark,
+            deltaU: Math.abs(o.dark - o.light),
+            marginLight: m.marginLight,
+            marginDark: m.marginDark,
+            worstMargin: Math.min(m.marginLight, m.marginDark),
+            ok: passes(o)
+        };
+    });
+
+    const passing = evaluated.filter(e => e.ok);
+    const anyPass = passing.length > 0;
+
+    /* Spośród wartości spełniających oba warunki wybieramy tę
+    o największym ΔU (rozpiętości napięć światło/ciemność) —
+    to lepszy wybór niż maksymalizacja samego marginesu od progu,
+    bo bardzo duże R formalnie zwiększa margines (oba napięcia
+    zbiegają do zera, więc "odległość od progu" rośnie), ale
+    jednocześnie osłabia sygnał i zwiększa czułość na zakłócenia.
+    Maksymalizacja ΔU naturalnie unika tej skrajności. Gdy żadna
+    wartość nie spełnia obu warunków, awaryjnie pokazujemy tę
+    z najlepszym (choć niewystarczającym) marginesem. */
+    const winner = anyPass
+        ? passing.reduce((best, e) => (e.deltaU > best.deltaU ? e : best))
+        : evaluated.reduce((best, e) => (e.worstMargin > best.worstMargin ? e : best));
+
+    const Ilight = topo==="A" ? Uz/(winner.R+Rlight) : Uz/(Rlight+winner.R);
+    const Idark  = topo==="A" ? Uz/(winner.R+Rdark)  : Uz/(Rdark+winner.R);
+    const PlightR   = Ilight*Ilight*winner.R;
+    const PdarkR    = Idark*Idark*winner.R;
+    const PlightLDR = Ilight*Ilight*Rlight;
+    const PdarkLDR  = Idark*Idark*Rdark;
+
+    let html = "";
+
+    if(backwardsWarning){
+        html += box(
+            "SPRAWDŹ WARTOŚCI LDR",
+            "światło ≥ ciemność?",
+            `Podana rezystancja w świetle (${fmt(RlightK)} kΩ) jest większa lub równa rezystancji w ciemności (${fmt(RdarkK)} kΩ). Dla typowego fotorezystora jest odwrotnie — im ciemniej, tym wyższa rezystancja. Wyniki poniżej są policzone poprawnie matematycznie, ale sprawdź, czy wartości nie zostały zamienione miejscami.`,
+            "warn"
+        );
+    }
+
+    if(!anyPass){
+        html += box(
+            "BRAK WARTOŚCI SPEŁNIAJĄCEJ OBA WARUNKI",
+            fmtOhm(winner.R),
+            `Żadna wartość ze standardowego szeregu E24 (100 Ω – 9,1 MΩ) nie spełnia w pełni obu warunków jednocześnie. Poniżej pokazano najbliższą: ${fmtOhm(winner.R)}.`,
+            "bad",
+            `Rozważ zmianę progu Uth, wybór innej konfiguracji dzielnika, albo sprawdź, czy różnica między LDR w świetle i w ciemności jest wystarczająco duża dla tego zastosowania.`
+        );
+    }
+
+    html += box(
+        "REKOMENDOWANY REZYSTOR",
+        fmtOhm(winner.R),
+        `Wybrany spośród szeregu E24 jako wartość dająca największą różnicę napięć (ΔU) między stanem jasnym a ciemnym, przy zachowaniu obu warunków przełączania.`,
+        anyPass ? "good" : "warn",
+        `Maksymalizacja ΔU (zamiast samego marginesu od progu) celowo unika skrajnie dużych rezystorów: przy bardzo dużym R oba napięcia zbiegają do zera, więc formalny margines od progu rośnie, ale sygnał robi się słaby i podatny na zakłócenia. Największe ΔU daje najwyraźniejsze, najbardziej „cyfrowe” przejście między stanami.`
+    );
+
+    html += box(
+        "NAPIĘCIE WYJŚCIOWE (światło → ciemność)",
+        `${fmt(winner.light)} V → ${fmt(winner.dark)} V`,
+        `
+        Światło: Uout = Uz × Rdolny / (Rgórny + Rdolny) = ${fmt(winner.light)} V
+        <br>
+        Ciemność: Uout = ${fmt(winner.dark)} V
+        <br>
+        ΔU = ${fmt(winner.deltaU)} V
+        `,
+        "good"
+    );
+
+    html += box(
+        "MARGINES WZGLĘDEM PROGU (światło / ciemność)",
+        `${fmt(winner.marginLight)} V / ${fmt(winner.marginDark)} V`,
+        `Im większy margines, tym bardziej odporna konfiguracja na niewielkie zmiany parametrów (tolerancja rezystora, starzenie LDR, temperatura).`,
+        winner.worstMargin > 0 ? "good" : "bad"
+    );
+
+    html += box(
+        "PRĄD DZIELNIKA (światło / ciemność)",
+        `${fmt(Ilight*1000)} mA / ${fmt(Idark*1000)} mA`,
+        `I = Uz / (Rgórny + Rdolny)`,
+        "good"
+    );
+
+    html += box(
+        "MOC: REZYSTOR / LDR (światło → ciemność)",
+        `${fmt(PlightR*1000)} mW → ${fmt(PdarkR*1000)} mW`,
+        `
+        Rezystor R: ${fmt(PlightR*1000)} mW (światło) → ${fmt(PdarkR*1000)} mW (ciemność)
+        <br>
+        LDR: ${fmt(PlightLDR*1000)} mW (światło) → ${fmt(PdarkLDR*1000)} mW (ciemność)
+        `,
+        "good",
+        `W tego typu dzielnikach moce są zwykle rzędu pojedynczych miliwatów — standardowy rezystor 0,25 W obsłuży to bez problemu.`
+    );
+
+    /* tabela porównawcza: 3 wartości poniżej + zwycięzca + 3 powyżej */
+    const winnerIdx = evaluated.indexOf(winner);
+    const tableStart = Math.max(0, winnerIdx - 3);
+    const tableEnd = Math.min(evaluated.length, winnerIdx + 4);
+    const tableRows = evaluated.slice(tableStart, tableEnd);
+
+    const tableHtml = `
+    <div class="result-table-wrap">
+    <table class="result-table">
+    <tr><th>Rezystor</th><th>Uout świ.</th><th>Uout ciem.</th><th>Margines świ.</th><th>Margines ciem.</th><th>Spełnia?</th></tr>
+    ${tableRows.map(e => `
+    <tr${e===winner ? ' class="winner"' : ''}>
+    <td>${fmtOhm(e.R)}${e===winner ? " ★" : ""}</td>
+    <td>${fmt(e.light)} V</td>
+    <td>${fmt(e.dark)} V</td>
+    <td>${fmt(e.marginLight)} V</td>
+    <td>${fmt(e.marginDark)} V</td>
+    <td>${e.ok ? "TAK" : "NIE"}</td>
+    </tr>`).join("")}
+    </table>
+    </div>
+    `;
+
+    html += box(
+        "PORÓWNANIE SĄSIEDNICH WARTOŚCI ZE SZEREGU E24",
+        "",
+        tableHtml,
+        "good"
+    );
+
+    html += `
+    <details class="collapsible" style="margin-top:4px;">
+    <summary>Dlaczego kalkulator wybrał tę wartość?</summary>
+    <div class="collapsible-body">
+    <ol style="padding-left:18px; line-height:1.8; margin:0;">
+    <li>Dane wejściowe: Uz = ${fmt(Uz)} V, LDR w świetle = ${fmt(RlightK)} kΩ, LDR w ciemności = ${fmt(RdarkK)} kΩ, próg Uth = ${fmt(Uth)} V, konfiguracja ${topo}.</li>
+    <li>Dla każdej standardowej wartości rezystora z szeregu E24 (100 Ω – 9,1 MΩ) policzono Uout ze wzoru dzielnika napięcia — osobno dla światła i dla ciemności.</li>
+    <li>Odrzucono wartości, które nie spełniają obu warunków (${topo==="A" ? "Uout(światło) &lt; Uth ORAZ Uout(ciemność) &gt; Uth" : "Uout(światło) &gt; Uth ORAZ Uout(ciemność) &lt; Uth"}).</li>
+    <li>Spośród pozostałych wybrano tę, dla której różnica napięć ΔU = |Uout(ciemność) − Uout(światło)| jest największa — daje to najwyraźniejsze rozróżnienie stanów, bez przechodzenia na skrajnie duże rezystory, przy których oba napięcia zbiegają do zera.</li>
+    <li>Wynik: ${fmtOhm(winner.R)} — Uout(światło) = ${fmt(winner.light)} V, Uout(ciemność) = ${fmt(winner.dark)} V, ΔU = ${fmt(winner.deltaU)} V, margines ${fmt(Math.min(winner.marginLight, winner.marginDark))} V.</li>
+    </ol>
+    </div>
+    </details>
+    `;
+
+    html =
+        `<button type="button" id="copyBtn" class="copybtn" onclick="copyResults()">Kopiuj wynik</button>` +
+        html;
+
+    document.getElementById("res").innerHTML = html;
+
+    lastResultText =
+        `Kalkulator wspólny — Dobór rezystora dla LDR — LeMaCh\n\n` +
+        `Uz: ${fmt(Uz)} V, LDR światło: ${fmt(RlightK)} kΩ, LDR ciemność: ${fmt(RdarkK)} kΩ, próg: ${fmt(Uth)} V, konfiguracja: ${topo}\n` +
+        `Rekomendowany rezystor: ${fmtOhm(winner.R)}\n` +
+        `Uout światło: ${fmt(winner.light)} V (margines ${fmt(winner.marginLight)} V)\n` +
+        `Uout ciemność: ${fmt(winner.dark)} V (margines ${fmt(winner.marginDark)} V)\n` +
+        `Spełnia oba warunki: ${anyPass ? "TAK" : "NIE — brak idealnej wartości w E24"}\n` +
+        `Uwaga: to model przybliżony — rzeczywisty próg zależy od konkretnego tranzystora.`;
+
+    saveState();
+}
+
+
+/* =====================================================
 ZAPAMIĘTYWANIE STANU (localStorage) — realna strona,
 nie artefakt czatu, więc localStorage jest tu bezpieczny.
 ===================================================== */
@@ -2293,6 +2648,14 @@ function saveState(){
             state.tcRise = document.getElementById("tc-rise").value;
             state.tcThickness = document.getElementById("tc-thickness").value;
             state.tcLayer = document.getElementById("tc-layer").value;
+        }
+
+        if(mode === "LDR"){
+            state.ldrUz = document.getElementById("ldr-uz").value;
+            state.ldrTh = document.getElementById("ldr-th").value;
+            state.ldrLight = document.getElementById("ldr-light").value;
+            state.ldrDark = document.getElementById("ldr-dark").value;
+            state.ldrTopo = document.getElementById("ldr-topo").value;
         }
 
         localStorage.setItem(LS_KEY, JSON.stringify(state));
@@ -2381,6 +2744,14 @@ function restoreState(){
         if(state.tcLayer){ document.getElementById("tc-layer").value = state.tcLayer; }
     }
 
+    if(state.mode === "LDR"){
+        document.getElementById("ldr-uz").value = state.ldrUz || "";
+        if(state.ldrTh){ document.getElementById("ldr-th").value = state.ldrTh; }
+        document.getElementById("ldr-light").value = state.ldrLight || "";
+        document.getElementById("ldr-dark").value = state.ldrDark || "";
+        if(state.ldrTopo){ document.getElementById("ldr-topo").value = state.ldrTopo; }
+    }
+
     return true;
 }
 
@@ -2410,6 +2781,9 @@ function clearForm(){
     document.getElementById("ne-c").value = "";
     document.getElementById("tc-current").value = "";
     document.getElementById("tc-rise").value = "";
+    document.getElementById("ldr-uz").value = "";
+    document.getElementById("ldr-light").value = "";
+    document.getElementById("ldr-dark").value = "";
     document.getElementById("res").innerHTML = "";
 
     lastResultText = "";
