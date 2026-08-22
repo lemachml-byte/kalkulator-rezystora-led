@@ -2331,16 +2331,54 @@ Konfiguracja A — R na górze, LDR na dole:
 Konfiguracja B — LDR na górze, R na dole (logika odwrotna):
   chcemy: Uout(światło) > Uth  ORAZ  Uout(ciemność) < Uth
 
-Przeszukujemy szereg E24 (100 Ω – ok. 9,1 MΩ). Spośród wartości
-spełniających oba warunki wybieramy tę, która maksymalizuje
-MNIEJSZY z dwóch marginesów względem progu — najbardziej odporną
-na tolerancję LDR i rezystora, a nie tylko pierwszą, która
-"ledwo przechodzi".
+ZAKRES ANALITYCZNY (przed przeszukaniem listy rezystorów):
+rozwiązując obie nierówności względem R wprost, dla konfiguracji A
+wychodzi:
+  R > Rlight × (Uz−Uth)/Uth   ORAZ   R < Rdark × (Uz−Uth)/Uth
+(dla konfiguracji B ten sam wzór z odwróconym mnożnikiem
+Uth/(Uz−Uth) i zamienionymi Rlight/Rdark). To dokładny zakres
+wartości R, dla których fizycznie możliwe jest spełnienie obu
+warunków — pokazujemy go użytkownikowi wprost.
+
+KRYTERIUM WYBORU „REKOMENDOWANEGO” REZYSTORA (poprawka 2026):
+Spośród rezystorów z listy dostępnych wartości (LDR_RESISTOR_SET),
+które mieszczą się w powyższym zakresie, wybieramy ten o
+NAJWIĘKSZYM WZGLĘDNYM MARGINESIE:
+
+  relMarginLight = marginLight / (maksymalny możliwy marginLight)
+  relMarginDark  = marginDark  / (maksymalny możliwy marginDark)
+  wynik = min(relMarginLight, relMarginDark)  → maksymalizujemy
+
+Maksymalny możliwy margines w danym stanie to odległość Uth od
+odpowiedniej "ściany" napięcia zasilania (0 V albo Uz), czyli:
+dla konfiguracji A: max(marginLight) = Uth (gdy Uout→0),
+                    max(marginDark)  = Uz−Uth (gdy Uout→Uz).
+Dzielenie przez tę wartość graniczną SKALUJE margines względem
+tego, ile w ogóle da się "wycisnąć" przy danym Uth — dzięki temu
+kryterium POPRAWNIE reaguje na zmianę Uth (w przeciwieństwie do
+wcześniejszej wersji opartej na samym ΔU, która ignorowała Uth
+i przy każdej jego wartości wskazywała tę samą "globalnie
+najszerszą" wartość rezystora). Brana jest MNIEJSZA z dwóch
+względnych wartości, żeby nagradzać rezystory dobre w OBU stanach
+naraz, a nie tylko w jednym.
+
+Jeżeli żadna wartość z listy nie spełnia obu warunków, kalkulator
+NIE wskazuje żadnego rezystora jako rekomendowanego — pokazuje
+tylko obliczony zakres i wyraźny komunikat.
 
 Model zakłada pomijalny prąd bazy tranzystora (dzielnik
 nieobciążony) i stały próg Uth — to uproszczenie projektowe,
-nie dokładny model konkretnego tranzystora.
+nie dokładny model konkretnego tranzystora (patrz ostrzeżenie
+w wynikach).
 ===================================================== */
+
+/* Dostępne wartości rezystorów (zestaw użytkownika, nie pełny E24) */
+const LDR_RESISTOR_SET = [
+    10, 22, 47, 100, 150, 200, 220, 270, 330, 470, 510, 680,
+    1000, 2000, 2200, 3300, 4700, 5100, 6800,
+    10000, 20000, 47000, 51000, 68000, 100000,
+    220000, 300000, 470000, 680000, 1000000
+];
 
 function ldrDividerOutput(Uz, Rtop, Rbottom){
     return Uz * Rbottom / (Rtop + Rbottom);
@@ -2393,25 +2431,34 @@ function calcLDR(){
         return o.light > Uth && o.dark < Uth;
     }
 
-    function margins(o){
+    /* marginesy bezwzględne i ich skala względem Uth/(Uz-Uth) — patrz komentarz nad funkcją */
+    function scoredMargins(o){
         if(topo === "A"){
-            return { marginLight: Uth - o.light, marginDark: o.dark - Uth };
+            const marginLight = Uth - o.light;
+            const marginDark = o.dark - Uth;
+            return {
+                marginLight, marginDark,
+                relLight: marginLight / Uth,
+                relDark: marginDark / (Uz - Uth)
+            };
         }
-        return { marginLight: o.light - Uth, marginDark: Uth - o.dark };
+        const marginLight = o.light - Uth;
+        const marginDark = Uth - o.dark;
+        return {
+            marginLight, marginDark,
+            relLight: marginLight / (Uz - Uth),
+            relDark: marginDark / Uth
+        };
     }
 
-    /* przeszukanie szeregu E24 w zakresie 100 Ω – ok. 9,1 MΩ */
-    const candidates = [];
-    for(let exp=2; exp<=6; exp++){
-        E24.forEach(base => {
-            candidates.push(Math.round(base * Math.pow(10, exp) * 100) / 100);
-        });
-    }
-    candidates.sort((a,b) => a-b);
+    /* analityczny zakres R spełniający oba warunki (patrz komentarz wyżej) */
+    const rangeFactor = topo === "A" ? (Uz - Uth) / Uth : Uth / (Uz - Uth);
+    const Rmin = Rlight * rangeFactor;
+    const Rmax = Rdark * rangeFactor;
 
-    const evaluated = candidates.map(R => {
+    const evaluated = LDR_RESISTOR_SET.map(R => {
         const o = outputs(R);
-        const m = margins(o);
+        const m = scoredMargins(o);
         return {
             R,
             light: o.light,
@@ -2419,7 +2466,7 @@ function calcLDR(){
             deltaU: Math.abs(o.dark - o.light),
             marginLight: m.marginLight,
             marginDark: m.marginDark,
-            worstMargin: Math.min(m.marginLight, m.marginDark),
+            score: Math.min(m.relLight, m.relDark),
             ok: passes(o)
         };
     });
@@ -2427,25 +2474,12 @@ function calcLDR(){
     const passing = evaluated.filter(e => e.ok);
     const anyPass = passing.length > 0;
 
-    /* Spośród wartości spełniających oba warunki wybieramy tę
-    o największym ΔU (rozpiętości napięć światło/ciemność) —
-    to lepszy wybór niż maksymalizacja samego marginesu od progu,
-    bo bardzo duże R formalnie zwiększa margines (oba napięcia
-    zbiegają do zera, więc "odległość od progu" rośnie), ale
-    jednocześnie osłabia sygnał i zwiększa czułość na zakłócenia.
-    Maksymalizacja ΔU naturalnie unika tej skrajności. Gdy żadna
-    wartość nie spełnia obu warunków, awaryjnie pokazujemy tę
-    z najlepszym (choć niewystarczającym) marginesem. */
+    /* Rekomendacja WYŁĄCZNIE spośród wartości spełniających oba
+    warunki — jeśli żadna nie spełnia, winner pozostaje null
+    i kalkulator nie wskazuje arbitralnego rezystora. */
     const winner = anyPass
-        ? passing.reduce((best, e) => (e.deltaU > best.deltaU ? e : best))
-        : evaluated.reduce((best, e) => (e.worstMargin > best.worstMargin ? e : best));
-
-    const Ilight = topo==="A" ? Uz/(winner.R+Rlight) : Uz/(Rlight+winner.R);
-    const Idark  = topo==="A" ? Uz/(winner.R+Rdark)  : Uz/(Rdark+winner.R);
-    const PlightR   = Ilight*Ilight*winner.R;
-    const PdarkR    = Idark*Idark*winner.R;
-    const PlightLDR = Ilight*Ilight*Rlight;
-    const PdarkLDR  = Idark*Idark*Rdark;
+        ? passing.reduce((best, e) => (e.score > best.score ? e : best))
+        : null;
 
     let html = "";
 
@@ -2458,76 +2492,93 @@ function calcLDR(){
         );
     }
 
+    html += box(
+        "ZAKRES REZYSTANCJI SPEŁNIAJĄCY OBA WARUNKI",
+        `${fmtOhm(Math.max(0,Rmin))} – ${fmtOhm(Rmax)}`,
+        `Obliczone analitycznie z warunków progowych dla podanych Uz, Uth i wartości LDR — każdy rezystor w tym przedziale teoretycznie spełnia oba warunki (${topo==="A" ? "Uout(światło) &lt; Uth i Uout(ciemność) &gt; Uth" : "Uout(światło) &gt; Uth i Uout(ciemność) &lt; Uth"}).`,
+        "good"
+    );
+
     if(!anyPass){
+
         html += box(
-            "BRAK WARTOŚCI SPEŁNIAJĄCEJ OBA WARUNKI",
-            fmtOhm(winner.R),
-            `Żadna wartość ze standardowego szeregu E24 (100 Ω – 9,1 MΩ) nie spełnia w pełni obu warunków jednocześnie. Poniżej pokazano najbliższą: ${fmtOhm(winner.R)}.`,
+            "BRAK DOSTĘPNEJ WARTOŚCI SPEŁNIAJĄCEJ OBA WARUNKI",
+            "—",
+            `Żadna wartość z dostępnego zestawu rezystorów nie mieści się w obliczonym zakresie (${fmtOhm(Math.max(0,Rmin))} – ${fmtOhm(Rmax)}).`,
             "bad",
-            `Rozważ zmianę progu Uth, wybór innej konfiguracji dzielnika, albo sprawdź, czy różnica między LDR w świetle i w ciemności jest wystarczająco duża dla tego zastosowania.`
+            `Rozważ zmianę progu Uth, wybór innej konfiguracji dzielnika (A/B), albo sprawdź, czy różnica między LDR w świetle i w ciemności jest wystarczająco duża dla tego zastosowania. Poniżej — najbliższe dostępne wartości i o ile im brakuje do spełnienia warunków.`
+        );
+
+    } else {
+
+        const Ilight = topo==="A" ? Uz/(winner.R+Rlight) : Uz/(Rlight+winner.R);
+        const Idark  = topo==="A" ? Uz/(winner.R+Rdark)  : Uz/(Rdark+winner.R);
+        const PlightR   = Ilight*Ilight*winner.R;
+        const PdarkR    = Idark*Idark*winner.R;
+        const PlightLDR = Ilight*Ilight*Rlight;
+        const PdarkLDR  = Idark*Idark*Rdark;
+
+        html += box(
+            "REKOMENDOWANY REZYSTOR",
+            fmtOhm(winner.R),
+            `Wybrany z dostępnego zestawu rezystorów jako wartość o największym względnym marginesie bezpieczeństwa (patrz „Dlaczego...” niżej) — nie tylko pierwsza wartość, która „ledwo przechodzi”.`,
+            "good",
+            `Względny margines uwzględnia próg Uth: to samo obliczenie dla innego Uth może wskazać inny rezystor, bo zmienia się nie tylko to, co "przechodzi", ale i to, co jest najbezpieczniejsze przy danym progu.`
+        );
+
+        html += box(
+            "NAPIĘCIE WYJŚCIOWE (światło → ciemność)",
+            `${fmt(winner.light)} V → ${fmt(winner.dark)} V`,
+            `
+            Światło: Uout = Uz × Rdolny / (Rgórny + Rdolny) = ${fmt(winner.light)} V
+            <br>
+            Ciemność: Uout = ${fmt(winner.dark)} V
+            <br>
+            ΔU = ${fmt(winner.deltaU)} V
+            `,
+            "good"
+        );
+
+        html += box(
+            "MARGINES WZGLĘDEM PROGU (światło / ciemność)",
+            `${fmt(winner.marginLight)} V / ${fmt(winner.marginDark)} V`,
+            `Im większy margines, tym bardziej odporna konfiguracja na niewielkie zmiany parametrów (tolerancja rezystora, starzenie LDR, temperatura).`,
+            "good"
+        );
+
+        html += box(
+            "PRĄD DZIELNIKA (światło / ciemność)",
+            `${fmt(Ilight*1000)} mA / ${fmt(Idark*1000)} mA`,
+            `I = Uz / (Rgórny + Rdolny)`,
+            "good"
+        );
+
+        html += box(
+            "MOC: REZYSTOR / LDR (światło → ciemność)",
+            `${fmt(PlightR*1000)} mW → ${fmt(PdarkR*1000)} mW`,
+            `
+            Rezystor R: ${fmt(PlightR*1000)} mW (światło) → ${fmt(PdarkR*1000)} mW (ciemność)
+            <br>
+            LDR: ${fmt(PlightLDR*1000)} mW (światło) → ${fmt(PdarkLDR*1000)} mW (ciemność)
+            `,
+            "good",
+            `W tego typu dzielnikach moce są zwykle rzędu pojedynczych miliwatów — standardowy rezystor 0,25 W obsłuży to bez problemu.`
         );
     }
 
-    html += box(
-        "REKOMENDOWANY REZYSTOR",
-        fmtOhm(winner.R),
-        `Wybrany spośród szeregu E24 jako wartość dająca największą różnicę napięć (ΔU) między stanem jasnym a ciemnym, przy zachowaniu obu warunków przełączania.`,
-        anyPass ? "good" : "warn",
-        `Maksymalizacja ΔU (zamiast samego marginesu od progu) celowo unika skrajnie dużych rezystorów: przy bardzo dużym R oba napięcia zbiegają do zera, więc formalny margines od progu rośnie, ale sygnał robi się słaby i podatny na zakłócenia. Największe ΔU daje najwyraźniejsze, najbardziej „cyfrowe” przejście między stanami.`
-    );
-
-    html += box(
-        "NAPIĘCIE WYJŚCIOWE (światło → ciemność)",
-        `${fmt(winner.light)} V → ${fmt(winner.dark)} V`,
-        `
-        Światło: Uout = Uz × Rdolny / (Rgórny + Rdolny) = ${fmt(winner.light)} V
-        <br>
-        Ciemność: Uout = ${fmt(winner.dark)} V
-        <br>
-        ΔU = ${fmt(winner.deltaU)} V
-        `,
-        "good"
-    );
-
-    html += box(
-        "MARGINES WZGLĘDEM PROGU (światło / ciemność)",
-        `${fmt(winner.marginLight)} V / ${fmt(winner.marginDark)} V`,
-        `Im większy margines, tym bardziej odporna konfiguracja na niewielkie zmiany parametrów (tolerancja rezystora, starzenie LDR, temperatura).`,
-        winner.worstMargin > 0 ? "good" : "bad"
-    );
-
-    html += box(
-        "PRĄD DZIELNIKA (światło / ciemność)",
-        `${fmt(Ilight*1000)} mA / ${fmt(Idark*1000)} mA`,
-        `I = Uz / (Rgórny + Rdolny)`,
-        "good"
-    );
-
-    html += box(
-        "MOC: REZYSTOR / LDR (światło → ciemność)",
-        `${fmt(PlightR*1000)} mW → ${fmt(PdarkR*1000)} mW`,
-        `
-        Rezystor R: ${fmt(PlightR*1000)} mW (światło) → ${fmt(PdarkR*1000)} mW (ciemność)
-        <br>
-        LDR: ${fmt(PlightLDR*1000)} mW (światło) → ${fmt(PdarkLDR*1000)} mW (ciemność)
-        `,
-        "good",
-        `W tego typu dzielnikach moce są zwykle rzędu pojedynczych miliwatów — standardowy rezystor 0,25 W obsłuży to bez problemu.`
-    );
-
-    /* tabela porównawcza: 3 wartości poniżej + zwycięzca + 3 powyżej */
-    const winnerIdx = evaluated.indexOf(winner);
-    const tableStart = Math.max(0, winnerIdx - 3);
-    const tableEnd = Math.min(evaluated.length, winnerIdx + 4);
-    const tableRows = evaluated.slice(tableStart, tableEnd);
+    /* "Najlepsze dostępne wartości" — top 5 wg tego samego kryterium,
+    niezależnie od tego, czy któraś w ogóle spełnia oba warunki
+    (w przypadku braku spełnienia pokazuje najbliższe/najmniej złe). */
+    const ranked = evaluated.slice().sort((a,b) => b.score - a.score).slice(0, 5);
+    ranked.sort((a,b) => a.R - b.R);
 
     const tableHtml = `
     <div class="result-table-wrap">
     <table class="result-table">
-    <tr><th>Rezystor</th><th>Uout świ.</th><th>Uout ciem.</th><th>Margines świ.</th><th>Margines ciem.</th><th>Spełnia?</th></tr>
-    ${tableRows.map(e => `
-    <tr${e===winner ? ' class="winner"' : ''}>
-    <td>${fmtOhm(e.R)}${e===winner ? " ★" : ""}</td>
+    <tr><th>Rezystor</th><th>Uout świ.</th><th>Uout ciem.</th><th>Margines świ.</th><th>Margines ciem.</th><th>Status</th></tr>
+    ${ranked.map(e => `
+    <tr${winner && e===winner ? ' class="winner"' : ''}>
+    <td>${fmtOhm(e.R)}${winner && e===winner ? " ★" : ""}</td>
     <td>${fmt(e.light)} V</td>
     <td>${fmt(e.dark)} V</td>
     <td>${fmt(e.marginLight)} V</td>
@@ -2539,11 +2590,18 @@ function calcLDR(){
     `;
 
     html += box(
-        "PORÓWNANIE SĄSIEDNICH WARTOŚCI ZE SZEREGU E24",
+        anyPass ? "NAJLEPSZE DOSTĘPNE WARTOŚCI" : "NAJBLIŻSZE DOSTĘPNE WARTOŚCI (żadna nie spełnia obu warunków)",
         "",
         tableHtml,
-        "good"
+        anyPass ? "good" : "warn"
     );
+
+    html += `
+    <div class="box warn" style="margin-top:0;">
+    <div class="title">Uwaga dotycząca tranzystora</div>
+    <div class="detail">Model wykorzystuje przyjęty próg Uth. Rzeczywisty punkt przełączania zależy m.in. od konkretnego tranzystora, prądu bazy, obciążenia oraz pozostałych elementów układu. Nie traktuj obliczonego Uth jako rzeczywistego napięcia przełączania konkretnego modelu tranzystora (np. 2N2222) — sprawdź jego kartę katalogową.</div>
+    </div>
+    `;
 
     html += `
     <details class="collapsible" style="margin-top:4px;">
@@ -2551,10 +2609,14 @@ function calcLDR(){
     <div class="collapsible-body">
     <ol style="padding-left:18px; line-height:1.8; margin:0;">
     <li>Dane wejściowe: Uz = ${fmt(Uz)} V, LDR w świetle = ${fmt(RlightK)} kΩ, LDR w ciemności = ${fmt(RdarkK)} kΩ, próg Uth = ${fmt(Uth)} V, konfiguracja ${topo}.</li>
-    <li>Dla każdej standardowej wartości rezystora z szeregu E24 (100 Ω – 9,1 MΩ) policzono Uout ze wzoru dzielnika napięcia — osobno dla światła i dla ciemności.</li>
-    <li>Odrzucono wartości, które nie spełniają obu warunków (${topo==="A" ? "Uout(światło) &lt; Uth ORAZ Uout(ciemność) &gt; Uth" : "Uout(światło) &gt; Uth ORAZ Uout(ciemność) &lt; Uth"}).</li>
-    <li>Spośród pozostałych wybrano tę, dla której różnica napięć ΔU = |Uout(ciemność) − Uout(światło)| jest największa — daje to najwyraźniejsze rozróżnienie stanów, bez przechodzenia na skrajnie duże rezystory, przy których oba napięcia zbiegają do zera.</li>
-    <li>Wynik: ${fmtOhm(winner.R)} — Uout(światło) = ${fmt(winner.light)} V, Uout(ciemność) = ${fmt(winner.dark)} V, ΔU = ${fmt(winner.deltaU)} V, margines ${fmt(Math.min(winner.marginLight, winner.marginDark))} V.</li>
+    <li>Rozwiązując warunki progowe wprost względem R, obliczono zakres teoretyczny: ${fmtOhm(Math.max(0,Rmin))} – ${fmtOhm(Rmax)}.</li>
+    <li>Z dostępnego zestawu rezystorów odrzucono wartości spoza tego zakresu (${topo==="A" ? "Uout(światło) &lt; Uth ORAZ Uout(ciemność) &gt; Uth" : "Uout(światło) &gt; Uth ORAZ Uout(ciemność) &lt; Uth"}).</li>
+    <li>${anyPass
+        ? `Spośród pozostałych wybrano tę, dla której MNIEJSZY z dwóch marginesów (światło/ciemność), wyrażony jako ułamek maksymalnego możliwego marginesu przy tym Uth, jest NAJWIĘKSZY — to kryterium uwzględnia próg Uth, więc zmiana progu może zmienić rekomendację.`
+        : `Żadna dostępna wartość nie spełniła obu warunków jednocześnie — poniżej pokazano te najbliższe.`}</li>
+    <li>${anyPass
+        ? `Wynik: ${fmtOhm(winner.R)} — Uout(światło) = ${fmt(winner.light)} V, Uout(ciemność) = ${fmt(winner.dark)} V, margines ${fmt(Math.min(winner.marginLight, winner.marginDark))} V.`
+        : `Rozważ zmianę Uth, konfiguracji dzielnika, albo LDR o innym zakresie rezystancji.`}</li>
     </ol>
     </div>
     </details>
@@ -2566,14 +2628,18 @@ function calcLDR(){
 
     document.getElementById("res").innerHTML = html;
 
-    lastResultText =
-        `Kalkulator wspólny — Dobór rezystora dla LDR — LeMaCh\n\n` +
-        `Uz: ${fmt(Uz)} V, LDR światło: ${fmt(RlightK)} kΩ, LDR ciemność: ${fmt(RdarkK)} kΩ, próg: ${fmt(Uth)} V, konfiguracja: ${topo}\n` +
-        `Rekomendowany rezystor: ${fmtOhm(winner.R)}\n` +
-        `Uout światło: ${fmt(winner.light)} V (margines ${fmt(winner.marginLight)} V)\n` +
-        `Uout ciemność: ${fmt(winner.dark)} V (margines ${fmt(winner.marginDark)} V)\n` +
-        `Spełnia oba warunki: ${anyPass ? "TAK" : "NIE — brak idealnej wartości w E24"}\n` +
-        `Uwaga: to model przybliżony — rzeczywisty próg zależy od konkretnego tranzystora.`;
+    lastResultText = anyPass
+        ? `Kalkulator wspólny — Dobór rezystora dla LDR — LeMaCh\n\n` +
+          `Uz: ${fmt(Uz)} V, LDR światło: ${fmt(RlightK)} kΩ, LDR ciemność: ${fmt(RdarkK)} kΩ, próg: ${fmt(Uth)} V, konfiguracja: ${topo}\n` +
+          `Zakres spełniający warunki: ${fmtOhm(Math.max(0,Rmin))} – ${fmtOhm(Rmax)}\n` +
+          `Rekomendowany rezystor: ${fmtOhm(winner.R)}\n` +
+          `Uout światło: ${fmt(winner.light)} V (margines ${fmt(winner.marginLight)} V)\n` +
+          `Uout ciemność: ${fmt(winner.dark)} V (margines ${fmt(winner.marginDark)} V)\n` +
+          `Uwaga: to model przybliżony — rzeczywisty próg zależy od konkretnego tranzystora.`
+        : `Kalkulator wspólny — Dobór rezystora dla LDR — LeMaCh\n\n` +
+          `Uz: ${fmt(Uz)} V, LDR światło: ${fmt(RlightK)} kΩ, LDR ciemność: ${fmt(RdarkK)} kΩ, próg: ${fmt(Uth)} V, konfiguracja: ${topo}\n` +
+          `Zakres spełniający warunki: ${fmtOhm(Math.max(0,Rmin))} – ${fmtOhm(Rmax)}\n` +
+          `Brak dostępnej wartości spełniającej oba warunki.`;
 
     saveState();
 }
